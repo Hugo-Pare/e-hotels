@@ -1,9 +1,13 @@
 import os
 import psycopg2
 import psycopg2.extras
-from flask import Flask, render_template
+import json
+from flask import Flask, render_template, request
+from datetime import date
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 def get_db_connection():
     connection = psycopg2.connect(
@@ -13,6 +17,8 @@ def get_db_connection():
             password="Kalonji!23")
 
     return connection
+
+### TESTS --- START ###
 
 @app.route('/')
 def hello():
@@ -40,6 +46,70 @@ def test2(num):
         connection.commit()
 
         return []
+
+    except Exception as e:
+        print(e)
+
+@app.route('/test3', methods=['POST']) 
+def test3():
+    try:
+        data = request.json
+        num = data['num']
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute('INSERT INTO test VALUES (%s)', [num])
+        connection.commit()
+        return json.dumps(num)
+
+    except Exception as e:
+        print(e)
+
+### TESTS --- END ###
+
+@app.route('/signup/user', methods=['POST'])
+def signup_user():
+    try:
+        # get all data from json body
+        data = request.get_json(force=True)
+
+        # get value for each key
+        email = data['email']
+        firstname = data['firstname']
+        lastname = data['lastname']
+        country = data['country']
+        province_state = data['province_state']
+        city = data['city']
+        street_name = data['street_name']
+        street_num = data['street_num']
+        zip_code = data['zip_code']
+        telephone = data['telephone']
+        nas = data['nas']
+
+        today = date.today()
+        date_enregistrement = today.strftime("%Y-%m-%d")
+
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute('INSERT INTO client VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', (email,firstname,lastname,country,province_state,city,street_name,street_num,nas,date_enregistrement,telephone,zip_code))
+        connection.commit()
+
+        client_data = {
+            "email": email,
+            "firstname": firstname,
+            "lastname": lastname,
+            "country": country,
+            "province_state": province_state,
+            "city": city,
+            "street_name": street_name,
+            "street_num": street_num,
+            "zip_code": zip_code,
+            "telephone": telephone,
+            "nas": nas,
+            "date_enregistrement": date_enregistrement
+        }
+
+        # returns json data of new user
+        return json.dumps(client_data)
 
     except Exception as e:
         print(e)
