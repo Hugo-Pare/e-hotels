@@ -114,5 +114,36 @@ def signup_user():
     except Exception as e:
         print(e)
         
+@app.route('/users') 
+def get_users():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute('SELECT * FROM client')
+        data = cursor.fetchall()
+        json = []
+
+        for i in range(len(data)):
+            json.append({
+                "email": data[i][0],
+                "firstname": data[i][1],
+                "lastname": data[i][2],
+                "country": data[i][3],
+                "province_state": data[i][4],
+                "city": data[i][5],
+                "street_name": data[i][6],
+                "street_num": data[i][7],
+                "zip_code": data[i][11],
+                "telephone": data[i][10].strip(),
+                "nas": data[i][8],
+                "date_enregistrement": data[i][9],
+            })
+
+        return json
+
+    except Exception as e:
+        print(e)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
