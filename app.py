@@ -66,7 +66,7 @@ def test3():
 
 ### TESTS --- END ###
 
-@app.route('/signup/user', methods=['POST'])
+@app.route('/signup/client', methods=['POST'])
 def signup_user():
     try:
         # get all data from json body
@@ -114,8 +114,8 @@ def signup_user():
     except Exception as e:
         print(e)
         
-@app.route('/users') 
-def get_users():
+@app.route('/clients') 
+def get_client():
     try:
         connection = get_db_connection()
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -137,6 +137,35 @@ def get_users():
                 "telephone": data[i][10].strip(),
                 "nas": data[i][8],
                 "date_enregistrement": data[i][9],
+            })
+
+        return json
+
+    except Exception as e:
+        print(e)
+
+@app.route('/chaines') 
+def get_chaines():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute('SELECT * FROM chaine')
+        data = cursor.fetchall()
+        json = []
+
+        for i in range(len(data)):
+            json.append({
+                "id_chaine": data[i][0],
+                "country": data[i][1],
+                "province_state": data[i][2],
+                "city": data[i][3],
+                "street_name": data[i][4],
+                "street_num": data[i][5],
+                "zip_code": data[i][6],
+                "nb_hotel": data[i][7],
+                "email": data[i][8],
+                "telephone": data[i][9].strip(),
+                "nom_chaine": data[i][10]
             })
 
         return json
