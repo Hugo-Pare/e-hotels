@@ -268,7 +268,57 @@ def get_hotels():
     try:
         connection = get_db_connection()
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cursor.execute('SELECT * FROM hotel')
+        args = request.args
+
+        #args
+        id_chaine = args.get('id_chaine')
+
+        if (id_chaine is not None):
+            cursor.execute('SELECT * FROM hotel WHERE fk_chaine = (%s)', (id_chaine,))
+
+        else:
+            cursor.execute('SELECT * FROM hotel')
+
+        data = cursor.fetchall()
+        json = []
+
+        for i in range(len(data)):
+            json.append({
+                "id_hotel": data[i][0],
+                "country": data[i][1],
+                "province_state": data[i][2],
+                "city": data[i][3],
+                "street_name": data[i][4],
+                "street_num": data[i][5],
+                "zip_code": data[i][6],
+                "nb_chambre": data[i][7],
+                "telephone": data[i][8].strip(),
+                "email": data[i][9],
+                "rating": data[i][10],
+                "id_chaine": data[i][11]
+            })
+
+        return json
+
+    except Exception as e:
+        print(e)
+
+@app.route('/hotels/<country>') 
+def get_hotels_by_country(country):
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        args = request.args
+
+        #args
+        id_chaine = args.get('id_chaine')
+
+        if (id_chaine is not None):
+            cursor.execute('SELECT * FROM hotel WHERE pays = (%s) AND fk_chaine = (%s)', (country,id_chaine,))
+
+        else:
+            cursor.execute('SELECT * FROM hotel WHERE pays = (%s)', (country,))
+
         data = cursor.fetchall()
         json = []
 
