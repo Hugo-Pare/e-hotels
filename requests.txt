@@ -1,0 +1,28 @@
+POST:
+	/signup/client
+
+GET:
+	/clients
+	/clients?email=X
+
+	/employes
+	/employes?id_employe=X
+
+	/reservations
+	/reservations/pending/
+	/reservations/pending/id_hotel
+[x]	/reservations/pending/id_hotel?id_reservation=X
+[x]	/reservations/pending/id_hotel?email_client=X
+[x]	/reservations/pending/id_hotel?date_checkin=X
+[x]	/reservations/pending/id_hotel?date_checkin=X&email_client=X
+
+	/chaines
+
+	/hotels
+ 	/hotels?id_chaine=X
+ 	/hotels/country
+ 	/hotels/country?id_chaine=X
+    /hotels/country/province_state
+ 	/hotels/country/province_state?id_chaine=X
+    /hotels/country/province_state/city
+    /hotels/country/province_state/city?id_chaine=X
