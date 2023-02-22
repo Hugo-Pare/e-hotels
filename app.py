@@ -3,7 +3,7 @@ import psycopg2
 import psycopg2.extras
 import json
 from flask import Flask, render_template, request
-from datetime import date
+from datetime import date, datetime
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -256,7 +256,24 @@ def get_reservations_pending_by_hotel_id(id_hotel):
     try:
         connection = get_db_connection()
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false AND id_hotel = (%s)', (id_hotel,))
+        args = request.args
+
+        id_reservation = args.get('id_reservation')
+        email_client = args.get('email_client')
+        date_checkin = args.get('date_checkin')
+
+        # if statements
+        if(id_reservation is not None):
+            cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false AND id_hotel = (%s) AND id_reservation = (%s)', (id_hotel,id_reservation,))
+        elif((email_client is not None) and (date_checkin is not None)):
+            cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false AND id_hotel = (%s) AND LOWER(email_id) = LOWER((%s)) AND date_checkin = (%s)', (id_hotel,email_client,date_checkin,))
+        elif(email_client is not None):
+            cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false AND id_hotel = (%s) AND LOWER(email_id) = LOWER((%s))', (id_hotel,email_client,))
+        elif(date_checkin is not None):
+            cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false AND id_hotel = (%s) AND date_checkin = (%s)', (id_hotel,date_checkin,))
+        else:
+            cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false AND id_hotel = (%s)', (id_hotel,))
+
         data = cursor.fetchall()
         json = []
 

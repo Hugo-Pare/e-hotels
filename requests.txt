@@ -1,6 +1,3 @@
-POST:
-	/signup/client
-
 GET:
 	/clients
 	/clients?email=X
@@ -11,10 +8,14 @@ GET:
 	/reservations
 	/reservations/pending/
 	/reservations/pending/id_hotel
-[x]	/reservations/pending/id_hotel?id_reservation=X
-[x]	/reservations/pending/id_hotel?email_client=X
-[x]	/reservations/pending/id_hotel?date_checkin=X
-[x]	/reservations/pending/id_hotel?date_checkin=X&email_client=X
+	/reservations/pending/id_hotel?id_reservation=X
+	/reservations/pending/id_hotel?email_client=X
+	/reservations/pending/id_hotel?date_checkin=X
+	/reservations/pending/id_hotel?date_checkin=X&email_client=X
+
+[x]	/locations
+[x]	/locations?email_client=X
+[x]	/locations/id_location
 
 	/chaines
 
@@ -26,3 +27,20 @@ GET:
  	/hotels/country/province_state?id_chaine=X
     /hotels/country/province_state/city
     /hotels/country/province_state/city?id_chaine=X
+
+[x]	/rooms
+[x]	/rooms/id_hotel
+[x] /rooms/id_hotel?capacite=X
+
+POST:
+	/signup/client
+
+[x]	/locations/id_reservation
+[x]	/locations/id_hotel/room_num
+
+PATCH:
+[x]	/reservations/id_reservation?canceled=X
+[x]	/reservations/id_reservation?checkedin=X
+[x]	/reservations/id_reservation?frais_payer=X
+
+[x]	/rooms/id_hotel/room_num?problems=X
