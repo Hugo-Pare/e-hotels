@@ -9,9 +9,12 @@ function Login() {
   };
 
   const handleEmployeeLogin = () => {
-    setShowEmployeeLogin(true)
-
+    setShowEmployeeLogin(true);
+    var loginBtn = document.getElementById("login-buttons");
+    loginBtn.style.backgroundColor = "grey";
   };
+  
+
 
   const handleClientLoginSubmit = (event) => {
     event.preventDefault();
@@ -28,6 +31,7 @@ function Login() {
       const name = formData.get('name');
       alert('Login terminer')
   }
+  
 
   return (
     <div>
@@ -48,15 +52,12 @@ function Login() {
             <form onSubmit={handleClientLoginSubmit}>
               <label>
                 Email:
+                <br/>
                 <input type="email" name="email" required />
-              </label>
-              <label>
-                Name:
-                <input type="text" name="name" required />
               </label>
               <button type="submit">Login</button>
             </form>
-            <button className="close-button" onClick={() => setShowClientLogin(false)}>Close</button>
+            <button className="close-button" onClick={() => setShowClientLogin(false)}>Fermer</button>
           </div>
         </div>
       )}
@@ -65,12 +66,9 @@ function Login() {
           <h2>Login Employer</h2>
           <form onSubmit={handleEmployeeLoginSubmit}>
             <label>
-              Email:
+              Numéro d'identification:
+              <br/>
               <input type="text" name="employee_num" required />
-            </label>
-            <label>
-              Nom:
-              <input type="text" name="name" required />
             </label>
             <button type="submit">Login</button>
           </form>
