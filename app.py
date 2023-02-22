@@ -115,11 +115,20 @@ def signup_user():
         print(e)
         
 @app.route('/clients') 
-def get_client():
+def get_clients():
     try:
         connection = get_db_connection()
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cursor.execute('SELECT * FROM client')
+
+        args = request.args
+        email = args.get('email')
+
+        if(email is not None):
+            cursor.execute('SELECT * FROM client WHERE email_id = (%s)', (email,))
+
+        else:
+            cursor.execute('SELECT * FROM client')
+            
         data = cursor.fetchall()
         json = []
 
@@ -140,6 +149,87 @@ def get_client():
             })
 
         return json
+
+    except Exception as e:
+        print(e)
+
+@app.route('/employes') 
+def get_employes():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+        args = request.args
+        id_employe = args.get('id_employe')
+
+        if(id_employe is not None):
+            cursor.execute('SELECT * FROM employe WHERE id_employe = (%s)', (id_employe,))
+
+        else:
+            cursor.execute('SELECT * FROM employe')
+            
+        data = cursor.fetchall()
+        json = []
+
+        for i in range(len(data)):
+            json.append({
+                "firstname": data[i][0],
+                "lastname": data[i][1],
+                "salaire": data[i][2],
+                "poste": data[i][3],
+                "email": data[i][4],
+                "telephone": data[i][5].strip(),
+                "nas": data[i][6],
+                "country": data[i][7],
+                "province_state": data[i][8],
+                "city": data[i][9],
+                "street_name": data[i][10],
+                "street_num": data[i][11],
+                "zip_code": data[i][12],
+                "id_employe": data[i][13],
+                "id_hotel": data[i][14]
+            })
+
+        return json
+
+    except Exception as e:
+        print(e)
+
+@app.route('/reservations') 
+def get_reservations():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+        args = request.args
+        id_employe = args.get('id_employe')
+
+        if(id is not None):
+            cursor.execute('SELECT * FROM employe WHERE id_employe = (%s)', (id_employe,))
+
+        else:
+            cursor.execute('SELECT * FROM employe')
+            
+        data = cursor.fetchall()
+        json = []
+
+        # for i in range(len(data)):
+        #     json.append({
+        #         "email": data[i][0],
+        #         "firstname": data[i][1],
+        #         "lastname": data[i][2],
+        #         "country": data[i][3],
+        #         "province_state": data[i][4],
+        #         "city": data[i][5],
+        #         "street_name": data[i][6],
+        #         "street_num": data[i][7],
+        #         "zip_code": data[i][11],
+        #         "telephone": data[i][10].strip(),
+        #         "nas": data[i][8],
+        #         "date_enregistrement": data[i][9],
+        #     })
+
+        return data
 
     except Exception as e:
         print(e)
@@ -166,6 +256,36 @@ def get_chaines():
                 "email": data[i][8],
                 "telephone": data[i][9].strip(),
                 "nom_chaine": data[i][10]
+            })
+
+        return json
+
+    except Exception as e:
+        print(e)
+
+@app.route('/hotels') 
+def get_hotels():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute('SELECT * FROM hotel')
+        data = cursor.fetchall()
+        json = []
+
+        for i in range(len(data)):
+            json.append({
+                "id_hotel": data[i][0],
+                "country": data[i][1],
+                "province_state": data[i][2],
+                "city": data[i][3],
+                "street_name": data[i][4],
+                "street_num": data[i][5],
+                "zip_code": data[i][6],
+                "nb_chambre": data[i][7],
+                "telephone": data[i][8].strip(),
+                "email": data[i][9],
+                "rating": data[i][10],
+                "id_chaine": data[i][11]
             })
 
         return json
