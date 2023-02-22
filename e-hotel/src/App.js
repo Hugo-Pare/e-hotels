@@ -10,10 +10,19 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/signup/client" element={<Signup_client />} />
-        <Route path="/firstpage/c" element={<First_page_c />} />
-        <Route path="/firstpage/e" element={<First_page_e />} />
+        <Route path="/signedOut">
+          <Navbar />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signupClient" element={<Signup_client />} />
+        </Route>
+        <Route path="/clientIn">
+          <Navbar_c />
+          <Route path="/" element={<First_page_c />} /> 
+        </Route>
+        <Route path="/employeeIn">
+          <Navbar_e />
+            <Route path="/" element={<First_page_e />} /> 
+        </Route>
       </Routes>
     </Router>
   );
