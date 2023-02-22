@@ -16,7 +16,7 @@ function Signup_client() {
 
   const handleSignUpClick = () => {
     if (!firstName || !lastName || !email || !phoneNumber || !socialInsuranceNumber || !streetNumber || !streetName || !city || !province || !postalCode || !country) {
-      alert("s'il vous plait remplir tout les champs");
+      alert("S'il vous plait remplir tout les champs");
       setIsClicked(true);
       return;
     }
@@ -69,22 +69,23 @@ function Signup_client() {
         Ville:
         <input type="text" value={city} onChange={(e) => setCity(e.target.value)} />
         </label>
+        <br/>
         <label style={{color: isClicked && !province ? 'red' : 'black'}} htmlFor="Province/State">
-            Province/State:
-            <input type="text" value={province} onChange={(e) => setProvince(e.target.value)}/>
+          Province/State:
+          <input type="text" value={province} onChange={(e) => setProvince(e.target.value)}/>
         </label>
         <br/>
         <label style={{color: isClicked && !postalCode ? 'red' : 'black'}} htmlFor="Code_Postal/Zip">
-            Code Postal/Zip:
-            <input type="text" value={postalCode} onChange={(e) => setPostalCode(e.target.value)}/>
+          Code Postal/Zip:
+          <input type="text" value={postalCode} onChange={(e) => setPostalCode(e.target.value)}/>
         </label>
         <br/>
         <label style={{color: isClicked && !country ? 'red' : 'black'}} htmlFor="Pays">
-            Pays:
-            <input type="text" value={country} onChange={(e) => setCountry(e.target.value)}/>
+          Pays:
+          <input type="text" value={country} onChange={(e) => setCountry(e.target.value)}/>
         </label>
         <br/>
-            <button onClick={handleSignUpClick}>Sign up</button>
+          <button onClick={handleSignUpClick}>Sign up</button>
         </div>
     )
 }

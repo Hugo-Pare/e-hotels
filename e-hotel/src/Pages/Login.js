@@ -35,16 +35,16 @@ function Login() {
         <div className="brand">
           <a href="#">E-hotels</a>
         </div>
-        <div className="login-buttons" style={{marginRight: "10px"}}>
-          <button onClick={handleEmployeeLogin}>Employee Login</button>
-          <button onClick={handleClientLogin}>Client Login</button>
-          <a href="/signup"><button>Sign Up</button></a>
+        <div className="login-buttons">
+          <button onClick={handleEmployeeLogin}>Login Employer</button>
+          <button onClick={handleClientLogin}>Login Client</button>
+          <a href="/signup/client"><button>Enregistrer</button></a>
         </div>
       </nav>
       {showClientLogin && (
         <div className="popup">
           <div className="popup-content">
-            <h2>Client Login</h2>
+            <h2>Login Client</h2>
             <form onSubmit={handleClientLoginSubmit}>
               <label>
                 Email:
@@ -62,19 +62,19 @@ function Login() {
       )}
       {showEmployeeLogin && (
           <div className="popup-content">
-          <h2>Employee Login</h2>
+          <h2>Login Employer</h2>
           <form onSubmit={handleEmployeeLoginSubmit}>
             <label>
               Email:
               <input type="text" name="employee_num" required />
             </label>
             <label>
-              Name:
+              Nom:
               <input type="text" name="name" required />
             </label>
             <button type="submit">Login</button>
           </form>
-          <button className="close-button" onClick={() => setShowEmployeeLogin(false)}>Close</button>
+          <button className="close-button" onClick={() => setShowEmployeeLogin(false)}>Fermer</button>
         </div>
       )}
     </div>
