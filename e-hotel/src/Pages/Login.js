@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
   const [showClientLogin, setShowClientLogin] = useState(false);
   const [showEmployeeLogin, setShowEmployeeLogin] = useState(false);
+  const navigate = useNavigate();
 
   const handleClientLogin = () => {
+    setShowEmployeeLogin(false);
     setShowClientLogin(true);
   };
 
   const handleEmployeeLogin = () => {
+    setShowClientLogin(false);
     setShowEmployeeLogin(true);
-    var loginBtn = document.getElementById("login-buttons");
-    loginBtn.style.backgroundColor = "grey";
+    
   };
   
 
@@ -21,7 +24,8 @@ function Login() {
     const formData = new FormData(event.target);
     const email = formData.get('email');
     const name = formData.get('name');
-    alert('Login terminer')
+    navigate('/firstpage/c');
+    
   };
 
   const handleEmployeeLoginSubmit = (event) => {
@@ -29,7 +33,7 @@ function Login() {
       const formData = new FormData(event.target);
       const employee_num = formData.get('employee_num');
       const name = formData.get('name');
-      alert('Login terminer')
+      navigate('/firstpage/e');
   }
   
 
@@ -37,7 +41,7 @@ function Login() {
     <div>
       <nav>
         <div className="brand">
-          <a href="#">E-hotels</a>
+          <a href="/">E-hotels</a>
         </div>
         <div className="login-buttons">
           <button onClick={handleEmployeeLogin}>Login Employer</button>
@@ -55,9 +59,9 @@ function Login() {
                 <br/>
                 <input type="email" name="email" required />
               </label>
+              <br/>
               <button type="submit">Login</button>
             </form>
-            <button className="close-button" onClick={() => setShowClientLogin(false)}>Fermer</button>
           </div>
         </div>
       )}
@@ -70,9 +74,9 @@ function Login() {
               <br/>
               <input type="text" name="employee_num" required />
             </label>
+            <br/>
             <button type="submit">Login</button>
           </form>
-          <button className="close-button" onClick={() => setShowEmployeeLogin(false)}>Fermer</button>
         </div>
       )}
     </div>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Signup_client() {
   const [firstName, setFirstName] = useState('');
@@ -13,19 +14,19 @@ function Signup_client() {
   const [postalCode, setPostalCode] = useState('');
   const [country, setCountry] = useState('');
   const [isClicked, setIsClicked] = useState(false);
+  const navigate = useNavigate();
 
   const handleSignUpClick = () => {
     if (!firstName || !lastName || !email || !phoneNumber || !socialInsuranceNumber || !streetNumber || !streetName || !city || !province || !postalCode || !country) {
       alert("S'il vous plait remplir tout les champs");
       setIsClicked(true);
       return;
-      <style>
-
-      </style>
     }
     else {
-        alert('Enregistrement terminer')
+      navigate('/');
+        
     }
+    
     
 };
   return (
