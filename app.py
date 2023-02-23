@@ -223,6 +223,34 @@ def get_reservations():
     except Exception as e:
         print(e)
 
+@app.route('/reservations/<id_reservation>') 
+def get_reservations_by_id(id_reservation):
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute('SELECT * FROM reservation WHERE id_reservation = (%s)', (id_reservation,))
+        data = cursor.fetchall()
+        json = []
+
+        for i in range(len(data)):
+            json.append({
+                "id_reservation": data[i][0],
+                "id_hotel": data[i][1],
+                "num_chambre": data[i][2],
+                "id_email": data[i][3],
+                "date_checkin": data[i][4],
+                "date_checkout": data[i][5],
+                "frais_total": data[i][6],
+                "frais_restant": data[i][7],
+                "canceled": data[i][8],
+                "location": data[i][9]
+            })
+
+        return json
+
+    except Exception as e:
+        print(e)
+
 @app.route('/reservations/pending') 
 def get_reservations_pending():
     try:
@@ -479,6 +507,80 @@ def get_hotels_by_country_and_province_state_and_city(country,province_state,cit
                 "rating": data[i][10],
                 "id_chaine": data[i][11]
             })
+
+        return json
+
+    except Exception as e:
+        print(e)
+
+@app.route('/rooms') 
+def get_rooms():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute('SELECT * FROM chambre')
+        data = cursor.fetchall()
+        json = []
+
+        for i in range(len(data)):
+            json.append({
+                "prix": data[i][0],
+                "problems": data[i][1],
+                "capacity": data[i][2],
+                "vue": data[i][3],
+                "tv": data[i][4],
+                "ac": data[i][5],
+                "refrigerator": data[i][6],
+                "microwave": data[i][7],
+                "coffee": data[i][8],
+                "oven": data[i][9],
+                "id_hotel": data[i][10],
+                "room_num": data[i][11]
+            })
+
+        return json
+
+    except Exception as e:
+        print(e)
+
+# check /reservation/<id_reservation> "paid_amount" <= "frais_restant" avant de fetch PATCH
+@app.route('/reservations/<id_reservation>', methods=['PATCH']) 
+def update_reservations(id_reservation):
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        args = request.args
+
+        canceled = args.get('canceled')
+        checked_in = args.get('checked_in') # la location a été créer
+        paid_amount = args.get('paid_amount')
+
+        # check if reservation exists
+        if(requests.get("http://127.0.0.1:5000/reservations/{id_reservation}") == []):
+            json.append({"reservation not found": 404})
+            return json
+
+        # on peut cancellé une réservation
+        if(canceled == True):
+            cursor.execute('UPDATE reservation SET canceler = true WHERE id_reservation = (%s)', (id_reservation,))
+            json.append({"canceled reservation": 200})
+            return json
+        
+        elif((checked_in is not None) and (paid_amount is not None)):
+            # update frais restant
+            cursor.execute('UPDATE reservation SET locationcreer = true AND frais_restant = frais_restant - (%s) WHERE id_reservation = (%s)', (paid_amount,id_reservation,))
+            json.append({"updated reservation": 200})
+
+        elif((checked_in is not None)):
+            cursor.execute('UPDATE reservation SET locationcreer = true WHERE id_reservation = (%s)', (id_reservation,))
+            json.append({"updated reservation": 200})
+
+        elif((paid_amount is not None)):
+            cursor.execute('UPDATE reservation SET frais_restant = frais_restant - (%s) WHERE id_reservation = (%s)', (paid_amount,id_reservation,))
+            json.append({"updated reservation": 200})
+
+        else:
+            json.append({"reservation unchanged": 200})
 
         return json
 
