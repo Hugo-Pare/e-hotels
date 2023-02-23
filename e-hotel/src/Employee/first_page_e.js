@@ -1,66 +1,51 @@
-import { Component } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-const LocationComponent = props => {
-    const location = useLocation()
-    console.log(location)
-    const state = location.state;
-    // return <Main location={location} {...props} /> // your component
-  }
-
-// import { useLocation } from "react-router-dom";
-class First_page_e extends Component{
-
-    constructor(props){
-      super(props)
-    }
-
-
+function First_page_e(){
     
-    render(){
-        // let {id} = useLocation();
-        console.log(this.state)
-        return(<div>
-                <h1>Résérvations actifs</h1>
+    const id_employe = useLocation().state.id
+    console.log(id_employe)
+
+    return(
+        <div>
+            <h1>Résérvations actifs</h1>
+            <br/>
+            <div>
+                <label>
+                    Email
+                    <br/>
+                    <input type="email" name="email"/>
+                </label>
                 <br/>
-                <div>
-                    <label>
-                        Email
-                        <br/>
-                        <input type="email" name="email"/>
-                    </label>
+                <label>
+                    Nom
                     <br/>
-                    <label>
-                        Nom
-                        <br/>
-                        <input type="nom" name="nom" required />
-                    </label>
+                    <input type="nom" name="nom" required />
+                </label>
+                <br/>
+                <label>
+                    Prénom
                     <br/>
-                    <label>
-                        Prénom
-                        <br/>
-                        <input type="prenom" name="prenom" required />
-                    </label>
-                    <br/>
+                    <input type="prenom" name="prenom" required />
+                </label>
+                <br/>
 
-                    <button type="submit">Search</button>
-                    <button>Clear</button>
-                </div>
+                <button type="submit">Search</button>
+                <button>Clear</button>
+            </div>
 
-                <div>
-                    <h2>Recherche de réservation avec ID</h2>
+            <div>
+                <h2>Recherche de réservation avec ID</h2>
+                <br/>
+                <label>
+                    ID
                     <br/>
-                    <label>
-                        ID
-                        <br/>
-                        <input type="prenom" name="prenom" required />
-                    </label> <br/>
-                    <button>Find</button>
-                </div>
+                    <input type="prenom" name="prenom" required />
+                </label> <br/>
+                <button>Find</button>
+            </div>
 
-        </div>
-           
-        )
-    }
+    </div>
+        
+    )
 } 
 export default First_page_e; 
