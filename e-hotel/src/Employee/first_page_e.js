@@ -1,26 +1,12 @@
-import { Component } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-const LocationComponent = props => {
-    const location = useLocation()
-    console.log(location)
-    const state = location.state;
-    // return <Main location={location} {...props} /> // your component
-  }
-
-// import { useLocation } from "react-router-dom";
-class First_page_e extends Component{
-
-    constructor(props){
-      super(props)
-    }
-
-
+function First_page_e(){
     
-    render(){
+    const id_employe = useLocation().state.id
+    console.log(id_employe)
 
-        console.log(this.state)
-        return(<div className="grid-page">
+    return(
+        <div className="grid-page">
             <div>
                 <h1>Résérvations actifs</h1>
                 <br/>
@@ -62,8 +48,7 @@ class First_page_e extends Component{
                 </div>
 
         </div>
-           
-        )
-    }
+        
+    )
 } 
 export default First_page_e; 
