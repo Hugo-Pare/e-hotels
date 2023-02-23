@@ -15,7 +15,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signupClient" element={<Signup_client />} />
         </Route>
-        <Route path="/clientIn">
+        <Route path="/clientIn/:email">
           <Navbar_c />
           <Route path="/" element={<First_page_c />} /> 
         </Route>
