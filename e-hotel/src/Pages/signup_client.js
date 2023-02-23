@@ -17,11 +17,75 @@ function Signup_client() {
   const navigate = useNavigate();
 
   const handleSignUpClick = () => {
+    const regex_firstname = /^[a-zA-Z]{2,}$/;
+    const regex_lastname = /^[a-zA-Z]{2,}$/;
+    const regex_email = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/ 
+    const regex_phonenumber = /^(\d{3}-|\(\d{3}\) )\d{3}-\d{4}$/;
+    const regex_streetnum = /^\d{0,8}$/;
+    const regex_nas = /^\d{9}$/;
+    const regex_postalcode = /\b[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d\b/;
+    const regex_string = /[a-zA-Z]+/; 
     if (!firstName || !lastName || !email || !phoneNumber || !socialInsuranceNumber || !streetNumber || !streetName || !city || !province || !postalCode || !country) {
       alert("S'il vous plait remplir tout les champs");
       setIsClicked(true);
       return;
     }
+    if (!regex_firstname.test(firstName)) {
+      alert("Le prénom doit avoir au moins 2 lettres et ne doit contenir que des lettres alphabétiques.");
+      setIsClicked(true);
+      return;
+    }
+    if (!regex_lastname.test(lastName)) {
+      alert("Le nom doit avoir au moins 2 lettres et ne doit contenir que des lettres alphabétiques.");
+      setIsClicked(true);
+      return;
+    }
+    if (!regex_email.test(email)) {
+      alert("Le courriel n'est pas valide");
+      setIsClicked(true);
+      return;
+    }
+    if (!regex_phonenumber.test(phoneNumber)) {
+      alert("Le numero de telephone n'est pas valide");
+      setIsClicked(true);
+      return;
+    } 
+    if (!regex_nas.test(socialInsuranceNumber)) {
+      alert("Le numero d'assurance sociale n'est pas valide");
+      setIsClicked(true);
+      return;
+    }
+    if (!regex_streetnum.test(streetNumber)) {
+      alert("Le numero d'assurance sociale n'est pas valide");
+      setIsClicked(true);
+      return;
+    }
+    if (!regex_streetnum.test(streetNumber)) {
+      alert("Le numero d'assurance sociale n'est pas valide");
+      setIsClicked(true);
+      return;
+    }
+    if (!regex_postalcode.test(postalCode)) {
+      alert("Le code postale n'est pas valide");
+      setIsClicked(true);
+      return;
+    }
+    if (!regex_string.test(country)) {
+      alert("Le pays n'est pas valide");
+      setIsClicked(true);
+      return;
+    }
+    if (!regex_string.test(province)) {
+      alert("La province n'est pas valide");
+      setIsClicked(true);
+      return;
+    }
+    if (!regex_string.test(city)) {
+      alert("La ville n'est pas valide");
+      setIsClicked(true);
+      return;
+    }
+
     else {
       navigate('/');
         
@@ -36,7 +100,7 @@ function Signup_client() {
       <label style={{color: isClicked && !firstName ? 'red' : 'black'}} htmlFor="firstName">
         Prénom:
         <br/>
-        <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+        <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
       </label>
       <br />
       <label style={{color: isClicked && !lastName ? 'red' : 'black'}} htmlFor="lastName">
