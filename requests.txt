@@ -1,3 +1,9 @@
+POST:
+	/signup/client
+
+[x]	/locations/id_employe/id_reservation
+[x]	/locations/id_employe/id_hotel/room_num
+
 GET:
 	/clients
 	/clients?email=X
@@ -6,6 +12,7 @@ GET:
 	/employes?id_employe=X
 
 	/reservations
+	/reservations/id_reservation
 	/reservations/pending/
 	/reservations/pending/id_hotel
 	/reservations/pending/id_hotel?id_reservation=X
@@ -28,15 +35,9 @@ GET:
     /hotels/country/province_state/city
     /hotels/country/province_state/city?id_chaine=X
 
-[x]	/rooms
+	/rooms
 [x]	/rooms/id_hotel
 [x] /rooms/id_hotel?capacite=X
-
-POST:
-	/signup/client
-
-[x]	/locations/id_reservation
-[x]	/locations/id_hotel/room_num
 
 PATCH:
 [x]	/reservations/id_reservation?canceled=X
