@@ -7,7 +7,7 @@ const Navbar_e = () => {
           <div className="brand">
             <a href="/">E-hotels</a>
           </div>
-          <div className="login-buttons">
+          <div className="nav-buttons">
             <button >Login Employer</button>
             <button >Login Client</button>
             <a href="/signup/client"><button>Enregistrer</button></a>

@@ -25,7 +25,7 @@ function App() {
           <Route path="/clientIn" element={<First_page_c />} /> 
         </Route>
         <Route path="/employeeIn">
-            <Route path="/employeeIn" element={<First_page_e />} /> 
+            <Route path="/employeeIn" element={<><Navbar_e /><First_page_e /></>} /> 
         </Route>
       </Routes>
     </Router>
