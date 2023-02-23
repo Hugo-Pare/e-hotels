@@ -18,35 +18,38 @@ class First_page_e extends Component{
 
     
     render(){
-        // let {id} = useLocation();
+
         console.log(this.state)
-        return(<div>
+        return(<div className="grid-page">
+            <div>
                 <h1>Résérvations actifs</h1>
                 <br/>
-                <div>
-                    <label>
+                <div className="grid-search">
+                    <div> <label>
                         Email
                         <br/>
                         <input type="email" name="email"/>
-                    </label>
-                    <br/>
-                    <label>
+                    </label></div>
+                    <div><label>
                         Nom
                         <br/>
-                        <input type="nom" name="nom" required />
-                    </label>
-                    <br/>
-                    <label>
+                        <input type="nom" name="nom" />
+                    </label></div>
+                    <div><label>
                         Prénom
                         <br/>
-                        <input type="prenom" name="prenom" required />
-                    </label>
-                    <br/>
-
-                    <button type="submit">Search</button>
-                    <button>Clear</button>
+                        <input type="prenom" name="prenom" />
+                    </label></div>
+                    <div>
+                    <button className="hug-bottom" type="submit">Search</button>
+             
+                    </div>
+                    <div>
+                    <button className="hug-bottom">Clear</button> 
+                    </div>
+   
                 </div>
-
+                </div>
                 <div>
                     <h2>Recherche de réservation avec ID</h2>
                     <br/>
@@ -55,7 +58,7 @@ class First_page_e extends Component{
                         <br/>
                         <input type="prenom" name="prenom" required />
                     </label> <br/>
-                    <button>Find</button>
+                    <button>Search</button>
                 </div>
 
         </div>

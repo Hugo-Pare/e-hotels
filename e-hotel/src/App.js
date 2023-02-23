@@ -1,4 +1,5 @@
 import './App.css';
+import './Employee.css';
 import Signup_client from './LoggedOut/signup_client.js'
 import First_page_c from './Client/first_page_c'
 import First_page_e from './Employee/first_page_e'
