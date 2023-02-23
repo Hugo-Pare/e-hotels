@@ -1,5 +1,8 @@
+import { useLocation } from "react-router-dom";
 function First_page_e() {
-
+    const location = useLocation();
+   
+    console.log(location.state)
 
 
     return(
