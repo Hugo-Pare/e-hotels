@@ -13,7 +13,8 @@ function LoginEmployee() {
         if (json.length === 0) {
           alert("Votre comptes n'est pas activer");
         } else {
-          navigate('/employee', {'id':employee_num});
+          console.log('valid')
+          navigate('/employeeIn', {'id':employee_num});
         }
       });
   }
@@ -23,6 +24,7 @@ function LoginEmployee() {
     const formData = new FormData(event.target);
     const employee_num = formData.get('employee_num');
     const regex_employeenum = /^\d{0,8}$/;
+    console.log("in");
     if (!regex_employeenum.test(employee_num)) {
       alert("Le numero d'employer n'est pas valide ");
       return;
