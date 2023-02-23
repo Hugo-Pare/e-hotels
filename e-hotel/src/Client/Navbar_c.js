@@ -1,4 +1,4 @@
-const Navbar = () => {
+const Navbar_c = () => {
 
     return (
         <nav>
@@ -6,10 +6,12 @@ const Navbar = () => {
             <a href="/">E-hotels</a>
           </div>
           <div className="login-buttons">
-            <button onClick={handleEmployeeLogin}>Login Employer</button>
-            <button onClick={handleClientLogin}>Login Client</button>
+            <button >Login Employer</button>
+            <button >Login Client</button>
             <a href="/signup/client"><button>Enregistrer</button></a>
           </div>
         </nav>
     )
 }
+
+export default Navbar_c
