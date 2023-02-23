@@ -17,25 +17,25 @@ function Signup_client() {
   const navigate = useNavigate();
 
   const handleSignUpClick = () => {
-    const regex_firstname = /^[a-zA-Z]{2,}$/;
-    const regex_lastname = /^[a-zA-Z]{2,}$/;
-    const regex_email = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/ 
-    const regex_phonenumber = /^(\d{3}-|\(\d{3}\) )\d{3}-\d{4}$/;
-    const regex_streetnum = /^\d{0,8}$/;
+    const regex_name = /^[a-zA-Z]{2,}$/;
+    const regex_email = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/; 
+    const regex_phonenumber = /^\d{10,12}$/;
+    const regex_streetnum = /^\d{1,8}$/;
     const regex_nas = /^\d{9}$/;
-    const regex_postalcode = /\b[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d\b/;
+    const regex_postalcode = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
+    const regex_zip = /^\d{5}$/;
     const regex_string = /[a-zA-Z]+/; 
     if (!firstName || !lastName || !email || !phoneNumber || !socialInsuranceNumber || !streetNumber || !streetName || !city || !province || !postalCode || !country) {
       alert("S'il vous plait remplir tout les champs");
       setIsClicked(true);
       return;
     }
-    if (!regex_firstname.test(firstName)) {
+    if (!regex_name.test(firstName)) {
       alert("Le prénom doit avoir au moins 2 lettres et ne doit contenir que des lettres alphabétiques.");
       setIsClicked(true);
       return;
     }
-    if (!regex_lastname.test(lastName)) {
+    if (!regex_name.test(lastName)) {
       alert("Le nom doit avoir au moins 2 lettres et ne doit contenir que des lettres alphabétiques.");
       setIsClicked(true);
       return;
@@ -65,17 +65,12 @@ function Signup_client() {
       setIsClicked(true);
       return;
     }
-    if (!regex_postalcode.test(postalCode)) {
-      alert("Le code postale n'est pas valide");
-      setIsClicked(true);
-      return;
-    }
     if (!regex_string.test(country)) {
       alert("Le pays n'est pas valide");
       setIsClicked(true);
       return;
     }
-    if (!regex_string.test(province)) {
+    if(!regex_string.test(province)) {
       alert("La province n'est pas valide");
       setIsClicked(true);
       return;
@@ -85,15 +80,25 @@ function Signup_client() {
       setIsClicked(true);
       return;
     }
-
+    if (country == "Canada" && (!regex_postalcode.test(postalCode))) {
+      alert("Le code postale n'est pas valide");
+      setIsClicked(true);
+      return; 
+    }
+    if (country == "Etats-Unis" && (!regex_zip.test(postalCode))) {
+      console.log (country)
+      alert("Le zip n'est pas valide");
+      setIsClicked(true);
+      return;
+    }
     else {
       navigate('/');
         
     }
-    
-    
-};
+
+    }
   return (
+    
     <div>
       <h1>S'enregistrer</h1>
 
@@ -159,9 +164,13 @@ function Signup_client() {
         </label>
         <br/>
         <label style={{color: isClicked && !country ? 'red' : 'black'}} htmlFor="Pays">
-          Pays:
+          Pays :
           <br/>
-          <input type="text" value={country} onChange={(e) => setCountry(e.target.value)}/>
+          <select id="Pays" name="Pays" value={country} onChange={(e) => setCountry(e.target.value)}>
+            <option value="">--Choisir un pays--</option>
+            <option value="Canada">Canada</option>
+            <option value="Etats-Unis">États-Unis</option>
+          </select>
         </label>
         <br/>
           <button onClick={handleSignUpClick}>Sign up</button>
