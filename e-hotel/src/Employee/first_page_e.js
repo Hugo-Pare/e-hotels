@@ -1,9 +1,32 @@
+
+// import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
 function First_page_e(){
     
     const id_employe = useLocation().state.id
-    console.log(id_employe)
+    let id_hotel = null
+    
+    console.log("id_employe : " + id_employe)
+
+    async function getHotelId(){
+        fetch(`http://127.0.0.1:5000/employes?id_employe=${id_employe}`)
+        .then(function(response){
+            return response.json()
+        })
+        .then(function(data){
+            // console.log(data[0].id_hotel)
+            id_hotel = data[0].id_hotel
+            getAllReservations()
+        })
+    }
+
+    async function getAllReservations(){
+        console.log("id_hotel : " + id_hotel)
+        // fetch(`http://127.0.0.1:5000/pending/reservations/${id_hotel}`)
+        // .then(response => response.json())
+        // .then(json => console.log(json))
+    }
 
     return(
         <div className="grid-page">
@@ -44,7 +67,7 @@ function First_page_e(){
                         <br/>
                         <input type="prenom" name="prenom" required />
                     </label> <br/>
-                    <button>Search</button>
+                    <button onClick={getHotelId}>Search</button>
                 </div>
 
         </div>
