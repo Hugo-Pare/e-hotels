@@ -116,6 +116,12 @@ function First_page_e(){
         getHotelId()
     }
 
+    function handleLocation(event){
+        const id_reservation = event.target.value
+        console.log("clicked location, id_reservation = " + id_reservation)
+        // navigate to location page
+    }
+
     return(
         <>
             <div className="grid-page">
@@ -166,6 +172,7 @@ function First_page_e(){
                                     <td>{reservation.num_chambre}</td>
                                     <td>${reservation.frais_total}</td>
                                     <td>${reservation.frais_restant}</td>
+                                    <td><button value={reservation.id_reservation} onClick={handleLocation}>Location</button></td>
                                 </tr>
                             ))}
                         </tbody>
