@@ -1,12 +1,22 @@
+table {
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+}
+
 th{
-    width: 12%;
     font-size: larger;
     padding-top: 1%;
+    padding-bottom: 1%;
 }
 
 td{
     text-align: center;
     margin-top: 1%;
+}
+
+tr{
+    border-bottom: 1pt solid black;
 }
 
 .filter{
