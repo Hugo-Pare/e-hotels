@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 
 function First_page_e(){
     
+    sessionStorage.setItem("id", id_employe)
     const id_employe = useLocation().state.id
     let id_hotel = null
     
