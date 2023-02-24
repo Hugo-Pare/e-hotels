@@ -4,11 +4,10 @@ import { useLocation } from "react-router-dom";
 
 function First_page_e(){
     
-    sessionStorage.setItem("id", id_employe)
+    
     const id_employe = useLocation().state.id
     let id_hotel = null
-    
-    console.log("id_employe : " + id_employe)
+    sessionStorage.setItem("id", id_employe)
 
     async function getHotelId(){
         fetch(`http://127.0.0.1:5000/employes?id_employe=${id_employe}`)
