@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import './first_page_e.css'
 
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -124,25 +126,19 @@ function First_page_e(){
 
     return(
         <>
-            <div className="grid-page">
+            <div>
                 <div>
                     <h1>Réservations Actives</h1>
                     <br/>
-                    <div className="grid-search">
-                        <div>
-                            <label>Email : </label>
-                            <input type="email" name="email" onChange={handleEmailChange} value={email}/>
-                        </div>
-                        <div>
-                            <label>ID Réservation : </label>
-                            <input type="id" name="id" onChange={handleIdChange} value={id}/>
-                        </div>
-                        <div>
-                            <button className="hug-bottom" onClick={handleSearch}>Search</button>
-                        </div>
-                        <div>
-                            <button className="hug-bottom" onClick={handleClear}>Clear</button> 
-                        </div>
+                    <div className="filter">
+                        <label>Email : </label>
+                        <input type="email" name="email" onChange={handleEmailChange} value={email}/>
+                    
+                        <label>ID Réservation : </label>
+                        <input type="id" name="id" onChange={handleIdChange} value={id}/>
+                    
+                        <button onClick={handleSearch}>Search</button>
+                        <button onClick={handleClear}>Clear</button> 
                     </div>
                 </div>    
             </div>
@@ -160,9 +156,8 @@ function First_page_e(){
                                 <th>Frais Restant</th>
                             </tr>
                         </thead>
-                        {console.log(data)}
+                        {/* {console.log(data)} */}
                         <tbody>
-                            {/* si data is empty, "aucune réservation trouvée" */}
                             {data[0].map((reservation) => (
                                 <tr key={reservation.id_reservation}>
                                     <td>{reservation.id_reservation}</td>
@@ -177,6 +172,8 @@ function First_page_e(){
                             ))}
                         </tbody>
                     </table>
+                    {/* si data is empty, "aucune réservation trouvée" */}
+                    {data[0].length === 0 ? <div className='no-result-found'>Aucunes Réservations Trouvées</div> : <div></div>}
                     
                 </div>
             : <div><p>Loading Reservations ...</p></div>}

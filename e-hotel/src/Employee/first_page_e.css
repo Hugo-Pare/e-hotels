@@ -1,0 +1,20 @@
+th{
+    width: 12%;
+    font-size: larger;
+    padding-top: 1%;
+}
+
+td{
+    text-align: center;
+    margin-top: 1%;
+}
+
+.filter{
+    text-align: left;
+}
+
+.no-result-found{
+    text-align: center;
+    padding-top: 2%;
+    font-size: larger;
+}
