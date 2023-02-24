@@ -291,14 +291,12 @@ def get_reservations_pending_by_hotel_id(id_hotel):
         date_checkin = args.get('date_checkin')
 
         # if statements
-        if(id_reservation is not None):
-            cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false AND id_hotel = (%s) AND id_reservation = (%s)', (id_hotel,id_reservation,))
-        elif((email_client is not None) and (date_checkin is not None)):
-            cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false AND id_hotel = (%s) AND LOWER(email_id) = LOWER((%s)) AND date_checkin = (%s)', (id_hotel,email_client,date_checkin,))
+        if(id_reservation is not None and email_client is not None):
+            cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false AND id_hotel = (%s) AND id_reservation = (%s) AND LOWER(email_id) = LOWER((%s))', (id_hotel,id_reservation,email_client,))
         elif(email_client is not None):
             cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false AND id_hotel = (%s) AND LOWER(email_id) = LOWER((%s))', (id_hotel,email_client,))
-        elif(date_checkin is not None):
-            cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false AND id_hotel = (%s) AND date_checkin = (%s)', (id_hotel,date_checkin,))
+        elif(id_reservation is not None):
+            cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false AND id_hotel = (%s) AND id_reservation = (%s)', (id_hotel,id_reservation,))
         else:
             cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false AND id_hotel = (%s)', (id_hotel,))
 

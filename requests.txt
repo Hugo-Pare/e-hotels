@@ -17,8 +17,7 @@ GET:
 	/reservations/pending/id_hotel
 	/reservations/pending/id_hotel?id_reservation=X
 	/reservations/pending/id_hotel?email_client=X
-	/reservations/pending/id_hotel?date_checkin=X
-	/reservations/pending/id_hotel?date_checkin=X&email_client=X
+[x] /reservations/pending/id_hotel?id_reservation=X&email_client=X
 
 [x]	/locations
 [x]	/locations?email_client=X
