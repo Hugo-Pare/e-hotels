@@ -27,7 +27,7 @@ function First_page_e(){
                         <input type="prenom" name="prenom" />
                     </label></div>
                     <div>
-                    <button className="hug-bottom" type="submit">Search</button>
+                    <button className="hug-bottom">Search</button>
              
                     </div>
                     <div>

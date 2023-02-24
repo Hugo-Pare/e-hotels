@@ -8,9 +8,7 @@ const Navbar_e = () => {
             <a href="/">E-hotels</a>
           </div>
           <div className="nav-buttons">
-            <button >Login Employer</button>
-            <button >Login Client</button>
-            <a href="/signup/client"><button>Enregistrer</button></a>
+            <button><a href="">Account Info</a></button>
           </div>
         </nav>
     )
