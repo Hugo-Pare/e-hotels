@@ -1,8 +1,9 @@
 POST:
 	/signup/client
+[x] /update/client?email_client=X
+[x] /update/employe?id_employe=X
 
-[x]	/locations/id_employe/id_reservation
-[x]	/locations/id_employe/id_hotel/room_num
+	/locations
 
 GET:
 	/clients
@@ -17,10 +18,11 @@ GET:
 	/reservations/pending/id_hotel
 	/reservations/pending/id_hotel?id_reservation=X
 	/reservations/pending/id_hotel?email_client=X
-[x] /reservations/pending/id_hotel?id_reservation=X&email_client=X
+	/reservations/pending/id_hotel?id_reservation=X&email_client=X
 
 [x]	/locations
 [x]	/locations?email_client=X
+	/locations/count
 [x]	/locations/id_location
 
 	/chaines
@@ -39,8 +41,8 @@ GET:
 [x] /rooms/id_hotel?capacite=X
 
 PATCH:
-[x]	/reservations/id_reservation?canceled=X
-[x]	/reservations/id_reservation?checkedin=X
-[x]	/reservations/id_reservation?frais_payer=X
+	/reservations/id_reservation?canceled=X
+	/reservations/id_reservation?checkedin=X
+	/reservations/id_reservation?frais_restant=X
 
 [x]	/rooms/id_hotel/room_num?problems=X

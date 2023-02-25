@@ -114,6 +114,49 @@ def signup_user():
     except Exception as e:
         print(e)
         
+@app.route('/locations', methods=['POST'])
+def post_location_with_reservation():
+    try:
+        # get all data from json body
+        data = request.get_json(force=True)
+        
+        # get value for each key
+        id_location = data['id_location']
+        frais_restant = data['frais_restant']
+        frais_total = data['frais_total']
+        date_checkin = data['date_checkin']
+        date_checkout = data['date_checkout']
+        id_employe = data['id_employe']
+        email_id = data['email_id']
+        num_chambre = data['num_chambre']
+        id_hotel = data['id_hotel']
+        id_reservation = data['id_reservation']
+
+        # connect to database
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute('INSERT INTO location VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', (id_location,frais_restant,frais_total,date_checkin,date_checkout,id_employe,email_id,num_chambre,id_hotel,id_reservation,))
+        connection.commit()
+
+        # return json data of new location
+        location_data = {
+            "id_location": id_location,
+            "frais_restant": frais_restant,
+            "frais_total": frais_total,
+            "date_checkin": date_checkin,
+            "date_checkout": date_checkout,
+            "id_employe": id_employe,
+            "email_id": email_id,
+            "num_chambre": num_chambre,
+            "id_hotel": id_hotel,
+            "id_reservation": id_reservation
+        }
+
+        return json.dumps(location_data)
+
+    except Exception as e:
+        print(e) 
+
 @app.route('/clients') 
 def get_clients():
     try:
@@ -251,6 +294,7 @@ def get_reservations_by_id(id_reservation):
     except Exception as e:
         print(e)
 
+
 @app.route('/reservations/pending') 
 def get_reservations_pending():
     try:
@@ -321,6 +365,20 @@ def get_reservations_pending_by_hotel_id(id_hotel):
 
     except Exception as e:
         print(e)
+
+@app.route('/locations/count') 
+def get_count_locations():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute('SELECT COUNT(*) FROM location')
+        data = cursor.fetchall()
+
+        return data[0]
+
+    except Exception as e:
+        print(e)
+
 
 @app.route('/chaines') 
 def get_chaines():
@@ -541,7 +599,7 @@ def get_rooms():
     except Exception as e:
         print(e)
 
-# check /reservation/<id_reservation> "paid_amount" <= "frais_restant" avant de fetch PATCH
+# check /reservation/<id_reservation>
 @app.route('/reservations/<id_reservation>', methods=['PATCH']) 
 def update_reservations(id_reservation):
     try:
@@ -551,34 +609,29 @@ def update_reservations(id_reservation):
 
         canceled = args.get('canceled')
         checked_in = args.get('checked_in') # la location a été créer
-        paid_amount = args.get('paid_amount')
+        frais_restant = args.get('frais_restant')
+
+        json = []
 
         # check if reservation exists
-        if(requests.get("http://127.0.0.1:5000/reservations/{id_reservation}") == []):
-            json.append({"reservation not found": 404})
-            return json
+        # if(requests.get("http://127.0.0.1:5000/reservations/{id_reservation}") == []):
+        #     json.append({"reservation not found": 404})
+        #     return json
 
         # on peut cancellé une réservation
-        if(canceled == True):
+        if(canceled == "true"):
             cursor.execute('UPDATE reservation SET canceler = true WHERE id_reservation = (%s)', (id_reservation,))
-            json.append({"canceled reservation": 200})
-            return json
-        
-        elif((checked_in is not None) and (paid_amount is not None)):
-            # update frais restant
-            cursor.execute('UPDATE reservation SET locationcreer = true AND frais_restant = frais_restant - (%s) WHERE id_reservation = (%s)', (paid_amount,id_reservation,))
-            json.append({"updated reservation": 200})
+            json.append({"reservation canceled": "true"})
 
-        elif((checked_in is not None)):
+        elif(checked_in is not None):
             cursor.execute('UPDATE reservation SET locationcreer = true WHERE id_reservation = (%s)', (id_reservation,))
-            json.append({"updated reservation": 200})
+            json.append({"reservation checked in": "true"})
 
-        elif((paid_amount is not None)):
-            cursor.execute('UPDATE reservation SET frais_restant = frais_restant - (%s) WHERE id_reservation = (%s)', (paid_amount,id_reservation,))
-            json.append({"updated reservation": 200})
-
-        else:
-            json.append({"reservation unchanged": 200})
+        elif(frais_restant is not None):
+            cursor.execute('UPDATE reservation SET frais_restant = (%s) WHERE id_reservation = (%s)', (frais_restant,id_reservation,))
+            json.append({"updated amount": frais_restant})
+        
+        connection.commit()
 
         return json
 

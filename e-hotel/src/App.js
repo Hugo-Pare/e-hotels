@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-pascal-case */
 import './App.css';
 import './Employee.css';
 import Signup_client from './LoggedOut/signup_client.js'
@@ -9,6 +10,7 @@ import Navbar_e from './Employee/Navbar_e';
 import LoginEmployee from './LoggedOut/Login_e';
 import LoginClient from './LoggedOut/Login_c';
 import Info_e from './Employee/info_e';
+import Location from './Employee/location'
 
 import { BrowserRouter as Router, Routes, Route, React} from 'react-router-dom';
 
@@ -29,6 +31,7 @@ function App() {
         <Route exact path="/employeeIn">
             <Route exact path="/employeeIn" element={<><Navbar_e /><First_page_e /></>} />
             <Route exact path="/employeeIn/info" element={<><Navbar_e />< Info_e/></>} />
+            <Route exact path='/employeeIn/location' element={<><Navbar_e />< Location/></>}/>
         </Route>
       </Routes>
     </Router>
