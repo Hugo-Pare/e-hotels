@@ -2,11 +2,12 @@
 import './first_page_e.css'
 
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { format } from 'date-fns'
 
 function First_page_e(){
     const id_employe = useLocation().state.id
+    const navigate = useNavigate();
     sessionStorage.setItem("id", id_employe)
     let id_hotel = null
 
@@ -122,13 +123,45 @@ function First_page_e(){
         const id_reservation = event.target.value
         console.log("clicked location, id_reservation = " + id_reservation)
         // navigate to location page
+        navigate('/employeeIn/location', {
+            state: {
+                reservationId: id_reservation,
+                id_employe: id_employe
+            }
+        });
+    }
+
+    function handleAnnulation(event){
+        const id_reservation = event.target.value
+        // console.log("clicked annulation, id_reservation = " + id_reservation)
+        // alert pour s'assurer d'annuler la réservation
+        if(window.confirm('Voulez-vous vraiment annuler cette réservation?')){
+            console.log("annuler la réservation " + id_reservation)
+            
+            // patch request
+            fetch(`http://127.0.0.1:5000/reservations/${id_reservation}?canceled=true`, {
+                method: "PATCH"
+            })
+            .then(response => response.json())
+            .then(function(json){
+                console.log(json)
+            })
+
+            // reload data
+            setData([])
+            setLoaded(false)
+            getHotelId()
+        }
+        else{
+            // do nothing
+        }
     }
 
     return(
         <>
             <div>
                 <div>
-                    <h1>Réservations Actives</h1>
+                    <h1>Réservations en Attente</h1>
                     <br/>
                     <div className="filter">
                         <label>Email : </label>
@@ -167,13 +200,16 @@ function First_page_e(){
                                     <td>{reservation.num_chambre}</td>
                                     <td>${reservation.frais_total}</td>
                                     <td>${reservation.frais_restant}</td>
-                                    <td><button value={reservation.id_reservation} onClick={handleLocation}>Location</button></td>
+                                    <td>
+                                        <button value={reservation.id_reservation} onClick={handleLocation}>Location</button>
+                                        <button value={reservation.id_reservation} onClick={handleAnnulation}>Annulation</button>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
                     {/* si data is empty, "aucune réservation trouvée" */}
-                    {data[0].length === 0 ? <div className='no-result-found'>Aucunes Réservations Trouvées</div> : <div></div>}
+                    {data[0].length === 0 ? <div className='no-result-found'>Aucune Réservation Trouvée</div> : <div></div>}
                     
                 </div>
             : <div><p>Loading Reservations ...</p></div>}

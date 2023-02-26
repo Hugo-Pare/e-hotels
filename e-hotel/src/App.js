@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-pascal-case */
 import './App.css';
 import './Employee.css';
 import Signup_client from './LoggedOut/signup_client.js'
@@ -9,6 +10,10 @@ import Navbar_e from './Employee/Navbar_e';
 import LoginEmployee from './LoggedOut/Login_e';
 import LoginClient from './LoggedOut/Login_c';
 import Info_e from './Employee/info_e';
+import Location from './Employee/location'
+import Hotel_rooms from './Client/Hotel_rooms'
+import Info_chaine from './Client/Info_chaine'
+import Reservation from './Client/Reservation'
 
 import { BrowserRouter as Router, Routes, Route, React} from 'react-router-dom';
 
@@ -24,11 +29,15 @@ function App() {
             <Route exact path="/signupClient" element={<><Navbar/> <Signup_client /> </>} />
         </Route>
         <Route exact path="/clientIn">
-          <Route exact path="/clientIn" element={<><Navbar_c/><First_page_c /></>} /> 
+          <Route exact path="/clientIn" element={<><Navbar_c/><First_page_c /></>} />
+          <Route exact path="/clientIn/hotelRooms" element={<><Navbar_c/><Hotel_rooms /></>} />
+          <Route exact path="/clientIn/infoChaine" element={<><Navbar_c/><Info_chaine /></>} />
+          <Route exact path="/clientIn/hotelRooms/reservation" element={<><Navbar_c/><Reservation /></>} />
         </Route>
         <Route exact path="/employeeIn">
             <Route exact path="/employeeIn" element={<><Navbar_e /><First_page_e /></>} />
             <Route exact path="/employeeIn/info" element={<><Navbar_e />< Info_e/></>} />
+            <Route exact path='/employeeIn/location' element={<><Navbar_e />< Location/></>}/>
         </Route>
       </Routes>
     </Router>
