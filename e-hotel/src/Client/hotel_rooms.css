@@ -1,0 +1,14 @@
+
+.hotel-rooms-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .filter-panel {
+    flex: 0;
+    margin-right: 0px;
+  }
+  .table-panel {
+    flex: 2;
+  }
+  

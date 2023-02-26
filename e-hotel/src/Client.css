@@ -1,0 +1,32 @@
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+  }
+  
+  .left-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .right-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  
+  .square {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  
+  button {
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+  
+  
