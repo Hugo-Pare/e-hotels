@@ -592,7 +592,57 @@ def get_rooms():
                 "oven": data[i][9],
                 "id_hotel": data[i][10],
                 "room_num": data[i][11]
-            })
+        })
+
+        return json
+
+    except Exception as e:
+        print(e)
+
+@app.route('/employes/info/<id_employe>', methods=['PATCH']) 
+def update_employe_info_by_id(id_employe):
+    try:
+        # get all data from json body
+        data_received = request.get_json(force=True)
+
+        # get value for each key
+        email = data_received['email']
+        firstname = data_received['firstname']
+        lastname = data_received['lastname']
+        country = data_received['country']
+        province_state = data_received['province_state']
+        city = data_received['city']
+        street_name = data_received['street_name']
+        street_num = data_received['street_num']
+        zip_code = data_received['zip_code']
+        telephone = data_received['telephone']
+        salary = data_received['salary']
+        poste = data_received['poste']
+
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute(
+            '''UPDATE employe SET email = (%s), prenom = (%s), nom = (%s), salaire = (%s), poste_hotel = (%s), telephone = (%s), pays = (%s),
+            province_state = (%s), ville = (%s), rue = (%s), num_rue = (%s), postal_zip_code = (%s)
+            WHERE id_employe = (%s)''', (email,firstname,lastname,salary,poste,telephone,country,province_state,city,street_name,street_num,zip_code,id_employe,))
+        connection.commit()
+        json = []
+
+        json.append({
+            "email": email,
+            "firstname": firstname,
+            "lastname": lastname,
+            "country": country,
+            "province_state": province_state,
+            "city": city,
+            "street_name": street_name,
+            "street_num": street_num,
+            "zip_code": zip_code,
+            "telephone": telephone,
+            "salary": salary,
+            "poste": poste,
+            "id_employe": id_employe
+        })
 
         return json
 

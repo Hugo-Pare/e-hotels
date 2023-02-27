@@ -2,6 +2,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "date-fns": "^2.29.3",
+    "jquery": "^3.6.3",
     "react-datepicker": "^4.10.0"
   }
 }

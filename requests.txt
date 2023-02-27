@@ -41,6 +41,10 @@ GET:
 [x] /rooms/id_hotel?capacite=X
 
 PATCH:
+[x]	/clients/info/email_client
+
+	/employes/info/id_employe
+
 	/reservations/id_reservation?canceled=X
 	/reservations/id_reservation?checkedin=X
 	/reservations/id_reservation?frais_restant=X
