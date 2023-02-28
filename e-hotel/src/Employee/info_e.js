@@ -1,8 +1,8 @@
 import { set } from "date-fns";
 import { event } from "jquery";
+
 import React, {useState, useEffect} from "react";
 function Info_e(){
-
     let id_employe = sessionStorage.getItem("id")
     let data;
     const [prenom, setPrenom] = useState();
@@ -29,6 +29,39 @@ function Info_e(){
     useEffect(() => {
         checkEmployeeNumber()
     }, [])
+
+    async function updateToDataBase() {
+
+      const json = {
+        "city": ville,
+        "country": pays,
+        "email": email,
+        "firstname": prenom,
+        "lastname": nom,
+        "poste": poste,
+        "province_state": provinceState,
+        "salaire": salaire,
+        "street_name": rue,
+        "street_num": numRue,
+        "telephone": telephone,
+        "zip_code": postal
+    }
+    
+      fetch(`http://127.0.0.1:5000/employes/info/${id_employe}`, {
+            method: "PATCH",
+            mode:"cors",
+            headers: {
+          
+              "Access-Control-Allow-Origin": "*",
+        
+            },
+            body: JSON.stringify(json)
+        })
+        .then(response => response.json())
+        .then(function(json){
+            console.log(json)
+        })
+    }
    
     async function checkEmployeeNumber() {
         fetch(`http://127.0.0.1:5000/employes?id_employe=${id_employe}`)
@@ -109,8 +142,6 @@ function Info_e(){
         setDisabled(!disabled)
       }
 
-      
-
       function save() {
         if (!prenom|| !nom || !pays || !provinceState || !ville || !postal || !rue || !numRue || !poste || !salaire || !email || !telephone) {
           alert("S'il vous plait remplir tout les champs");
@@ -145,6 +176,7 @@ function Info_e(){
           return;
         } 
         setDisabled(!disabled)
+        updateToDataBase()
       }
 
     return(
