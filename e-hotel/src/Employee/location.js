@@ -144,7 +144,7 @@ function Location(){
                 <br/>
                 <button onClick={handleLocation}>Procéder à la Location</button>
             </div>
-            : <div><p>Loading Location ...</p></div>}
+            : <div><p>Recherche de Location ...</p></div>}
            
         </>
     )

@@ -33,24 +33,21 @@ function LoginClient() {
     else{
       checkClientEmail(email);
     }
-    
-    }
+  }
 
   return (
-
-        
-          <div>
-            <h2>Login Client</h2>
-            <form onSubmit={handleClientLoginSubmit}>
-              <label>
-                Email:
-                <br/>
-                <input type="email" name="email" required />
-              </label>
-              <br/>
-              <button type="submit">Login</button>
-            </form>
-          </div>
+    <div>
+      <h2>Login Client</h2>
+      <form onSubmit={handleClientLoginSubmit}>
+        <label>
+          Email:
+          <br/>
+          <input type="email" name="email" required />
+        </label>
+        <br/>
+        <button type="submit">Login</button>
+      </form>
+    </div>
         
    
   );
