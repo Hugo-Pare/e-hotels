@@ -4,7 +4,7 @@ import psycopg2.extras
 import json
 from flask import Flask, render_template, request
 from datetime import date, datetime
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 CORS(app)
@@ -599,7 +599,7 @@ def get_rooms():
     except Exception as e:
         print(e)
 
-@app.route('/employes/info/<id_employe>', methods=['PATCH']) 
+@app.route('/employes/info/<id_employe>', methods=['PATCH'])
 def update_employe_info_by_id(id_employe):
     try:
         # get all data from json body
@@ -626,9 +626,9 @@ def update_employe_info_by_id(id_employe):
             province_state = (%s), ville = (%s), rue = (%s), num_rue = (%s), postal_zip_code = (%s)
             WHERE id_employe = (%s)''', (email,firstname,lastname,salary,poste,telephone,country,province_state,city,street_name,street_num,zip_code,id_employe,))
         connection.commit()
-        json = []
+        new_employe_info = []
 
-        json.append({
+        new_employe_info.append({
             "email": email,
             "firstname": firstname,
             "lastname": lastname,
@@ -644,7 +644,7 @@ def update_employe_info_by_id(id_employe):
             "id_employe": id_employe
         })
 
-        return json
+        return json.dumps(new_employe_info)
 
     except Exception as e:
         print(e)

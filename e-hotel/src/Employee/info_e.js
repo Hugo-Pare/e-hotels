@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { set } from "date-fns";
 import { event } from "jquery";
 
@@ -40,22 +42,20 @@ function Info_e(){
         "lastname": nom,
         "poste": poste,
         "province_state": provinceState,
-        "salaire": salaire,
+        "salary": salaire,
         "street_name": rue,
-        "street_num": numRue,
+        "street_num": numRue.toString(),
         "telephone": telephone,
         "zip_code": postal
     }
-    
+      
       fetch(`http://127.0.0.1:5000/employes/info/${id_employe}`, {
             method: "PATCH",
             mode:"cors",
+            body: JSON.stringify(json),
             headers: {
-          
               "Access-Control-Allow-Origin": "*",
-        
-            },
-            body: JSON.stringify(json)
+            }
         })
         .then(response => response.json())
         .then(function(json){
