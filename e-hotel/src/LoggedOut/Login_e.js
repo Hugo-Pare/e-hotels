@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function LoginEmployee() {
-  const [employeeData, setEmployeeData] = useState([]);
+  const [employeeData, setEmployeeData] = useState([]); //necessaire?
   const navigate = useNavigate();
 
   async function checkEmployeeNumber(employee_num) {

@@ -6,8 +6,6 @@ import './hotel_rooms.css'
 
 function Hotel_rooms() {
 
-
-
   const [hotels, setHotels] = useState({
     hilton: false,
     exchange: false,
@@ -15,6 +13,7 @@ function Hotel_rooms() {
     sheraton: false,
     marriot: false,
   });
+
   const [maxPrice, setMaxPrice] = useState('');
   const [minPrice, setMinPrice] = useState('');
   const [checkInDate, setCheckInDate] = useState(null);
@@ -37,9 +36,6 @@ function Hotel_rooms() {
         setData([json])
   });
 }
-
-
-
 
   const handleHotelChange = (event) => {
     const { name, checked } = event.target;
@@ -168,7 +164,7 @@ function Hotel_rooms() {
             <input  type="number" value={minPrice} onChange={handleMinPriceChange} />
           </label>
         </div>
-        <div className="date-filter">
+        {/* <div className="date-filter">
           <label style={{fontSize: "20px"}}>
             Check-in date:
             <div className="date-picker">
@@ -182,7 +178,7 @@ function Hotel_rooms() {
             <DatePicker selected={checkOutDate} onChange={handleCheckOutDateChange} />
             </div>
           </label>
-        </div>
+        </div> */}
         <div className="capacite-filter">
           <label style={{fontSize: "20px"}}>
             Capacité:
@@ -191,11 +187,11 @@ function Hotel_rooms() {
             {capacite}
             <button onClick={handleCapaciteIncrement}>+</button>
           </label>
-        </div>
+  </div>
         <div className="button-container">
           <button onClick={handleSearchClick}>Search</button>
           <button onClick={handleClearClick}>Clear</button>
-        </div>
+        </div> 
         
       </div>
       {loaded ?

@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function LoginClient() {
-  const [showClientLogin, setShowClientLogin] = useState(false);
-  const [clientData, setClientData] = useState([]);
+  const [showClientLogin, setShowClientLogin] = useState(false); //necessaire?
+  const [clientData, setClientData] = useState([]); //necessaire?
   const navigate = useNavigate();
 
   async function checkClientEmail(email) {
