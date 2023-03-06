@@ -599,6 +599,50 @@ def get_rooms():
     except Exception as e:
         print(e)
 
+@app.route('/clients/info/<email>', methods=['PATCH'])
+def update_client_info_by_email(email):
+    try:
+        # get all data from json body
+        data_received = request.get_json(force=True)
+
+        # get value for each key
+        firstname = data_received['firstname']
+        lastname = data_received['lastname']
+        country = data_received['country']
+        province_state = data_received['province_state']
+        city = data_received['city']
+        street_name = data_received['street_name']
+        street_num = data_received['street_num']
+        zip_code = data_received['zip_code']
+        telephone = data_received['telephone']
+
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute(
+            '''UPDATE client SET prenom = (%s), nom = (%s), telephone = (%s), pays = (%s),
+            province_state = (%s), ville = (%s), rue = (%s), num_rue = (%s), postal_zip_code = (%s)
+            WHERE email_id = (%s)''', (firstname,lastname,telephone,country,province_state,city,street_name,street_num,zip_code,email,))
+        connection.commit()
+        new_client_info = []
+
+        new_client_info.append({
+            "email": email,
+            "firstname": firstname,
+            "lastname": lastname,
+            "country": country,
+            "province_state": province_state,
+            "city": city,
+            "street_name": street_name,
+            "street_num": street_num,
+            "zip_code": zip_code,
+            "telephone": telephone
+        })
+
+        return json.dumps(new_client_info)
+
+    except Exception as e:
+        print(e)
+
 @app.route('/employes/info/<id_employe>', methods=['PATCH'])
 def update_employe_info_by_id(id_employe):
     try:
