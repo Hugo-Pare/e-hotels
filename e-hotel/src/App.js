@@ -15,6 +15,7 @@ import Hotel_rooms from './Client/Hotel_rooms'
 import Info_chaine from './Client/Info_chaine'
 import Reservation from './Client/Reservation'
 import Info_c from './Client/Info_c';
+import Welcome from './LoggedOut/Welcome';
 
 import { BrowserRouter as Router, Routes, Route, React} from 'react-router-dom';
 
@@ -23,8 +24,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/">
-            <Route exact path="/" element={<><Navbar/></>} />
-            {/* <Route path="/" element={<><Navbar/> <Welcome/></>} /> */}
+            <Route path="/" element={<><Navbar/> <Welcome/></>} />
             <Route exact path="/client" element={<><Navbar/> <LoginClient /></>} />
             <Route exact path="/employee" element={<><Navbar/><LoginEmployee /></>} />    
             <Route exact path="/signupClient" element={<><Navbar/> <Signup_client /> </>} />

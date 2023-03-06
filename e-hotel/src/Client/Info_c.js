@@ -23,7 +23,8 @@ function Info_c(){
     const regex_streetnum = /^\d{1,8}$/;
     const regex_postalcode = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
     const regex_zip = /^\d{5}$/;
-    const regex_string = /[a-zA-Z]+/; 
+    const regex_string = /[a-zA-Z]+/;
+
     useEffect(() => {
         fetchClientInfo()
       }, [])
@@ -120,6 +121,11 @@ function Info_c(){
           } 
         setDisabled(!disabled);
         updateToDataBase();
+      }
+
+      function cancel() {
+        fetchClientInfo()
+        setDisabled(true)
       }
 
       function reset() {
@@ -228,7 +234,8 @@ function Info_c(){
             {disabled ?
             <button onClick={handleEdit}>Edit</button>:
             <div><button onClick={save}>Save</button>
-            <button onClick={reset}>Reset</button> </div>
+            <button onClick={reset}>Reset</button>
+            <button onClick={cancel}>Cancel</button></div>
            }
         </div>
 

@@ -75,8 +75,6 @@ nav {
   width: 150px;
 }
 
-
-
-/* .login-buttons button:first-child {
-  margin-right: 10px;
-} */
+.center {
+  text-align: center;
+}

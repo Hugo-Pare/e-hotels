@@ -87,7 +87,12 @@ function Info_e(){
       }
 
       function reset() {
-        fetchEmployeeInfo()()
+        fetchEmployeeInfo()
+      }
+
+      function cancel() {
+        fetchEmployeeInfo();
+        setDisabled(true)
       }
 
       function handlePrenom(event) {
@@ -285,7 +290,8 @@ function Info_e(){
            {disabled ?
             <button onClick={handleEdit}>Edit</button>:
             <div><button onClick={save}>Save</button>
-            <button onClick={reset}>Reset</button> </div>
+            <button onClick={reset}>Reset</button>
+            <button onClick={cancel}>Cancel</button></div>
            }
         </div>
 

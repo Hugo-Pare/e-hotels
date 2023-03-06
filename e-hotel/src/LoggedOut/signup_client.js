@@ -95,8 +95,8 @@ function Signup_client() {
       navigate('/');
         
     }
-
     }
+    
   return (
     
     <div>
