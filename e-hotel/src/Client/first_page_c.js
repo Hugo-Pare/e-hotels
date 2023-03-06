@@ -6,7 +6,6 @@ import './first_page_c.css'
 function First_page_c() {
   const location = useLocation();
   sessionStorage.setItem("email_id", location.state.clientEmail)
-  console.log(sessionStorage.getItem("email_id"))
 
   const navigate = useNavigate();
 

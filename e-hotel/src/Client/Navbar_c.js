@@ -6,7 +6,7 @@ const Navbar_c = () => {
         <a href="/">E-hotels</a>
       </div>
       <div className="nav-buttons">
-        <button><a href="">Account Info</a></button>
+        <button><a href="/clientIn/info">Account Info</a></button>
       </div>
     </nav>
 )

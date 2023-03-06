@@ -24,12 +24,12 @@ function Info_e(){
     const regex_email = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/; 
     const regex_phonenumber = /^\d{10,12}$/;
     const regex_streetnum = /^\d{1,8}$/;
-    const regex_nas = /^\d{9}$/;
     const regex_postalcode = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
     const regex_zip = /^\d{5}$/;
+    const regex_string = /[a-zA-Z]+/; 
 
     useEffect(() => {
-        checkEmployeeNumber()
+      fetchEmployeeInfo()
     }, [])
 
     async function updateToDataBase() {
@@ -63,11 +63,12 @@ function Info_e(){
         })
     }
    
-    async function checkEmployeeNumber() {
+    async function fetchEmployeeInfo() {
         fetch(`http://127.0.0.1:5000/employes?id_employe=${id_employe}`)
           .then(response => response.json())
           .then(
             json => {
+            console.log(json)
             data = json[0]
             setPrenom(data.firstname)
             setNom(data.lastname)
@@ -86,7 +87,7 @@ function Info_e(){
       }
 
       function reset() {
-        checkEmployeeNumber()
+        fetchEmployeeInfo()()
       }
 
       function handlePrenom(event) {
@@ -94,7 +95,6 @@ function Info_e(){
       }
 
       function handleNom(event) {
-        console.log(event.target.value)
         setNom(event.target.value)
       }
 
@@ -155,18 +155,36 @@ function Info_e(){
           alert("Le prénom doit avoir au moins 2 lettres et ne doit contenir que des lettres alphabétiques.");
           return;
         }
-        //no need pour pays
-        //no need pour state et province a discuter plus tards
-        //ville
-        //postal
-        //rue
-        //num rue
 
+        if (pays == "Canada"){
+          if(!regex_postalcode.test(postal)){
+            alert("Le code postal n'est pas valide");
+            return;
+          }
+        } else {
+          if(!regex_zip.test(postal)){
+            alert("Le zip code n'est pas valide");
+            return;
+          }
+        }
+   
+        if(!regex_string.test(ville)) {
+          alert("La ville n'est pas valide");
+          return;
+        }
 
+        if(!regex_string.test(rue)){
+          alert("Le nom de rue n'est pas valide");
+          return;
+        }
 
+        if(!regex_streetnum.test(numRue)){
+          alert("Le numero de rue n'est pas valide");
+          return;
+        }
 
-        //no need pour poste
-        //salaire
+        //salaire??
+
         if (!regex_email.test(email)) {
           alert("Le courriel n'est pas valide");
           return;
@@ -198,7 +216,7 @@ function Info_e(){
             <label>
                 Pays:
                 <br/>
-                <select id="Pays" name="Pays" value={pays} disabled={disabled} onChange={handlePays}>
+                <select value={pays} disabled={disabled} onChange={handlePays}>
                   <option value="Canada">Canada</option>
                   <option value="Etats-Unis">États-Unis</option>
                 </select>
@@ -207,26 +225,26 @@ function Info_e(){
             <label>
                 Province/State:
                 <br/>
-                <input type="province" name="province" value={provinceState} disabled={disabled} onChange={handleProvince}/>
+                <input value={provinceState} disabled={disabled} onChange={handleProvince}/>
             </label>
             <br/>
            
             <label>
                 Ville:
                 <br/>
-                <input type="province" name="province" value={ville}  disabled={disabled} onChange={handleVille}/>
+                <input value={ville}  disabled={disabled} onChange={handleVille}/>
             </label>
             <br/>
             <label>
                 Postal/Zip:
                 <br/>
-                <input type="postal" name="postal" value={postal}  disabled={disabled} onChange={handlePostal}/>
+                <input value={postal}  disabled={disabled} onChange={handlePostal}/>
             </label>
             <br/>
             <label>
                 Rue:
                 <br/>
-                <input type="street" name="street" value={rue}  disabled={disabled} onChange={handleRue}/>
+                <input value={rue}  disabled={disabled} onChange={handleRue}/>
             </label>
             <br/>
             <label>
@@ -245,11 +263,6 @@ function Info_e(){
                   <option value="Gestionnaire">Gestionnaire</option>
                 </select>
             </label>
-            {/* <label>
-                Poste:
-                <br/>
-                <input disabled={disabled} value={poste} onChange={handlePoste}/>
-            </label> */}
             <br/>
             <label>
                 Salaire:
