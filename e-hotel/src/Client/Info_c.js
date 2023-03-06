@@ -49,11 +49,75 @@ function Info_c(){
       }
 
       async function updateToDataBase() {
-        console.log("update");
+
+        const json = {
+            "city": ville,
+            "country": pays,
+            "firstname": prenom,
+            "lastname": nom,
+            "province_state": provinceState,
+            "street_name": rue,
+            "street_num": numRue.toString(),
+            "telephone": telephone,
+            "zip_code": postal
+        }
+
+        fetch(`http://127.0.0.1:5000/clients/info/${email}`, {
+            method: "PATCH",
+            mode:"cors",
+            body: JSON.stringify(json),
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+            }
+        })
+        .then(response => response.json())
+        .then(function(json){
+            console.log(json)
+        })
       }
       
       function save(){
-        console.log("save");
+        if (!prenom|| !nom || !pays || !provinceState || !ville || !postal || !rue || !numRue || !telephone) {
+            alert("S'il vous plait remplir tout les champs");
+            return;
+        }
+        if (!regex_name.test(prenom)) {
+            alert("Le prénom doit avoir au moins 2 lettres et ne doit contenir que des lettres alphabétiques.");
+            return;
+          }
+          if (!regex_name.test(nom)) {
+            alert("Le prénom doit avoir au moins 2 lettres et ne doit contenir que des lettres alphabétiques.");
+            return;
+          }
+          if (pays == "Canada"){ //a demander au prof si les clients ne peuvent venir que du canada et usa?
+            if(!regex_postalcode.test(postal)){
+              alert("Le code postal n'est pas valide");
+              return;
+            }
+          } else {
+            if(!regex_zip.test(postal)){
+              alert("Le zip code n'est pas valide");
+              return;
+            }
+          }
+          if(!regex_string.test(ville)) {
+            alert("La ville n'est pas valide");
+            return;
+          }
+  
+          if(!regex_string.test(rue)){
+            alert("Le nom de rue n'est pas valide");
+            return;
+          }
+  
+          if(!regex_streetnum.test(numRue)){
+            alert("Le numero de rue n'est pas valide");
+            return;
+          }
+          if (!regex_phonenumber.test(telephone)) {
+            alert("Le numero de telephone n'est pas valide");
+            return;
+          } 
         setDisabled(!disabled);
         updateToDataBase();
       }
