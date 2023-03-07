@@ -574,7 +574,51 @@ def get_rooms():
     try:
         connection = get_db_connection()
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cursor.execute('SELECT * FROM chambre')
+        args = request.args
+
+        mincapacite = args.get('mincapacite')
+        maxcapacite = args.get('maxcapacite')
+        id_chaine = args.get('id_chaine')   # needs to be implemented
+        minprice = args.get('minprice')
+        maxprice = args.get('maxprice')
+        vue = args.get('vue')               # needs to be implemented
+
+        if(mincapacite is None):
+            cursor.execute('SELECT * FROM chambre')
+
+        else:
+            cursor.execute( ''' SELECT * FROM chambre 
+                                WHERE capacite BETWEEN (%s) AND (%s) AND prix BETWEEN (%s) AND (%s)''', (mincapacite,maxcapacite,minprice,maxprice,))
+        data = cursor.fetchall()
+        json = []
+
+        for i in range(len(data)):
+            json.append({
+                "prix": data[i][0],
+                "problems": data[i][1],
+                "capacity": data[i][2],
+                "vue": data[i][3],
+                "tv": data[i][4],
+                "ac": data[i][5],
+                "refrigerator": data[i][6],
+                "microwave": data[i][7],
+                "coffee": data[i][8],
+                "oven": data[i][9],
+                "id_hotel": data[i][10],
+                "room_num": data[i][11]
+        })
+
+        return json
+
+    except Exception as e:
+        print(e)
+
+@app.route('/rooms/<id_hotel>') 
+def get_rooms_by_hotel_id(id_hotel):
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute('SELECT * FROM chambre WHERE id_hotel = (%s)', (id_hotel,))
         data = cursor.fetchall()
         json = []
 

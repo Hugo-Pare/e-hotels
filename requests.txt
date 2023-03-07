@@ -1,9 +1,11 @@
 POST:
 	/signup/client
-[x] /update/client?email_client=X
-[x] /update/employe?id_employe=X
 
 	/locations
+
+[x]	/hotels
+
+[x]	/rooms
 
 GET:
 	/clients
@@ -37,8 +39,9 @@ GET:
     /hotels/country/province_state/city?id_chaine=X
 
 	/rooms
-[x]	/rooms/id_hotel
-[x] /rooms/id_hotel?capacite=X
+[x] /rooms?mincapacite=X&maxcapacite=X&id_chaine=[X]&minprice=X&maxprice=X&vue=X
+	/rooms/id_hotel
+[x] /rooms/id_hotel?capacite=X&id_chaine=[X]&minprice=X&maxprice=X&vue=X
 
 PATCH:
 	/clients/info/email_client
@@ -50,5 +53,10 @@ PATCH:
 	/reservations/id_reservation?frais_restant=X
 
 	/hotels/info/id_hotel
+
+[x]	/rooms/id_hotel/room_num
+
+DELETE:
+[x]	/hotels/id_hotel
 
 [x]	/rooms/id_hotel/room_num
