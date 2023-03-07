@@ -49,4 +49,6 @@ PATCH:
 	/reservations/id_reservation?checkedin=X
 	/reservations/id_reservation?frais_restant=X
 
-[x]	/rooms/id_hotel/room_num?problems=X
+	/hotels/info/id_hotel
+
+[x]	/rooms/id_hotel/room_num

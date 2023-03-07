@@ -732,6 +732,50 @@ def update_reservations(id_reservation):
     except Exception as e:
         print(e)
 
+@app.route('/hotels/info/<id_hotel>', methods=['PATCH'])
+def update_hotel_info_by_id(id_hotel):
+    try:
+        # get all data from json body
+        data_received = request.get_json(force=True)
+
+        # get value for each key
+        rating = data_received['rating']
+        email = data_received['email']
+        country = data_received['country']
+        province_state = data_received['province_state']
+        city = data_received['city']
+        street_name = data_received['street_name']
+        street_num = data_received['street_num']
+        zip_code = data_received['zip_code']
+        telephone = data_received['telephone']
+
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute(
+            '''UPDATE hotel SET rating = (%s), telephone = (%s), pays = (%s), email = (%s),
+            province_state = (%s), ville = (%s), rue = (%s), num_rue = (%s), postal_zip_code = (%s)
+            WHERE id_hotel = (%s)''', (rating,telephone,country,email,province_state,city,street_name,street_num,zip_code,id_hotel,))
+        connection.commit()
+        new_hotel_info = []
+
+        new_hotel_info.append({
+            "email": email,
+            "rating": rating,
+            "country": country,
+            "province_state": province_state,
+            "city": city,
+            "street_name": street_name,
+            "street_num": street_num,
+            "zip_code": zip_code,
+            "telephone": telephone,
+            "id_hotel": id_hotel
+        })
+
+        return json.dumps(new_hotel_info)
+
+    except Exception as e:
+        print(e)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
