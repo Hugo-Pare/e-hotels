@@ -31,6 +31,7 @@ function First_page_e(){
             id_hotel = data[0].id_hotel
             setIdHotel(data[0].id_hotel)
             getAllReservations()
+            console.log(data)
         })
     }
 
