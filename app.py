@@ -229,8 +229,8 @@ def get_employes():
                 "street_name": data[i][10],
                 "street_num": data[i][11],
                 "zip_code": data[i][12],
-                "id_employe": data[i][13],
-                "id_hotel": data[i][14]
+                "id_employe": data[i][14],
+                "id_hotel": data[i][13]
             })
 
         return json
