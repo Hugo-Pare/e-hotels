@@ -5,10 +5,9 @@
     justify-content: space-between;
   }
   .filter-panel {
-    flex: 0;
-    margin-right: 0px;
+    width: 15%;
   }
   .table-panel {
-    flex: 2;
+    width: 85%;
   }
   

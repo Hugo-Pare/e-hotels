@@ -1,20 +1,12 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './hotel_rooms.css'
 
 function Hotel_rooms() {
-
-  const [hotels, setHotels] = useState({
-    hilton: false,
-    exchange: false,
-    level: false,
-    sheraton: false,
-    marriot: false,
-  });
-
+  const [chaines, setChaines] = useState();
+  const [selectedChaines, setSelectedChaines] = useState();
   const [maxPrice, setMaxPrice] = useState('');
   const [minPrice, setMinPrice] = useState('');
   const [checkInDate, setCheckInDate] = useState(null);
@@ -23,10 +15,12 @@ function Hotel_rooms() {
   const [data, setData] = useState([]);
   const [included, setIncluded] = useState()
   const [loaded, setLoaded] = useState(false)
+  const [chainesLoaded, setChainesLoaded] = useState(false)
   const navigate = useNavigate();
 
   useEffect(() => {
     getAllRooms()
+    getChaines()
   }, [])
 
   async function getAllRooms() {
@@ -37,11 +31,6 @@ function Hotel_rooms() {
         setData([json])
   });
 }
-
-  const handleHotelChange = (event) => {
-    const { name, checked } = event.target;
-    setHotels({ ...hotels, [name]: checked });
-  };
 
   const handleMaxPriceChange = (event) => {
     setMaxPrice(event.target.value);
@@ -58,17 +47,14 @@ function Hotel_rooms() {
     setCheckOutDate(date);
   };
 
-  const handleCapaciteIncrement = () => {
-    if (capacite === null || capacite < 7) {
-      setCapacite((capacite || 0) + 1);
+  const handleCapacite = (event) => {
+    if(event.target.value === "null"){
+      setCapacite(null)
     }
-  };
-
-  const handleCapaciteDecrement = () => {
-    if (capacite !== null && capacite > 1) {
-      setCapacite(capacite - 1);
+    else{
+      setCapacite(event.target.value)
     }
-  };
+  }
 
   const handleSearchClick = () => {
     // TODO: Implement search functionality
@@ -76,81 +62,62 @@ function Hotel_rooms() {
 
   const handleReservation = () => {
     navigate('/clientIn/hotelRooms/reservation')
-
   }
 
-
   const handleClearClick = () => {
-    setHotels({
-      hilton: false,
-      exchange: false,
-      level: false,
-      sheraton: false,
-      marriot: false,
-    });
     setMaxPrice('');
     setMinPrice('');
     setCheckInDate(null);
     setCheckOutDate(null);
     setCapacite(null);
-
   };
+
+  async function getChaines(){
+    fetch(`http://127.0.0.1:5000/chaines`)
+      .then(response => response.json())
+      .then(function(json) {
+        var chainesList = []
+        var selectAllChaines = []
+        var obj = {}
+        for(var i = 0; i < Object.keys(json).length; i++){
+          chainesList.push(json[i]["nom_chaine"])
+          obj[json[i]["nom_chaine"]] = true
+        }
+        selectAllChaines.push(obj)
+        setChaines(chainesList)
+        setSelectedChaines(selectAllChaines[0])
+        setChainesLoaded(true)
+    });
+  }
+
+  const handleSelectedChaines = (e) => {
+    e.preventDefault()
+    setChainesLoaded(false)
+    const list = selectedChaines
+    list[e.target.id] = !selectedChaines[e.target.id]
+    console.log(list)
+    setSelectedChaines(list)
+    e.target.checked = !e.target.checked
+    setChainesLoaded(true)
+  }
 
   return (
     <div className="hotel-rooms-container">
       <div className="filter-panel">
       <h3>Filter hotels</h3>
         <div className="hotel-filters">
-          <label style={{fontSize: "20px"}}>
-            <input
-              type="checkbox"
-              name="hilton"
-              checked={hotels.hilton}
-              onChange={handleHotelChange}
-            />
-            Hilton
-          </label>
-          <br/>
-          <label style={{fontSize: "20px"}}>
-            <input
-              type="checkbox"
-              name="exchange"
-              checked={hotels.exchange}
-              onChange={handleHotelChange}
-            />
-            EXChange
-          </label>
-          <br/>
-          <label style={{fontSize: "20px"}}>
-            <input
-              type="checkbox"
-              name="level"
-              checked={hotels.level}
-              onChange={handleHotelChange}
-            />
-            Level
-          </label>
-          <br/>
-          <label style={{fontSize: "20px"}}>
-            <input
-              type="checkbox"
-              name="sheraton"
-              checked={hotels.sheraton}
-              onChange={handleHotelChange}
-            />
-            Sheraton
-          </label>
-          <br/>
-          <label style={{fontSize: "20px"}}>
-            <input
-              type="checkbox"
-              name="marriot"
-              checked={hotels.marriot}
-              onChange={handleHotelChange}
-            />
-            Marriot
-          </label>
-          <br/>
+          {chainesLoaded ?
+            <form>
+              {chaines.map((chaine) => (
+                <div key={chaine}>
+                  {console.log(selectedChaines[chaine])}
+                  <input key={chaine} id={chaine} type="checkbox" checked={selectedChaines[chaine]} onChange={handleSelectedChaines}></input>
+                  <label>{chaine}</label>
+                  <div></div>
+                </div>
+              ))}
+            </form>
+          :<div></div>}
         </div>
         <div className="price-filter">
           <label style={{fontSize: "20px"}}>
@@ -165,29 +132,35 @@ function Hotel_rooms() {
             <input  type="number" value={minPrice} onChange={handleMinPriceChange} />
           </label>
         </div>
-        {/* <div className="date-filter">
+        <div className="date-filter">
           <label style={{fontSize: "20px"}}>
             Check-in date:
             <div className="date-picker">
-            <DatePicker style={{width: "50px"}} selected={checkInDate} onChange={handleCheckInDateChange} />
+              <input type="date"></input>
             </div>
           </label>
-          <br/>
           <label style={{fontSize: "20px"}}>
             Check-out date:
             <div className="date-picker">
-            <DatePicker selected={checkOutDate} onChange={handleCheckOutDateChange} />
+              <input type="date"></input>
             </div>
           </label>
-        </div> */}
+        </div>
         <div className="capacite-filter">
           <label style={{fontSize: "20px"}}>
             Capacité:
-            <br/>
-            <button onClick={handleCapaciteDecrement}>-</button>
-            {capacite}
-            <button onClick={handleCapaciteIncrement}>+</button>
           </label>
+          <br/>
+          <select onChange={handleCapacite}>
+              <option value="null">Toute</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+            </select>
   </div>
         <div className="button-container">
           <button onClick={handleSearchClick}>Search</button>

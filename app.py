@@ -391,17 +391,17 @@ def get_chaines():
 
         for i in range(len(data)):
             json.append({
-                "id_chaine": data[i][0],
-                "country": data[i][1],
-                "province_state": data[i][2],
-                "city": data[i][3],
-                "street_name": data[i][4],
-                "street_num": data[i][5],
-                "zip_code": data[i][6],
-                "nb_hotel": data[i][7],
-                "email": data[i][8],
-                "telephone": data[i][9].strip(),
-                "nom_chaine": data[i][10]
+                "id_chaine": data[i][10],
+                "country": data[i][0],
+                "province_state": data[i][1],
+                "city": data[i][2],
+                "street_name": data[i][3],
+                "street_num": data[i][4],
+                "zip_code": data[i][5],
+                "nb_hotel": data[i][6],
+                "email": data[i][7],
+                "telephone": data[i][8].strip(),
+                "nom_chaine": data[i][9]
             })
 
         return json
