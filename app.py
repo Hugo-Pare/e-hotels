@@ -574,7 +574,51 @@ def get_rooms():
     try:
         connection = get_db_connection()
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cursor.execute('SELECT * FROM chambre')
+        args = request.args
+
+        mincapacite = args.get('mincapacite')
+        maxcapacite = args.get('maxcapacite')
+        id_chaine = args.get('id_chaine')   # needs to be implemented
+        minprice = args.get('minprice')
+        maxprice = args.get('maxprice')
+        vue = args.get('vue')               # needs to be implemented
+
+        if(mincapacite is None):
+            cursor.execute('SELECT * FROM chambre')
+
+        else:
+            cursor.execute( ''' SELECT * FROM chambre 
+                                WHERE capacite BETWEEN (%s) AND (%s) AND prix BETWEEN (%s) AND (%s)''', (mincapacite,maxcapacite,minprice,maxprice,))
+        data = cursor.fetchall()
+        json = []
+
+        for i in range(len(data)):
+            json.append({
+                "prix": data[i][0],
+                "problems": data[i][1],
+                "capacity": data[i][2],
+                "vue": data[i][3],
+                "tv": data[i][4],
+                "ac": data[i][5],
+                "refrigerator": data[i][6],
+                "microwave": data[i][7],
+                "coffee": data[i][8],
+                "oven": data[i][9],
+                "id_hotel": data[i][10],
+                "room_num": data[i][11]
+        })
+
+        return json
+
+    except Exception as e:
+        print(e)
+
+@app.route('/rooms/<id_hotel>') 
+def get_rooms_by_hotel_id(id_hotel):
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute('SELECT * FROM chambre WHERE id_hotel = (%s)', (id_hotel,))
         data = cursor.fetchall()
         json = []
 
@@ -728,6 +772,50 @@ def update_reservations(id_reservation):
         connection.commit()
 
         return json
+
+    except Exception as e:
+        print(e)
+
+@app.route('/hotels/info/<id_hotel>', methods=['PATCH'])
+def update_hotel_info_by_id(id_hotel):
+    try:
+        # get all data from json body
+        data_received = request.get_json(force=True)
+
+        # get value for each key
+        rating = data_received['rating']
+        email = data_received['email']
+        country = data_received['country']
+        province_state = data_received['province_state']
+        city = data_received['city']
+        street_name = data_received['street_name']
+        street_num = data_received['street_num']
+        zip_code = data_received['zip_code']
+        telephone = data_received['telephone']
+
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute(
+            '''UPDATE hotel SET rating = (%s), telephone = (%s), pays = (%s), email = (%s),
+            province_state = (%s), ville = (%s), rue = (%s), num_rue = (%s), postal_zip_code = (%s)
+            WHERE id_hotel = (%s)''', (rating,telephone,country,email,province_state,city,street_name,street_num,zip_code,id_hotel,))
+        connection.commit()
+        new_hotel_info = []
+
+        new_hotel_info.append({
+            "email": email,
+            "rating": rating,
+            "country": country,
+            "province_state": province_state,
+            "city": city,
+            "street_name": street_name,
+            "street_num": street_num,
+            "zip_code": zip_code,
+            "telephone": telephone,
+            "id_hotel": id_hotel
+        })
+
+        return json.dumps(new_hotel_info)
 
     except Exception as e:
         print(e)
