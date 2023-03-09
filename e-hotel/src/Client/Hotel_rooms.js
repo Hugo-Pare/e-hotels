@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'react-datepicker/dist/react-datepicker.css';
 import './hotel_rooms.css'
+import { id } from 'date-fns/locale';
 
 function Hotel_rooms() {
   const [chaines, setChaines] = useState();
-  const [selectedChaines, setSelectedChaines] = useState();
-  const [maxPrice, setMaxPrice] = useState('');
-  const [minPrice, setMinPrice] = useState('');
+  const [maxPrice, setMaxPrice] = useState();
+  const [minPrice, setMinPrice] = useState();
   const [checkInDate, setCheckInDate] = useState(null);
   const [checkOutDate, setCheckOutDate] = useState(null);
   const [capacite, setCapacite] = useState(null);
@@ -29,6 +29,19 @@ function Hotel_rooms() {
       .then(function(json) {
         setLoaded(true)
         setData([json])
+  });
+}
+
+async function getChaines(){
+  fetch(`http://127.0.0.1:5000/chaines`)
+    .then(response => response.json())
+    .then(function(json) {
+      var chainesList = []
+      for(var i = 0; i < Object.keys(json).length; i++){
+        chainesList.push({nom_chaine : json[i]["nom_chaine"], checked : false, id :json[i]["id_chaine"]})
+      }
+      setChaines(chainesList)
+      setChainesLoaded(true)
   });
 }
 
@@ -65,40 +78,26 @@ function Hotel_rooms() {
   }
 
   const handleClearClick = () => {
-    setMaxPrice('');
-    setMinPrice('');
+    setMaxPrice();
+    setMinPrice();
     setCheckInDate(null);
     setCheckOutDate(null);
     setCapacite(null);
+    clearChaines();
   };
 
-  async function getChaines(){
-    fetch(`http://127.0.0.1:5000/chaines`)
-      .then(response => response.json())
-      .then(function(json) {
-        var chainesList = []
-        var selectAllChaines = []
-        var obj = {}
-        for(var i = 0; i < Object.keys(json).length; i++){
-          chainesList.push(json[i]["nom_chaine"])
-          obj[json[i]["nom_chaine"]] = true
-        }
-        selectAllChaines.push(obj)
-        setChaines(chainesList)
-        setSelectedChaines(selectAllChaines[0])
-        setChainesLoaded(true)
-    });
+  const clearChaines = () => {
+    for (var i = 0; i <chaines.length; i++){
+      chaines[i].checked = false
+    }
   }
 
   const handleSelectedChaines = (e) => {
-    e.preventDefault()
-    setChainesLoaded(false)
-    const list = selectedChaines
-    list[e.target.id] = !selectedChaines[e.target.id]
-    console.log(list)
-    setSelectedChaines(list)
-    e.target.checked = !e.target.checked
-    setChainesLoaded(true)
+    chaines.map((chaine) => {
+      if(chaine.id == e.target.id) {
+        chaine.checked = !chaine.checked
+      }
+    })
   }
 
   return (
@@ -108,11 +107,11 @@ function Hotel_rooms() {
         <div className="hotel-filters">
           {chainesLoaded ?
             <form>
-              {chaines.map((chaine) => (
-                <div key={chaine}>
-                  {console.log(selectedChaines[chaine])}
-                  <input key={chaine} id={chaine} type="checkbox" checked={selectedChaines[chaine]} onChange={handleSelectedChaines}></input>
-                  <label>{chaine}</label>
+              {chaines.map(chaine => (
+                // <div key={chaine}> pourquoi avons nous un key pour le div?
+                <div>
+                  <input key={chaine.id} id={chaine.id} type="checkbox" onClick={handleSelectedChaines}></input>
+                  <label>{chaine.nom_chaine}</label>
                   <div></div>
                 </div>
               ))}
