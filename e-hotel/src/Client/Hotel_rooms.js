@@ -8,7 +8,6 @@ import { set } from 'date-fns';
 
 function Hotel_rooms() {
   const [chaines, setChaines] = useState();
-  const [update, setUpdate] = useState(0);
   const [maxPrice, setMaxPrice] = useState();
   const [minPrice, setMinPrice] = useState();
   // const [checkInDate, setCheckInDate] = useState(null);
@@ -29,6 +28,7 @@ function Hotel_rooms() {
   }, [])
 
   async function getAllRooms() {
+    setLoaded(false)
     fetch(`http://127.0.0.1:5000/rooms`)
       .then(response => response.json())
       .then(function(json) {
@@ -94,20 +94,14 @@ async function getChaines(){
     // setCapacite(null);
     clearChaines();
     getChaines();
+    getAllRooms();
   };
 
-function clearChaines() {
-  for (var i = 0; i <chaines.length; i++){
-    chaines[i].checked = false
+  const clearChaines = () => {
+    for (var i = 0; i <chaines.length; i++){
+      chaines[i].checked = false
+    }
   }
-  setUpdate(update+1)
-}
-
-  // const clearChaines = () => {
-  //   for (var i = 0; i <chaines.length; i++){
-  //     chaines[i].checked = false
-  //   }
-  // }
 
   const handleSelectedChaines = (e) => {
     chaines.map((chaine) => {
@@ -133,10 +127,7 @@ function clearChaines() {
                   <div></div>
                 </div>
               ))}
-            </form>
-          :<div></div>}
-        </div>
-        <div className="price-filter">
+              <div className="price-filter">
           <label style={{fontSize: "20px"}}>
             Prix Maximum:
             <br/>
@@ -183,6 +174,10 @@ function clearChaines() {
           <button onClick={handleSearchClick}>Search</button>
           <button onClick={handleClearClick}>Clear</button>
         </div> 
+            </form>
+          :<div>Loading filters ...</div>}
+        </div>
+        
         
       </div>
       {loaded ?
