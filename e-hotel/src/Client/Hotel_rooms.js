@@ -216,16 +216,12 @@ async function getChaines(){
           </tbody>
         </table>
       </div>
-      : <div><p>Loading Rooms ...</p></div>}
+      : <div>Loading Rooms ...</div>}
     </div>
     
-  );
-  
-              
+  );      
 }
-
-  
-  export default Hotel_rooms
+export default Hotel_rooms
 
 
   
