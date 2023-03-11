@@ -7,6 +7,7 @@ import { id } from 'date-fns/locale';
 import { set } from 'date-fns';
 
 function Hotel_rooms() {
+  const [chaineChecked, setChainesChecked] = useState([]);
   const [chaines, setChaines] = useState();
   const [maxPrice, setMaxPrice] = useState();
   const [minPrice, setMinPrice] = useState();
@@ -23,13 +24,13 @@ function Hotel_rooms() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getAllRooms()
     getChaines()
+    getAllRooms()
   }, [])
 
   async function getAllRooms() {
     setLoaded(false)
-    fetch(`http://127.0.0.1:5000/rooms`)
+    fetch(`http://127.0.0.1:5000/rooms/info`)
       .then(response => response.json())
       .then(function(json) {
         setLoaded(true)
@@ -44,6 +45,7 @@ async function getChaines(){
     .then(function(json) {
       var chainesList = []
       for(var i = 0; i < Object.keys(json).length; i++){
+        // chaineChecked.push(json[i]["id_chaine"])
         chainesList.push({nom_chaine : json[i]["nom_chaine"], checked : false, id :json[i]["id_chaine"]})
       }
       setChaines(chainesList)
@@ -75,7 +77,22 @@ async function getChaines(){
     }
   }
 
-  const handleSearchClick = () => {
+function valide (chambre){
+  if(chaineChecked.length > 0  && !chaineChecked.includes(chambre.id_chaine)){
+    return false
+  }
+
+  return true
+}
+
+  const search = () => {
+    setChainesChecked([])
+    let temp = []
+    for (let i = 0; i<chaines.length ; i++){
+      if (chaines[i].checked == true)
+      temp.push(chaines[i].id)
+    }
+    setChainesChecked(temp)
     // TODO: Implement search functionality
   };
 
@@ -83,7 +100,7 @@ async function getChaines(){
     navigate('/clientIn/hotelRooms/reservation')
   }
 
-  const handleClearClick = () => {
+  const clear = () => {
     setMaxPrice();
     setMinPrice();
     setCheckInDate();
@@ -101,6 +118,7 @@ async function getChaines(){
     for (var i = 0; i <chaines.length; i++){
       chaines[i].checked = false
     }
+    setChainesChecked([])
   }
 
   const handleSelectedChaines = (e) => {
@@ -114,53 +132,51 @@ async function getChaines(){
 
   return (
     <div className="hotel-rooms-container">
-      <div className="filter-panel">
-      <h3>Filter hotels</h3>
-        <div className="hotel-filters">
-          {chainesLoaded ?
-            <form>
-              {chaines.map(chaine => (
-                <div key={chaine.id}>
-              
-                  <input key={chaine.id} id={chaine.id} type="checkbox" onClick={handleSelectedChaines}></input>
-                  <label>{chaine.nom_chaine}</label>
-                  <div></div>
-                </div>
-              ))}
-              <div className="price-filter">
-          <label style={{fontSize: "20px"}}>
-            Prix Maximum:
-            <br/>
-            <input  type="number" value={maxPrice} onChange={handleMaxPriceChange} />
-          </label>
+      {chainesLoaded ?
+        <div className="filter-panel"> <h3>Filter rooms</h3>
+          <div className="chaines-filters">
+            {chaines.map(chaine => (
+              <div key={chaine.id}>
+                <input key={chaine.id} id={chaine.id} type="checkbox" onClick={handleSelectedChaines}></input>
+                <label>{chaine.nom_chaine}</label>
+              </div>
+            ))}
+          </div>
           <br/>
-          <label style={{fontSize: "20px"}}>
-            Prix Minimum:
-            <br/>
-            <input  type="number" value={minPrice} onChange={handleMinPriceChange} />
-          </label>
-        </div>
-        <div className="date-filter">
-          <label style={{fontSize: "20px"}}>
-            Check-in date:
-            <div className="date-picker">
-              <input type="date"></input>
+          <div className="price-filter">
+              <label style={{fontSize: "20px"}}>
+              Prix Maximum:
+              <br/>
+              <input  type="number" value={maxPrice} onChange={handleMaxPriceChange} />
+              </label>
+              <br/>
+              <label style={{fontSize: "20px"}}>
+              Prix Minimum:
+              <br/>
+              <input  type="number" value={minPrice} onChange={handleMinPriceChange} />
+              </label>
             </div>
-          </label>
-          <label style={{fontSize: "20px"}}>
-            Check-out date:
-            <div className="date-picker">
+            <div className="date-filter">
+              <label style={{fontSize: "20px"}}>
+              Check-in date:
+              <div className="date-picker">
               <input type="date"></input>
+              </div>
+              </label>
+              <label style={{fontSize: "20px"}}>
+              Check-out date:
+              <div className="date-picker">
+              <input type="date"></input>
+              </div>
+              </label>
             </div>
-          </label>
-        </div>
-        <div className="capacite-filter">
-          <label style={{fontSize: "20px"}}>
-            Capacité:
-          </label>
-          <br/>
-          <select onChange={handleCapacite}>
-              <option value="null">Toute</option>
+            <div className="capacite-filter">
+              <label style={{fontSize: "20px"}}>
+              Capacité:
+              </label>
+              <br/>
+              <select onChange={handleCapacite}>
+              <option value="null">Faites selection</option>
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -168,60 +184,49 @@ async function getChaines(){
               <option value="5">5</option>
               <option value="6">6</option>
               <option value="7">7</option>
-            </select>
-  </div>
-        <div className="button-container">
-          <button onClick={handleSearchClick}>Search</button>
-          <button onClick={handleClearClick}>Clear</button>
-        </div> 
-            </form>
-          :<div>Loading filters ...</div>}
+              </select>
+            </div>
+
+            <div className="button-container">
+              <button onClick={search}>Search</button>
+              <button onClick={clear}>Clear</button>
+            </div>
         </div>
-        
-        
-      </div>
-      {loaded ?
+          :<div>Loading filters ...</div>}
+
+{loaded ?
       <div className="table-panel">
       <table className="room-table">
           <thead>
               <tr key="titles">
-                  <th>Capacité</th>
                   <th>Prix</th>
                   <th>Numéro de chambre</th>
-                  <th>Air Climatisé</th>
-                  <th>Café</th>
-                  <th>Microonde</th>
-                  <th>Four</th>
-                  <th>Réfrigirateur</th>
-                  <th>Télévision</th>
-                  
+                  <th>Adresse</th>
+                  <th>Chaine</th>
+                  <th>Rating</th>
               </tr>
           </thead>
           <tbody>
               {data[0].map((chambre) => (
+                valide(chambre) ?
                   <tr key={(chambre.room_num)}>
-                      <td>{chambre.capacity}</td>
                       <td>{chambre.prix}</td>
                       <td>{chambre.room_num}</td>
-                      <td>{JSON.stringify(chambre.ac)}</td>
-                      <td>{JSON.stringify(chambre.coffee)}</td>
-                      <td>{JSON.stringify(chambre.microwave)}</td>
-                      <td>{JSON.stringify(chambre.oven)}</td>
-                      <td>{JSON.stringify(chambre.refrigerator)}</td>
-                      <td>{JSON.stringify(chambre.tv)}</td>
+                      <td>{chambre.street_num + " "+chambre.street_name + ", " + chambre.city+", "+chambre.province_state+" " +chambre.zip_code+ ", "+chambre.country}</td>
+                      <td>{chambre.chaine_name}</td>
+                      <td>{chambre.rating}</td>
                       <td><button value={chambre.num} onClick={handleReservation}>Réserver</button></td>
                       
                   </tr>
+                  : null
               ))}
           </tbody>
         </table>
       </div>
       : <div>Loading Rooms ...</div>}
-    </div>
-    
+      </div>
+      
+
   );      
 }
-export default Hotel_rooms
-
-
-  
+export default Hotel_rooms;
