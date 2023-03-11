@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'react-datepicker/dist/react-datepicker.css';
 import './hotel_rooms.css'
@@ -7,45 +7,43 @@ import { id } from 'date-fns/locale';
 import { set } from 'date-fns';
 
 function Hotel_rooms() {
+  const [showRooms, setShowRooms] = useState([])
   const [chaineChecked, setChainesChecked] = useState([]);
   const [chaines, setChaines] = useState();
   const [maxPrice, setMaxPrice] = useState();
   const [minPrice, setMinPrice] = useState();
-  // const [checkInDate, setCheckInDate] = useState(null);
-  // const [checkOutDate, setCheckOutDate] = useState(null);
-  // const [capacite, setCapacite] = useState(null);
   const [checkInDate, setCheckInDate] = useState();
   const [checkOutDate, setCheckOutDate] = useState();
   const [capacite, setCapacite] = useState();
   const [data, setData] = useState([]);
-  // const [included, setIncluded] = useState()
   const [loaded, setLoaded] = useState(false)
   const [chainesLoaded, setChainesLoaded] = useState(false)
   const navigate = useNavigate();
-
+  const firstUpdate = useRef(true);
+  const secondUpdate = useRef(true);
   useEffect(() => {
     getChaines()
     getAllRooms()
   }, [])
 
   async function getAllRooms() {
-    setLoaded(false)
     fetch(`http://127.0.0.1:5000/rooms/info`)
       .then(response => response.json())
       .then(function(json) {
-        setLoaded(true)
+        console.log("in")
         setData([json])
+        setShowRooms([json][0])
+        setLoaded(true)
   });
 }
 
 async function getChaines(){
-  setChainesLoaded(false)
+
   fetch(`http://127.0.0.1:5000/chaines`)
     .then(response => response.json())
     .then(function(json) {
       var chainesList = []
       for(var i = 0; i < Object.keys(json).length; i++){
-        // chaineChecked.push(json[i]["id_chaine"])
         chainesList.push({nom_chaine : json[i]["nom_chaine"], checked : false, id :json[i]["id_chaine"]})
       }
       setChaines(chainesList)
@@ -53,8 +51,9 @@ async function getChaines(){
   });
 }
 
-  const handleMaxPriceChange = (event) => {
-    setMaxPrice(event.target.value);
+  function handleMaxPriceChange(event) {
+    setMaxPrice(event.target.value)
+  
   };
 
   const handleMinPriceChange = (event) => {
@@ -78,22 +77,53 @@ async function getChaines(){
   }
 
 function valide (chambre){
-  if(chaineChecked.length > 0  && !chaineChecked.includes(chambre.id_chaine)){
+  // console.log(chambre)
+  console.log(chaineChecked.length)
+  if (chaineChecked.length> 0  && !chaineChecked.includes(chambre.id_chaine)){
+    // console.log("false")
     return false
   }
-
+  if(maxPrice != null && chambre.prix > parseFloat(maxPrice).toFixed(2)) {
+    // console.log("false")
+    return false
+  }
+  // console.log("true")
   return true
 }
 
+useLayoutEffect(() => {
+  if (firstUpdate.current) {
+    firstUpdate.current = false;
+    return;
+  }
+  if (secondUpdate.current) {
+    secondUpdate.current = false;
+    return;
+  }
+updateRooms()
+}, [chaineChecked])
+
+const updateRooms = () => {
+  let indexes = []
+  let tempList = []
+  for(let i = 0 ; i <data[0].length; i++){
+    if (true == valide(data[0][i])){
+      indexes.push(i)
+    }
+  }
+  for(let i = 0 ; i<indexes.length; i++){
+    tempList.push(data[0][indexes[i]])
+  }
+  setShowRooms(tempList);
+}
   const search = () => {
-    setChainesChecked([])
     let temp = []
     for (let i = 0; i<chaines.length ; i++){
       if (chaines[i].checked == true)
       temp.push(chaines[i].id)
     }
     setChainesChecked(temp)
-    // TODO: Implement search functionality
+   
   };
 
   const handleReservation = () => {
@@ -101,14 +131,13 @@ function valide (chambre){
   }
 
   const clear = () => {
+    setLoaded(false)
+    setChainesLoaded(false)
     setMaxPrice();
     setMinPrice();
     setCheckInDate();
     setCheckOutDate();
     setCapacite();
-    // setCheckInDate(null);
-    // setCheckOutDate(null);
-    // setCapacite(null);
     clearChaines();
     getChaines();
     getAllRooms();
@@ -148,6 +177,7 @@ function valide (chambre){
               Prix Maximum:
               <br/>
               <input  type="number" value={maxPrice} onChange={handleMaxPriceChange} />
+              {/* <input  type="number" value={maxPrice.current} onChange={handleMaxPriceChange} /> */}
               </label>
               <br/>
               <label style={{fontSize: "20px"}}>
@@ -207,8 +237,7 @@ function valide (chambre){
               </tr>
           </thead>
           <tbody>
-              {data[0].map((chambre) => (
-                valide(chambre) ?
+              {showRooms.map((chambre) => (
                   <tr key={(chambre.room_num)}>
                       <td>{chambre.prix}</td>
                       <td>{chambre.room_num}</td>
@@ -218,7 +247,6 @@ function valide (chambre){
                       <td><button value={chambre.num} onClick={handleReservation}>Réserver</button></td>
                       
                   </tr>
-                  : null
               ))}
           </tbody>
         </table>
