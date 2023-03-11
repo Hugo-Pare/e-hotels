@@ -179,7 +179,8 @@ def post_location_with_reservation():
         # connect to database
         connection = get_db_connection()
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cursor.execute('INSERT INTO location VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', (id_location,frais_restant,frais_total,date_checkin,date_checkout,id_employe,email_id,num_chambre,id_hotel,id_reservation,))
+        cursor.execute('INSERT INTO location VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', 
+        (id_location,frais_restant,frais_total,date_checkin,date_checkout,email_id,num_chambre,id_hotel,id_reservation,id_employe,))
         connection.commit()
 
         # return json data of new location
@@ -443,6 +444,34 @@ def get_reservations_pending_by_hotel_id(id_hotel):
                 "frais_restant": data[i][7],
                 "canceled": data[i][8],
                 "location": data[i][9]
+            })
+
+        return json
+
+    except Exception as e:
+        print(e)
+
+@app.route('/locations') 
+def get_locations():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute('SELECT * FROM location')
+        data = cursor.fetchall()
+        json = []
+
+        for i in range(len(data)):
+            json.append({
+                "id_location": data[i][0],
+                "frais_restant": data[i][1],
+                "frais_total": data[i][2],
+                "date_checkin": data[i][3],
+                "date_checkout": data[i][4],
+                "email_id": data[i][5],
+                "num_chambre": data[i][6],
+                "id_hotel": data[i][7],
+                "id_reservation": data[i][8],
+                "id_employe": data[i][9]
             })
 
         return json
@@ -745,6 +774,49 @@ def get_rooms_with_info():
                 "rating": data[i][20],
                 "id_chaine": data[i][21],
                 "chaine_name": data[i][22]
+        })
+
+        return json
+
+    except Exception as e:
+        print(e)
+
+@app.route('/rooms/available/<checkin>/<checkout>') 
+def get_rooms_available_by_date(checkin,checkout):
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+        cursor.execute(''' 
+            SELECT * FROM chambre WHERE CONCAT(id_hotel,num_chambre) NOT IN(
+                SELECT CONCAT(id_hotel,num_chambre) FROM reservation 
+                WHERE (date_checkin > (%s) AND date_checkin < (%s))
+                OR (date_checkout > (%s) AND date_checkout < (%s))
+                OR (date_checkin = (%s) AND date_checkout = (%s))
+                union
+                select concat(id_hotel,num_chambre) FROM location
+                where (date_checkin > (%s) AND date_checkin < (%s))
+                OR (date_checkout > (%s) AND date_checkout < (%s))
+                OR (date_checkin = (%s) AND date_checkout = (%s))
+            )
+        ''', (checkin,checkout,checkin,checkout,checkin,checkout,checkin,checkout,checkin,checkout,checkin,checkout,))
+        data = cursor.fetchall()
+        json = []
+
+        for i in range(len(data)):
+            json.append({
+                "prix": data[i][0],
+                "problems": data[i][1],
+                "capacity": data[i][2],
+                "vue": data[i][3],
+                "tv": data[i][4],
+                "ac": data[i][5],
+                "refrigerator": data[i][6],
+                "microwave": data[i][7],
+                "coffee": data[i][8],
+                "oven": data[i][9],
+                "id_hotel": data[i][10],
+                "room_num": data[i][11]
         })
 
         return json
