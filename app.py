@@ -196,6 +196,33 @@ def get_clients():
     except Exception as e:
         print(e)
 
+@app.route('/clients/exists') 
+def check_if_client_exists():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+        args = request.args
+        email = args.get('email')
+        json = []
+
+        if(email is not None):
+            cursor.execute('SELECT * FROM client WHERE LOWER(email_id) = LOWER((%s))', (email,))
+            data = cursor.fetchall()
+            if len(data) > 0:
+                json.append({"exists": "true"})
+            else:
+                json.append({"exists": "false"})
+            
+        else:
+            json.append({"error": "wrong input"})
+            
+
+        return json
+
+    except Exception as e:
+        print(e)
+
 @app.route('/employes') 
 def get_employes():
     try:
