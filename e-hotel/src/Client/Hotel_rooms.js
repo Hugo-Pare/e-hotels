@@ -4,16 +4,21 @@ import { useNavigate } from 'react-router-dom';
 import 'react-datepicker/dist/react-datepicker.css';
 import './hotel_rooms.css'
 import { id } from 'date-fns/locale';
+import { set } from 'date-fns';
 
 function Hotel_rooms() {
   const [chaines, setChaines] = useState();
+  const [update, setUpdate] = useState(0);
   const [maxPrice, setMaxPrice] = useState();
   const [minPrice, setMinPrice] = useState();
-  const [checkInDate, setCheckInDate] = useState(null);
-  const [checkOutDate, setCheckOutDate] = useState(null);
-  const [capacite, setCapacite] = useState(null);
+  // const [checkInDate, setCheckInDate] = useState(null);
+  // const [checkOutDate, setCheckOutDate] = useState(null);
+  // const [capacite, setCapacite] = useState(null);
+  const [checkInDate, setCheckInDate] = useState();
+  const [checkOutDate, setCheckOutDate] = useState();
+  const [capacite, setCapacite] = useState();
   const [data, setData] = useState([]);
-  const [included, setIncluded] = useState()
+  // const [included, setIncluded] = useState()
   const [loaded, setLoaded] = useState(false)
   const [chainesLoaded, setChainesLoaded] = useState(false)
   const navigate = useNavigate();
@@ -33,6 +38,7 @@ function Hotel_rooms() {
 }
 
 async function getChaines(){
+  setChainesLoaded(false)
   fetch(`http://127.0.0.1:5000/chaines`)
     .then(response => response.json())
     .then(function(json) {
@@ -80,17 +86,28 @@ async function getChaines(){
   const handleClearClick = () => {
     setMaxPrice();
     setMinPrice();
-    setCheckInDate(null);
-    setCheckOutDate(null);
-    setCapacite(null);
+    setCheckInDate();
+    setCheckOutDate();
+    setCapacite();
+    // setCheckInDate(null);
+    // setCheckOutDate(null);
+    // setCapacite(null);
     clearChaines();
+    getChaines();
   };
 
-  const clearChaines = () => {
-    for (var i = 0; i <chaines.length; i++){
-      chaines[i].checked = false
-    }
+function clearChaines() {
+  for (var i = 0; i <chaines.length; i++){
+    chaines[i].checked = false
   }
+  setUpdate(update+1)
+}
+
+  // const clearChaines = () => {
+  //   for (var i = 0; i <chaines.length; i++){
+  //     chaines[i].checked = false
+  //   }
+  // }
 
   const handleSelectedChaines = (e) => {
     chaines.map((chaine) => {
@@ -98,6 +115,7 @@ async function getChaines(){
         chaine.checked = !chaine.checked
       }
     })
+    
   }
 
   return (
@@ -108,8 +126,8 @@ async function getChaines(){
           {chainesLoaded ?
             <form>
               {chaines.map(chaine => (
-                // <div key={chaine}> pourquoi avons nous un key pour le div?
-                <div>
+                <div key={chaine.id}>
+              
                   <input key={chaine.id} id={chaine.id} type="checkbox" onClick={handleSelectedChaines}></input>
                   <label>{chaine.nom_chaine}</label>
                   <div></div>
