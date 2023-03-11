@@ -805,16 +805,16 @@ def get_rooms_available_by_date(checkin,checkout):
 
         for i in range(len(data)):
             json.append({
-                "prix": data[i][0],
-                "problems": data[i][1],
-                "capacity": data[i][2],
-                "vue": data[i][3],
-                "tv": data[i][4],
-                "ac": data[i][5],
-                "refrigerator": data[i][6],
-                "microwave": data[i][7],
-                "coffee": data[i][8],
-                "oven": data[i][9],
+                # "prix": data[i][0],
+                # "problems": data[i][1],
+                # "capacity": data[i][2],
+                # "vue": data[i][3],
+                # "tv": data[i][4],
+                # "ac": data[i][5],
+                # "refrigerator": data[i][6],
+                # "microwave": data[i][7],
+                # "coffee": data[i][8],
+                # "oven": data[i][9],
                 "id_hotel": data[i][10],
                 "room_num": data[i][11]
         })

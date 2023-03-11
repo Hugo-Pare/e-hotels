@@ -7,8 +7,10 @@ import { id } from 'date-fns/locale';
 import { set } from 'date-fns';
 
 function Hotel_rooms() {
+  const [roomsAvailableDate, setRoomsAvailableDate] = useState([]);
   const [showRooms, setShowRooms] = useState([])
   const [chaineChecked, setChainesChecked] = useState([]);
+  const [rating, setRating] = useState([]);
   const [chaines, setChaines] = useState();
   const [maxPrice, setMaxPrice] = useState();
   const [minPrice, setMinPrice] = useState();
@@ -21,6 +23,8 @@ function Hotel_rooms() {
   const navigate = useNavigate();
   const firstUpdate = useRef(true);
   const secondUpdate = useRef(true);
+  const thirdUpdate = useRef(true);
+  const fourthUpdate = useRef(true);
   useEffect(() => {
     getChaines()
     getAllRooms()
@@ -30,15 +34,23 @@ function Hotel_rooms() {
     fetch(`http://127.0.0.1:5000/rooms/info`)
       .then(response => response.json())
       .then(function(json) {
-        console.log("in")
         setData([json])
         setShowRooms([json][0])
         setLoaded(true)
   });
 }
 
-async function getChaines(){
+async function getRoomsForDates() {
+  if(checkInDate != null && checkOutDate != null){ 
+  fetch(`http://127.0.0.1:5000/rooms/available/${checkInDate}/${checkOutDate}`)
+      .then(response => response.json())
+      .then(function(json) {
+        setRoomsAvailableDate([json][0])
+  });
+} else setRoomsAvailableDate([])
+}
 
+async function getChaines(){
   fetch(`http://127.0.0.1:5000/chaines`)
     .then(response => response.json())
     .then(function(json) {
@@ -51,20 +63,23 @@ async function getChaines(){
   });
 }
 
+  function handleRating(event) {
+    setRating(event.target.value)
+  };
+
   function handleMaxPriceChange(event) {
     setMaxPrice(event.target.value)
-  
   };
 
   const handleMinPriceChange = (event) => {
     setMinPrice(event.target.value);
   };
 
-  const handleCheckInDateChange = (date) => {
-    setCheckInDate(date);
+  const handleCheckIn = (date) => {
+    setCheckInDate(date.target.value);
   };
-  const handleCheckOutDateChange = (date) => {
-    setCheckOutDate(date);
+  const handleCheckOut = (date) => {
+    setCheckOutDate(date.target.value);
   };
 
   const handleCapacite = (event) => {
@@ -77,17 +92,21 @@ async function getChaines(){
   }
 
 function valide (chambre){
-  // console.log(chambre)
-  console.log(chaineChecked.length)
   if (chaineChecked.length> 0  && !chaineChecked.includes(chambre.id_chaine)){
-    // console.log("false")
     return false
   }
-  if(maxPrice != null && chambre.prix > parseFloat(maxPrice).toFixed(2)) {
-    // console.log("false")
+  if(maxPrice != null && maxPrice != "" && chambre.prix > parseFloat(maxPrice).toFixed(2)) {
     return false
   }
-  // console.log("true")
+  if(minPrice != null && minPrice != "" && chambre.prix < parseFloat(minPrice).toFixed(2)) {
+    return false
+  }
+  if(capacite != null && capacite > chambre.capacity){
+    return false
+  }
+  if(rating != null && rating > chambre.rating){
+    return false
+  }
   return true
 }
 
@@ -103,12 +122,33 @@ useLayoutEffect(() => {
 updateRooms()
 }, [chaineChecked])
 
+useLayoutEffect(() => {
+  if (thirdUpdate.current) {
+    thirdUpdate.current = false;
+    return;
+  }
+  if (fourthUpdate.current) {
+    fourthUpdate.current = false;
+    return;
+  }
+  listChecked()
+}, [roomsAvailableDate])
+
 const updateRooms = () => {
+  console.log(roomsAvailableDate)
   let indexes = []
   let tempList = []
   for(let i = 0 ; i <data[0].length; i++){
     if (true == valide(data[0][i])){
-      indexes.push(i)
+      if(roomsAvailableDate.length > 0) {
+          for(let n = 0; n<roomsAvailableDate.length;n++){
+            if(roomsAvailableDate[n].room_num == data[0][i].room_num && roomsAvailableDate[n].id_hotel == data[0][i].id_hotel){
+              indexes.push(i)
+            }
+          }
+      } else {
+        indexes.push(i)
+      }
     }
   }
   for(let i = 0 ; i<indexes.length; i++){
@@ -117,14 +157,18 @@ const updateRooms = () => {
   setShowRooms(tempList);
 }
   const search = () => {
+    getRoomsForDates()
+  };
+
+  function listChecked () {
     let temp = []
     for (let i = 0; i<chaines.length ; i++){
       if (chaines[i].checked == true)
       temp.push(chaines[i].id)
     }
     setChainesChecked(temp)
-   
-  };
+  }
+  
 
   const handleReservation = () => {
     navigate('/clientIn/hotelRooms/reservation')
@@ -133,6 +177,7 @@ const updateRooms = () => {
   const clear = () => {
     setLoaded(false)
     setChainesLoaded(false)
+    setRating();
     setMaxPrice();
     setMinPrice();
     setCheckInDate();
@@ -177,7 +222,6 @@ const updateRooms = () => {
               Prix Maximum:
               <br/>
               <input  type="number" value={maxPrice} onChange={handleMaxPriceChange} />
-              {/* <input  type="number" value={maxPrice.current} onChange={handleMaxPriceChange} /> */}
               </label>
               <br/>
               <label style={{fontSize: "20px"}}>
@@ -190,13 +234,13 @@ const updateRooms = () => {
               <label style={{fontSize: "20px"}}>
               Check-in date:
               <div className="date-picker">
-              <input type="date"></input>
+              <input type="date" value={checkInDate} onChange={handleCheckIn}></input>
               </div>
               </label>
               <label style={{fontSize: "20px"}}>
               Check-out date:
               <div className="date-picker">
-              <input type="date"></input>
+              <input type="date" value={checkOutDate} onChange={handleCheckOut}></input>
               </div>
               </label>
             </div>
@@ -214,6 +258,21 @@ const updateRooms = () => {
               <option value="5">5</option>
               <option value="6">6</option>
               <option value="7">7</option>
+              </select>
+            </div>
+            <div className="rating-filter">
+              <label style={{fontSize: "20px"}}>
+              Rating:
+              </label>
+              <br/>
+              <select onChange={handleRating}>
+              <option value="null">Faites selection</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+             
               </select>
             </div>
 
