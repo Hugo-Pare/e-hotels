@@ -113,6 +113,50 @@ def signup_user():
 
     except Exception as e:
         print(e)
+
+@app.route('/reservations', methods=['POST'])
+def post_reservation():
+    try:
+        # get all data from json body
+        data = request.get_json(force=True)
+        
+        # get value for each key
+        id_reservation = data['id_reservation']
+        id_hotel = data['id_hotel']
+        num_chambre = data['num_chambre']
+        email_id = data['email_id']
+        date_checkin = data['date_checkin']
+        date_checkout = data['date_checkout']
+        frais_total = data['frais_total']
+        frais_restant = data['frais_restant']
+
+        # connect to database
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute('''
+            INSERT INTO reservation VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''',
+            (id_reservation,id_hotel,num_chambre,email_id,date_checkin,date_checkout,frais_total,frais_restant,"false","false",)
+        )
+        connection.commit()
+
+        # return json data of new location
+        reservation_data = {
+            "frais_restant": frais_restant,
+            "frais_total": frais_total,
+            "date_checkin": date_checkin,
+            "date_checkout": date_checkout,
+            "email_id": email_id,
+            "num_chambre": num_chambre,
+            "id_hotel": id_hotel,
+            "id_reservation": id_reservation,
+            "cancelled": "false",
+            "location": "false"
+        }
+
+        return json.dumps(reservation_data)
+
+    except Exception as e:
+        print(e) 
         
 @app.route('/locations', methods=['POST'])
 def post_location_with_reservation():
@@ -196,6 +240,33 @@ def get_clients():
     except Exception as e:
         print(e)
 
+@app.route('/clients/exists') 
+def check_if_client_exists():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+        args = request.args
+        email = args.get('email')
+        json = []
+
+        if(email is not None):
+            cursor.execute('SELECT * FROM client WHERE LOWER(email_id) = LOWER((%s))', (email,))
+            data = cursor.fetchall()
+            if len(data) > 0:
+                json.append({"exists": "true"})
+            else:
+                json.append({"exists": "false"})
+            
+        else:
+            json.append({"error": "wrong input"})
+            
+
+        return json
+
+    except Exception as e:
+        print(e)
+
 @app.route('/employes') 
 def get_employes():
     try:
@@ -262,6 +333,19 @@ def get_reservations():
             })
 
         return json
+
+    except Exception as e:
+        print(e)
+
+@app.route('/reservations/count') 
+def get_reservations_count():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute('SELECT count(*) FROM reservation')
+        data = cursor.fetchall()
+
+        return data[0]
 
     except Exception as e:
         print(e)
@@ -613,6 +697,61 @@ def get_rooms():
     except Exception as e:
         print(e)
 
+@app.route('/rooms/info') 
+def get_rooms_with_info():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        # args = request.args
+
+        # mincapacite = args.get('mincapacite')
+        # maxcapacite = args.get('maxcapacite')
+        # id_chaine = args.get('id_chaine')   # needs to be implemented
+        # minprice = args.get('minprice')
+        # maxprice = args.get('maxprice')
+        
+        cursor.execute( ''' SELECT prix,problemes,capacite,hotel_vue,tv,ac,refrigerateur,microonde,cafe,four,
+                            chambre.id_hotel,chambre.num_chambre, hotel.pays,hotel.province_state,hotel.ville,
+                            hotel.rue,hotel.num_rue,hotel.postal_zip_code,hotel.email,hotel.telephone,hotel.rating,
+                            hotel.fk_chaine,chaine.nom_chaine FROM chambre 
+                            JOIN hotel ON hotel.id_hotel = chambre.id_hotel JOIN chaine ON chaine.id_chaine = hotel.fk_chaine
+                        ''')
+
+        data = cursor.fetchall()
+        json = []
+
+        for i in range(len(data)):
+            json.append({
+                "prix": data[i][0],
+                "problems": data[i][1],
+                "capacity": data[i][2],
+                "vue": data[i][3],
+                "tv": data[i][4],
+                "ac": data[i][5],
+                "refrigerator": data[i][6],
+                "microwave": data[i][7],
+                "coffee": data[i][8],
+                "oven": data[i][9],
+                "id_hotel": data[i][10],
+                "room_num": data[i][11],
+                "country": data[i][12],
+                "province_state": data[i][13],
+                "city": data[i][14],
+                "street_name": data[i][15],
+                "street_num": data[i][16],
+                "zip_code": data[i][17],
+                "email_hotel": data[i][18],
+                "telephone_hotel": data[i][19].strip(),
+                "rating": data[i][20],
+                "id_chaine": data[i][21],
+                "chaine_name": data[i][22]
+        })
+
+        return json
+
+    except Exception as e:
+        print(e)
+
 @app.route('/rooms/<id_hotel>') 
 def get_rooms_by_hotel_id(id_hotel):
     try:
@@ -816,6 +955,53 @@ def update_hotel_info_by_id(id_hotel):
         })
 
         return json.dumps(new_hotel_info)
+
+    except Exception as e:
+        print(e)
+
+@app.route('/rooms/info/<id_hotel>/<room_num>', methods=['PATCH'])
+def update_room_info_by_id(id_hotel,room_num):
+    try:
+        # get all data from json body
+        data_received = request.get_json(force=True)
+
+        # get value for each key
+        prix = data_received['prix']
+        problems = data_received['problems']
+        capacity = data_received['capacity']
+        vue = data_received['vue']
+        tv = data_received['tv']
+        ac = data_received['ac']
+        refrigerator = data_received['refrigerator']
+        microwave = data_received['microwave']
+        coffee = data_received['coffee']
+        oven = data_received['oven']
+
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute(
+            '''UPDATE chambre SET prix = (%s), problemes = (%s), capacite = (%s), hotel_vue = (%s),
+            tv = (%s), ac = (%s), refrigerateur = (%s), microonde = (%s), cafe = (%s), four = (%s)
+            WHERE id_hotel = (%s) AND num_chambre = (%s)''', (prix,problems,capacity,vue,tv,ac,refrigerator,microwave,coffee,oven,id_hotel,room_num,))
+        connection.commit()
+        new_room_info = []
+
+        new_room_info.append({
+            "prix": prix,
+            "problems": problems,
+            "capacity": capacity,
+            "vue": vue,
+            "tv": tv,
+            "ac": ac,
+            "refrigerator": refrigerator,
+            "microwave": microwave,
+            "coffee": coffee,
+            "id_hotel": id_hotel,
+            "oven": oven,
+            "room_num": room_num
+        })
+
+        return json.dumps(new_room_info)
 
     except Exception as e:
         print(e)
