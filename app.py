@@ -613,6 +613,61 @@ def get_rooms():
     except Exception as e:
         print(e)
 
+@app.route('/rooms/info') 
+def get_rooms_with_info():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        # args = request.args
+
+        # mincapacite = args.get('mincapacite')
+        # maxcapacite = args.get('maxcapacite')
+        # id_chaine = args.get('id_chaine')   # needs to be implemented
+        # minprice = args.get('minprice')
+        # maxprice = args.get('maxprice')
+        
+        cursor.execute( ''' SELECT prix,problemes,capacite,hotel_vue,tv,ac,refrigerateur,microonde,cafe,four,
+                            chambre.id_hotel,chambre.num_chambre, hotel.pays,hotel.province_state,hotel.ville,
+                            hotel.rue,hotel.num_rue,hotel.postal_zip_code,hotel.email,hotel.telephone,hotel.rating,
+                            hotel.fk_chaine,chaine.nom_chaine FROM chambre 
+                            JOIN hotel ON hotel.id_hotel = chambre.id_hotel JOIN chaine ON chaine.id_chaine = hotel.fk_chaine
+                        ''')
+
+        data = cursor.fetchall()
+        json = []
+
+        for i in range(len(data)):
+            json.append({
+                "prix": data[i][0],
+                "problems": data[i][1],
+                "capacity": data[i][2],
+                "vue": data[i][3],
+                "tv": data[i][4],
+                "ac": data[i][5],
+                "refrigerator": data[i][6],
+                "microwave": data[i][7],
+                "coffee": data[i][8],
+                "oven": data[i][9],
+                "id_hotel": data[i][10],
+                "room_num": data[i][11],
+                "country": data[i][12],
+                "province_state": data[i][13],
+                "city": data[i][14],
+                "street_name": data[i][15],
+                "street_num": data[i][16],
+                "zip_code": data[i][17],
+                "email_hotel": data[i][18],
+                "telephone_hotel": data[i][19].strip(),
+                "rating": data[i][20],
+                "id_chaine": data[i][21],
+                "chaine_name": data[i][22]
+        })
+
+        return json
+
+    except Exception as e:
+        print(e)
+
 @app.route('/rooms/<id_hotel>') 
 def get_rooms_by_hotel_id(id_hotel):
     try:

@@ -39,6 +39,7 @@ GET:
     	/hotels/country/province_state/city?id_chaine=X
 
 	/rooms
+	/rooms/info
 [x] 	/rooms?mincapacite=X&maxcapacite=X&id_chaine=[X]&minprice=X&maxprice=X&vue=X
 	/rooms/id_hotel
 [x] 	/rooms/id_hotel?capacite=X&id_chaine=[X]&minprice=X&maxprice=X&vue=X
