@@ -1,6 +1,8 @@
 POST:
 	/signup/client
 
+	/reservations
+
 	/locations
 
 [x]	/hotels
@@ -16,6 +18,7 @@ GET:
 	/employes?id_employe=X
 
 	/reservations
+	/reservations/count
 	/reservations/id_reservation
 	/reservations/pending/
 	/reservations/pending/id_hotel

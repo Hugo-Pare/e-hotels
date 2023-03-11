@@ -113,6 +113,50 @@ def signup_user():
 
     except Exception as e:
         print(e)
+
+@app.route('/reservations', methods=['POST'])
+def post_reservation():
+    try:
+        # get all data from json body
+        data = request.get_json(force=True)
+        
+        # get value for each key
+        id_reservation = data['id_reservation']
+        id_hotel = data['id_hotel']
+        num_chambre = data['num_chambre']
+        email_id = data['email_id']
+        date_checkin = data['date_checkin']
+        date_checkout = data['date_checkout']
+        frais_total = data['frais_total']
+        frais_restant = data['frais_restant']
+
+        # connect to database
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute('''
+            INSERT INTO reservation VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''',
+            (id_reservation,id_hotel,num_chambre,email_id,date_checkin,date_checkout,frais_total,frais_restant,"false","false",)
+        )
+        connection.commit()
+
+        # return json data of new location
+        reservation_data = {
+            "frais_restant": frais_restant,
+            "frais_total": frais_total,
+            "date_checkin": date_checkin,
+            "date_checkout": date_checkout,
+            "email_id": email_id,
+            "num_chambre": num_chambre,
+            "id_hotel": id_hotel,
+            "id_reservation": id_reservation,
+            "cancelled": "false",
+            "location": "false"
+        }
+
+        return json.dumps(reservation_data)
+
+    except Exception as e:
+        print(e) 
         
 @app.route('/locations', methods=['POST'])
 def post_location_with_reservation():
@@ -289,6 +333,19 @@ def get_reservations():
             })
 
         return json
+
+    except Exception as e:
+        print(e)
+
+@app.route('/reservations/count') 
+def get_reservations_count():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute('SELECT count(*) FROM reservation')
+        data = cursor.fetchall()
+
+        return data[0]
 
     except Exception as e:
         print(e)
