@@ -26,7 +26,7 @@ GET:
 	/reservations/pending/id_hotel?email_client=X
 	/reservations/pending/id_hotel?id_reservation=X&email_client=X
 
-[x]	/locations
+	/locations
 [x]	/locations?email_client=X
 	/locations/count
 [x]	/locations/id_location
@@ -44,9 +44,8 @@ GET:
 
 	/rooms
 	/rooms/info
-[x] 	/rooms?mincapacite=X&maxcapacite=X&id_chaine=[X]&minprice=X&maxprice=X&vue=X
+	/rooms/available/checkin/checkout
 	/rooms/id_hotel
-[x] 	/rooms/id_hotel?capacite=X&id_chaine=[X]&minprice=X&maxprice=X&vue=X
 
 PATCH:
 	/clients/info/email_client
