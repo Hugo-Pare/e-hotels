@@ -902,6 +902,53 @@ def update_hotel_info_by_id(id_hotel):
     except Exception as e:
         print(e)
 
+@app.route('/rooms/info/<id_hotel>/<room_num>', methods=['PATCH'])
+def update_room_info_by_id(id_hotel,room_num):
+    try:
+        # get all data from json body
+        data_received = request.get_json(force=True)
+
+        # get value for each key
+        prix = data_received['prix']
+        problems = data_received['problems']
+        capacity = data_received['capacity']
+        vue = data_received['vue']
+        tv = data_received['tv']
+        ac = data_received['ac']
+        refrigerator = data_received['refrigerator']
+        microwave = data_received['microwave']
+        coffee = data_received['coffee']
+        oven = data_received['oven']
+
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute(
+            '''UPDATE chambre SET prix = (%s), problemes = (%s), capacite = (%s), hotel_vue = (%s),
+            tv = (%s), ac = (%s), refrigerateur = (%s), microonde = (%s), cafe = (%s), four = (%s)
+            WHERE id_hotel = (%s) AND num_chambre = (%s)''', (prix,problems,capacity,vue,tv,ac,refrigerator,microwave,coffee,oven,id_hotel,room_num,))
+        connection.commit()
+        new_room_info = []
+
+        new_room_info.append({
+            "prix": prix,
+            "problems": problems,
+            "capacity": capacity,
+            "vue": vue,
+            "tv": tv,
+            "ac": ac,
+            "refrigerator": refrigerator,
+            "microwave": microwave,
+            "coffee": coffee,
+            "id_hotel": id_hotel,
+            "oven": oven,
+            "room_num": room_num
+        })
+
+        return json.dumps(new_room_info)
+
+    except Exception as e:
+        print(e)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

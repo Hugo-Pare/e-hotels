@@ -56,7 +56,7 @@ PATCH:
 
 	/hotels/info/id_hotel
 
-[x]	/rooms/id_hotel/room_num
+	/rooms/info/id_hotel/room_num
 
 DELETE:
 [x]	/hotels/id_hotel
