@@ -90,7 +90,8 @@ def signup_user():
 
         connection = get_db_connection()
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cursor.execute('INSERT INTO client VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', (email,firstname,lastname,country,province_state,city,street_name,street_num,nas,date_enregistrement,telephone,zip_code))
+        cursor.execute('INSERT INTO client VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', 
+        (email,firstname,lastname,country,province_state,city,street_name,street_num,nas,date_enregistrement,telephone,zip_code,))
         connection.commit()
 
         client_data = {
