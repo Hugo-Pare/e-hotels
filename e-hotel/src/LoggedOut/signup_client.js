@@ -1,3 +1,5 @@
+/* eslint-disable no-useless-escape */
+/* eslint-disable no-unused-vars */
 import { post } from 'jquery';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -123,12 +125,12 @@ function Signup_client() {
       setIsClicked(true);
       return;
     }
-    if (country == "Canada" && (!regex_postalcode.test(postalCode))) {
+    if (country === "Canada" && (!regex_postalcode.test(postalCode))) {
       alert("Le code postale n'est pas valide");
       setIsClicked(true);
       return; 
     }
-    if (country == "Etats-Unis" && (!regex_zip.test(postalCode))) {
+    if (country === "Etats-Unis" && (!regex_zip.test(postalCode))) {
       console.log (country)
       alert("Le zip n'est pas valide");
       setIsClicked(true);
