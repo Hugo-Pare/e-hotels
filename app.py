@@ -545,18 +545,18 @@ def get_hotels():
 
         for i in range(len(data)):
             json.append({
-                "id_hotel": data[i][0],
-                "country": data[i][1],
-                "province_state": data[i][2],
-                "city": data[i][3],
-                "street_name": data[i][4],
-                "street_num": data[i][5],
-                "zip_code": data[i][6],
-                "nb_chambre": data[i][7],
-                "telephone": data[i][8].strip(),
-                "email": data[i][9],
-                "rating": data[i][10],
-                "id_chaine": data[i][11]
+                "street_name": data[i][0],
+                "province_state": data[i][1],
+                "city": data[i][2],
+                "street_name": data[i][3],
+                "street_num": data[i][4],
+                "zip_code": data[i][5],
+                "nb_chambre": data[i][6],
+                "telephone": data[i][7].strip(),
+                "email": data[i][8],
+                "rating": data[i][9],
+                "id_chaine": data[i][10],
+                "id_hotel": data[i][11]
             })
 
         return json
@@ -585,18 +585,18 @@ def get_hotels_by_country(country):
 
         for i in range(len(data)):
             json.append({
-                "id_hotel": data[i][0],
-                "country": data[i][1],
-                "province_state": data[i][2],
-                "city": data[i][3],
-                "street_name": data[i][4],
-                "street_num": data[i][5],
-                "zip_code": data[i][6],
-                "nb_chambre": data[i][7],
-                "telephone": data[i][8].strip(),
-                "email": data[i][9],
-                "rating": data[i][10],
-                "id_chaine": data[i][11]
+                "street_name": data[i][0],
+                "province_state": data[i][1],
+                "city": data[i][2],
+                "street_name": data[i][3],
+                "street_num": data[i][4],
+                "zip_code": data[i][5],
+                "nb_chambre": data[i][6],
+                "telephone": data[i][7].strip(),
+                "email": data[i][8],
+                "rating": data[i][9],
+                "id_chaine": data[i][10],
+                "id_hotel": data[i][11]
             })
 
         return json
@@ -625,18 +625,18 @@ def get_hotels_by_country_and_province_state(country,province_state):
 
         for i in range(len(data)):
             json.append({
-                "id_hotel": data[i][0],
-                "country": data[i][1],
-                "province_state": data[i][2],
-                "city": data[i][3],
-                "street_name": data[i][4],
-                "street_num": data[i][5],
-                "zip_code": data[i][6],
-                "nb_chambre": data[i][7],
-                "telephone": data[i][8].strip(),
-                "email": data[i][9],
-                "rating": data[i][10],
-                "id_chaine": data[i][11]
+                "street_name": data[i][0],
+                "province_state": data[i][1],
+                "city": data[i][2],
+                "street_name": data[i][3],
+                "street_num": data[i][4],
+                "zip_code": data[i][5],
+                "nb_chambre": data[i][6],
+                "telephone": data[i][7].strip(),
+                "email": data[i][8],
+                "rating": data[i][9],
+                "id_chaine": data[i][10],
+                "id_hotel": data[i][11]
             })
 
         return json
@@ -665,18 +665,18 @@ def get_hotels_by_country_and_province_state_and_city(country,province_state,cit
 
         for i in range(len(data)):
             json.append({
-                "id_hotel": data[i][0],
-                "country": data[i][1],
-                "province_state": data[i][2],
-                "city": data[i][3],
-                "street_name": data[i][4],
-                "street_num": data[i][5],
-                "zip_code": data[i][6],
-                "nb_chambre": data[i][7],
-                "telephone": data[i][8].strip(),
-                "email": data[i][9],
-                "rating": data[i][10],
-                "id_chaine": data[i][11]
+                "street_name": data[i][0],
+                "province_state": data[i][1],
+                "city": data[i][2],
+                "street_name": data[i][3],
+                "street_num": data[i][4],
+                "zip_code": data[i][5],
+                "nb_chambre": data[i][6],
+                "telephone": data[i][7].strip(),
+                "email": data[i][8],
+                "rating": data[i][9],
+                "id_chaine": data[i][10],
+                "id_hotel": data[i][11]
             })
 
         return json
@@ -733,13 +733,6 @@ def get_rooms_with_info():
     try:
         connection = get_db_connection()
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        # args = request.args
-
-        # mincapacite = args.get('mincapacite')
-        # maxcapacite = args.get('maxcapacite')
-        # id_chaine = args.get('id_chaine')   # needs to be implemented
-        # minprice = args.get('minprice')
-        # maxprice = args.get('maxprice')
         
         cursor.execute( ''' SELECT prix,problemes,capacite,hotel_vue,tv,ac,refrigerateur,microonde,cafe,four,
                             chambre.id_hotel,chambre.num_chambre, hotel.pays,hotel.province_state,hotel.ville,
@@ -747,6 +740,55 @@ def get_rooms_with_info():
                             hotel.fk_chaine,chaine.nom_chaine FROM chambre 
                             JOIN hotel ON hotel.id_hotel = chambre.id_hotel JOIN chaine ON chaine.id_chaine = hotel.fk_chaine
                         ''')
+
+        data = cursor.fetchall()
+        json = []
+
+        for i in range(len(data)):
+            json.append({
+                "prix": data[i][0],
+                "problems": data[i][1],
+                "capacity": data[i][2],
+                "vue": data[i][3],
+                "tv": data[i][4],
+                "ac": data[i][5],
+                "refrigerator": data[i][6],
+                "microwave": data[i][7],
+                "coffee": data[i][8],
+                "oven": data[i][9],
+                "id_hotel": data[i][10],
+                "room_num": data[i][11],
+                "country": data[i][12],
+                "province_state": data[i][13],
+                "city": data[i][14],
+                "street_name": data[i][15],
+                "street_num": data[i][16],
+                "zip_code": data[i][17],
+                "email_hotel": data[i][18],
+                "telephone_hotel": data[i][19].strip(),
+                "rating": data[i][20],
+                "id_chaine": data[i][21],
+                "chaine_name": data[i][22]
+        })
+
+        return json
+
+    except Exception as e:
+        print(e)
+
+@app.route('/rooms/info/<id_hotel>/<room_num>') 
+def get_rooms_by_hotel_and_room_num_with_info(id_hotel,room_num):
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        
+        cursor.execute( ''' SELECT prix,problemes,capacite,hotel_vue,tv,ac,refrigerateur,microonde,cafe,four,
+                            chambre.id_hotel,chambre.num_chambre, hotel.pays,hotel.province_state,hotel.ville,
+                            hotel.rue,hotel.num_rue,hotel.postal_zip_code,hotel.email,hotel.telephone,hotel.rating,
+                            hotel.fk_chaine,chaine.nom_chaine FROM chambre 
+                            JOIN hotel ON hotel.id_hotel = chambre.id_hotel JOIN chaine ON chaine.id_chaine = hotel.fk_chaine
+                            WHERE chambre.id_hotel = (%s) AND chambre.num_chambre = (%s)
+                        ''', (id_hotel,room_num,))
 
         data = cursor.fetchall()
         json = []
