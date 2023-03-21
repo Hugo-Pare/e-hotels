@@ -1,3 +1,6 @@
+/* eslint-disable no-useless-escape */
+/* eslint-disable no-unused-vars */
+import { post } from 'jquery';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,6 +18,48 @@ function Signup_client() {
   const [country, setCountry] = useState('');
   const [isClicked, setIsClicked] = useState(false);
   const navigate = useNavigate();
+
+
+
+  async function checkEmailExistence(email) {
+    const response = await fetch(`http://127.0.0.1:5000/clients/exists?email=${email}`);
+    const data = await response.json();
+    if (data[0].exists === 'true') {
+      alert("S'il vous plaît utiliser un email qui n'est pas déjà associer à un compte");
+    } else {
+      addToDataBase();
+    }
+  }
+
+  function addToDataBase() {
+
+    const json = {
+      "city": city,
+      "country": country,
+      "email": email,
+      "firstname": firstName,
+      "lastname": lastName,
+      "nas": parseInt(socialInsuranceNumber),
+      "province_state": province,
+      "street_name": streetName,
+      "street_num": parseInt(streetNumber),
+      "telephone": parseInt(phoneNumber),
+      "zip_code": postalCode
+  }
+    console.log(json)
+    fetch('http://127.0.0.1:5000/signup/client', {
+        method: "POST",
+        mode: "cors",
+        body: JSON.stringify(json),
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        }
+      })
+      .then(response => response.json())
+      .then(function(json){
+          console.log(json)
+      })
+  }
 
   const handleSignUpClick = () => {
     const regex_name = /^[a-zA-Z]{2,}$/;
@@ -80,22 +125,24 @@ function Signup_client() {
       setIsClicked(true);
       return;
     }
-    if (country == "Canada" && (!regex_postalcode.test(postalCode))) {
+    if (country === "Canada" && (!regex_postalcode.test(postalCode))) {
       alert("Le code postale n'est pas valide");
       setIsClicked(true);
       return; 
     }
-    if (country == "Etats-Unis" && (!regex_zip.test(postalCode))) {
+    if (country === "Etats-Unis" && (!regex_zip.test(postalCode))) {
       console.log (country)
       alert("Le zip n'est pas valide");
       setIsClicked(true);
       return;
     }
     else {
-      navigate('/');
+      checkEmailExistence(email);
+      //navigate('/');
         
     }
     }
+  
     
   return (
     

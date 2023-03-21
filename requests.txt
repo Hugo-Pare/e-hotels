@@ -20,7 +20,9 @@ GET:
 	/reservations
 	/reservations/count
 	/reservations/id_reservation
+[x]	/reservations/canceled/
 	/reservations/pending/
+[x]	/reservations/pending?email_client=X
 	/reservations/pending/id_hotel
 	/reservations/pending/id_hotel?id_reservation=X
 	/reservations/pending/id_hotel?email_client=X
@@ -44,6 +46,7 @@ GET:
 
 	/rooms
 	/rooms/info
+	/rooms/info/id_hotel/room_num
 	/rooms/available/checkin/checkout
 	/rooms/id_hotel
 
