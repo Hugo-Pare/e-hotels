@@ -6,9 +6,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { format } from 'date-fns'
 
 function First_page_e(){
-    const id_employe = useLocation().state.id
+    const id_employe = sessionStorage.getItem("id")
     const navigate = useNavigate();
-    sessionStorage.setItem("id", id_employe)
     let id_hotel = null
 
     const [idHotel, setIdHotel] = useState("")

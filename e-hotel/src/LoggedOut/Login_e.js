@@ -13,7 +13,8 @@ function LoginEmployee() {
         if (json.length === 0) {
           alert("Votre comptes n'est pas activer");
         } else {
-          navigate('/employeeIn', {state: {id:employee_num}});
+          sessionStorage.setItem("id", employee_num)
+          navigate('/employeeIn');
         }
       });
   }
