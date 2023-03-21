@@ -194,7 +194,6 @@ function First_page_e(){
                                 <th>Frais Restant</th>
                             </tr>
                         </thead>
-                        {/* {console.log(data)} */}
                         <tbody>
                             {data[0].map((reservation) => (
                                 <tr key={reservation.id_reservation}>
