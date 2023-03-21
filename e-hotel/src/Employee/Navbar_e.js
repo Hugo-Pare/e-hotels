@@ -3,7 +3,6 @@
 const Navbar_e = () => {
 
     return (
-<<<<<<< HEAD
       <div className="topnav">
       <a href="/">E-hotels</a>
       <div className="right">
@@ -25,32 +24,6 @@ const Navbar_e = () => {
       </div>
      
     </div>
-        // <nav>
-        //   <div className="brand">
-        //     <a href="/">E-hotels</a>
-        //   </div>
-        //   <div class="dropdown nav-buttons">
-        //     <button class="dropbtn">Réservations</button>
-        //     <div class="dropdown-content">
-        //       <a href="">Actifs</a>
-        //       <a href="">Cancelé</a>
-        //     </div>
-        //   </div>
-        //   <div className="nav-buttons">
-        //     <button><a href="/employeeIn/info">Account Info</a></button>
-        //   </div>
-        // </nav>
-=======
-        <nav>
-          <div className="brand">
-            <a href="/">E-hotels</a>
-          </div>
-          <div className="nav-buttons">
-            <button><a href="/employeeIn/info">Account Info</a></button>
-            <button><a href="/employeeIn/hotel_rooms_e">Hotel Rooms</a></button>
-          </div>
-        </nav>
->>>>>>> 676617d1e66b3a3aaefc6d8515a579707a804a07
     )
 }
 
