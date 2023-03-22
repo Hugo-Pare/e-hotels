@@ -1,14 +1,20 @@
 const Navbar_c = () => {
 
   return (
-    <nav>
-      <div className="brand">
-        <a href="/">E-hotels</a>
+    <div className="topnav">
+    <a href="/">E-hotels</a>
+    <div className="right">
+    <div className="dropdown">
+      <button className="dropbtn">Réservations</button>
+      <div className="dropdown-content">
+        <a href="/clientIn/hotelRooms">Créer réservation</a>
+        <a href="">Réservations actifs</a>
       </div>
-      <div className="nav-buttons">
-        <button><a href="/clientIn/info">Account Info</a></button>
-      </div>
-    </nav>
+    </div>
+    <a href="">Locations</a>
+    <a href="/clientIn/info">Account Info</a>
+    </div>
+  </div>
 )
 }
 
