@@ -35,11 +35,8 @@ function First_page_c() {
   function handleChaineClick(e,id_chaine){
     e.preventDefault()
     console.log("clicked chaine : " + id_chaine)
-    navigate('/clientIn/infoChaine', {
-      state: {
-        id_chaine: id_chaine
-      }
-    });
+    sessionStorage.setItem("id_chaine", id_chaine)
+    navigate('/clientIn/infoChaine');
   };
 
 
