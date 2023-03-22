@@ -28,14 +28,13 @@ function First_page_c() {
 
 
   const handleReservationClick = () => {
-      console.log("clicked reservation")
       navigate('/clientIn/hotelRooms')
   };
 
-  function handleChaineClick(e,id_chaine){
+  function handleChaineClick(e,id_chaine, nom_chaine){
     e.preventDefault()
-    console.log("clicked chaine : " + id_chaine)
-    sessionStorage.setItem("id_chaine", id_chaine)
+    sessionStorage.setItem("id_chaine", id_chaine);
+    sessionStorage.setItem("nom_chaine", nom_chaine);
     navigate('/clientIn/infoChaine');
   };
 
@@ -58,7 +57,7 @@ return(
         <>
           <div className="container-box-chaines">
             {chaines.map((reservation) => (
-            <div className="card" key={reservation.id_chaine} onClick={(e) => handleChaineClick(e,reservation.id_chaine)}>
+            <div className="card" key={reservation.id_chaine} onClick={(e) => handleChaineClick(e,reservation.id_chaine, reservation.nom_chaine)}>
                 <h4><b>{reservation.nom_chaine}</b></h4>
                 <p>{reservation.street_num}, {reservation.street_name}, {reservation.city}</p>
                 <p>{reservation.province_state}, {reservation.country}</p>

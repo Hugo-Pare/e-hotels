@@ -35,13 +35,11 @@ function First_page_e(){
     }
 
     async function getAllReservations(){
-        // console.log("id_hotel : " + id_hotel)
         fetch(`http://127.0.0.1:5000/reservations/pending/${id_hotel}`)
         .then(response => response.json())
         .then(function(json){
             setLoaded(true)
             setData([json])
-            // console.log(json)
         })
     }
 
@@ -56,7 +54,6 @@ function First_page_e(){
             .then(function(json){
                 setLoaded(true)
                 setData([json])
-                // console.log(json)
             })
         }
         else if(email !== ""){
@@ -69,7 +66,6 @@ function First_page_e(){
             .then(function(json){
                 setLoaded(true)
                 setData([json])
-                // console.log(json)
             })
         }
         else if(id !== ""){
@@ -82,7 +78,6 @@ function First_page_e(){
             .then(function(json){
                 setLoaded(true)
                 setData([json])
-                // console.log(json)
             })
         }
         else{
@@ -137,7 +132,6 @@ function First_page_e(){
 
     function handleAnnulation(event){
         const id_reservation = event.target.value
-        // console.log("clicked annulation, id_reservation = " + id_reservation)
         // alert pour s'assurer d'annuler la réservation
         if(window.confirm('Voulez-vous vraiment annuler cette réservation?')){
             console.log("annuler la réservation " + id_reservation)
@@ -166,7 +160,6 @@ function First_page_e(){
             <div>
                 <div>
                     <h1>Réservations en Attente</h1>
-                    {/* <button onClick={handleHotelRoom}>Hotel Rooms</button> */}
                     <br/>
                     <div className="filter">
                         <label>Email : </label>
