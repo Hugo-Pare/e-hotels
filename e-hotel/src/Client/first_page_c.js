@@ -1,7 +1,8 @@
 import { useLocation } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
-import './first_page_c.css'
+import './first_page_c.css';
+import hotel from './hotel.jpg';
 
 function First_page_c() {
   const location = useLocation();
@@ -22,7 +23,6 @@ function First_page_c() {
     .then(function(json){
         setLoaded(true)
         setChaines(json)
-        console.log(json)
     })
   }
 
@@ -46,29 +46,45 @@ function First_page_c() {
 
 return(
     <div>
-      <div>
-        <button onClick={handleReservationClick}>Effectuer une réservation</button>
-      </div>
-      <div>
-        <h2>Nos chaînes d'hotels</h2>
+    
+      <div className="grid-container-client">
+        <div className="grid-item-client-res" style={{backgroundImage: `url(${hotel})`, backgroundRepeat: 'no-repeat', padding: '10px'}}>
+          <div style={{backgroundColor:'white', width:"fit-content", margin:"0"}}>
+            <h3>Réservez une chambre maintenant tant qu'elle sont encore disponible!</h3>
+            <button onClick={handleReservationClick}>Effectuer une réservation</button>
+          </div>
+        </div>
+        <div className="grid-item-client"><h2>Chaînes</h2>
         {loaded ? 
         <>
           <div className="container-box-chaines">
             {chaines.map((reservation) => (
-              <div className="box-chaine" key={reservation.id_chaine} onClick={(e) => handleChaineClick(e,reservation.id_chaine)}>
-                <b>{reservation.nom_chaine}</b>
-                <div><p>{reservation.country}, {reservation.province_state}, {reservation.city}</p></div>
-                <div><p>{reservation.street_num}, {reservation.street_name}, {reservation.zip_code}</p></div>
-                <div><p>{reservation.email}</p></div>
-                <div><p>{reservation.telephone}</p></div>
-              </div>
+            <div className="card" key={reservation.id_chaine} onClick={(e) => handleChaineClick(e,reservation.id_chaine)}>
+              {/* <div className="container"> */}
+                <h4><b>{reservation.nom_chaine}</b></h4>
+                <p>{reservation.street_num}, {reservation.street_name}, {reservation.city}</p>
+                <p>{reservation.province_state}, {reservation.country}</p>
+                <p>{reservation.email}</p>
+                <p>{reservation.telephone}</p>
+              {/* </div> */}
+            </div>
+              
             ))}
           </div>
         </>
-        : <p>Recherche des chaînes ...</p>}
+        : <p>Recherche des chaînes ...</p>}</div>
       </div>
+      
     </div>
   );
 
 }
 export default First_page_c;
+
+{/* <div className="box-chaine" key={reservation.id_chaine} onClick={(e) => handleChaineClick(e,reservation.id_chaine)}>
+                <b>{reservation.nom_chaine}</b>
+                <div><p>{reservation.country}, {reservation.province_state}, {reservation.city}</p></div>
+                <div><p>{reservation.street_num}, {reservation.street_name}, {reservation.zip_code}</p></div>
+                <div><p>{reservation.email}</p></div>
+                <div><p>{reservation.telephone}</p></div>
+              </div> */}
