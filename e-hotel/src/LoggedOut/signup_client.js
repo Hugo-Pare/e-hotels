@@ -17,7 +17,7 @@ function Signup_client() {
   const [postalCode, setPostalCode] = useState('');
   const [country, setCountry] = useState('');
   const [isClicked, setIsClicked] = useState(false);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
 
 
@@ -138,8 +138,6 @@ function Signup_client() {
     }
     else {
       checkEmailExistence(email);
-      //navigate('/');
-        
     }
     }
   
@@ -147,7 +145,7 @@ function Signup_client() {
   return (
     
     <div>
-      <h1>S'enregistrer</h1>
+      <h1>Créer un compte</h1>
 
       <label style={{color: isClicked && !firstName ? 'red' : 'black'}} htmlFor="firstName">
         Prénom:
@@ -221,7 +219,7 @@ function Signup_client() {
         </label>
         <br/>
           <button onClick={handleSignUpClick}>Sign up</button>
-        </div>
+    </div>
     )
 }
 export default Signup_client;
