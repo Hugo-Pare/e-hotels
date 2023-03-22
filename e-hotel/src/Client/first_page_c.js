@@ -49,12 +49,14 @@ return(
     
       <div className="grid-container-client">
         <div className="grid-item-client-res" style={{backgroundImage: `url(${hotel})`, backgroundRepeat: 'no-repeat', padding: '10px'}}>
-          <div style={{backgroundColor:'white', width:"fit-content", margin:"0"}}>
-            <h3>Réservez une chambre maintenant tant qu'elle sont encore disponible!</h3>
-            <button onClick={handleReservationClick}>Effectuer une réservation</button>
+          <div className="bookRoom" style={{backgroundColor:'white', width:"fit-content", margin:"0"}}>
+            <h3 style={{margin: '0'}}>Réservez une chambre maintenant tant qu'elle sont encore disponible!</h3>
+            <button style={{marginTop: '10px'}} onClick={handleReservationClick}>Nouvelle Réservation</button>
           </div>
         </div>
-        <div className="grid-item-client"><h2>Chaînes</h2>
+        <div>
+        <h2>Chaînes</h2>
+        <div className="grid-item-client">
         {loaded ? 
         <>
           <div className="container-box-chaines">
@@ -71,10 +73,11 @@ return(
               
             ))}
           </div>
+          
         </>
         : <p>Recherche des chaînes ...</p>}</div>
       </div>
-      
+      </div>
     </div>
   );
 
