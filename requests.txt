@@ -32,10 +32,12 @@ GET:
 [x]	/locations?email_client=X
 	/locations/count
 [x]	/locations/id_location
+[x] /location/id_hotel
 
 	/chaines
 
 	/hotels
+[x] /hotels/id_hotel
  	/hotels?id_chaine=X
  	/hotels/country
  	/hotels/country?id_chaine=X
@@ -48,6 +50,7 @@ GET:
 	/rooms/info
 	/rooms/info/id_hotel/room_num
 	/rooms/available/checkin/checkout
+[x] /rooms/available/id_hotel/checkin/checkout
 	/rooms/id_hotel
 
 PATCH:

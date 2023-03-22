@@ -21,6 +21,7 @@ const Navbar_e = () => {
         </div>
       </div>
       <a href="/employeeIn/hotel_rooms_e">Rooms</a>
+      <a href="">Hotel</a>
       <a href="/employeeIn/info">Account Info</a>
       </div>
      
