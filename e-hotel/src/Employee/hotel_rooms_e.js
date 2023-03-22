@@ -6,12 +6,11 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 function Hotel_rooms_e() {
   const [showRooms, setShowRooms] = useState([])
-  const id_employe = useLocation().state.id
-  sessionStorage.setItem("id", id_employe)
+  const id_employe = sessionStorage.getItem("id")
   const [numChambre, setNumChambre] = useState([]);
   const [data, setData] = useState([]);
   const [loaded, setLoaded] = useState(false)
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [idHotel, setIdHotel] = useState("")
   useEffect(() => {
     getHotelId()
@@ -24,8 +23,8 @@ function Hotel_rooms_e() {
         return response.json()
     })
     .then(function(data){
-        idHotel = data[0].id_hotel
-        setIdHotel(data[0].id_hotel)
+        idHotel = data[0].id_hotel //setting constant variable?
+        setIdHotel(data[0].id_hotel) //why pass a set variable?
         getAllRooms()
         parseInt(idHotel);
         console.log(data)

@@ -62,13 +62,11 @@ return(
           <div className="container-box-chaines">
             {chaines.map((reservation) => (
             <div className="card" key={reservation.id_chaine} onClick={(e) => handleChaineClick(e,reservation.id_chaine)}>
-              {/* <div className="container"> */}
                 <h4><b>{reservation.nom_chaine}</b></h4>
                 <p>{reservation.street_num}, {reservation.street_name}, {reservation.city}</p>
                 <p>{reservation.province_state}, {reservation.country}</p>
                 <p>{reservation.email}</p>
                 <p>{reservation.telephone}</p>
-              {/* </div> */}
             </div>
               
             ))}
@@ -83,11 +81,3 @@ return(
 
 }
 export default First_page_c;
-
-{/* <div className="box-chaine" key={reservation.id_chaine} onClick={(e) => handleChaineClick(e,reservation.id_chaine)}>
-                <b>{reservation.nom_chaine}</b>
-                <div><p>{reservation.country}, {reservation.province_state}, {reservation.city}</p></div>
-                <div><p>{reservation.street_num}, {reservation.street_name}, {reservation.zip_code}</p></div>
-                <div><p>{reservation.email}</p></div>
-                <div><p>{reservation.telephone}</p></div>
-              </div> */}

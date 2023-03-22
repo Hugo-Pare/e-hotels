@@ -132,7 +132,7 @@ function First_page_e(){
     }
 
     function handleHotelRoom(){
-        navigate('/employeeIn/hotel_rooms_e', {state: {id:id_employe}});
+        navigate('/employeeIn/hotel_rooms_e');
     }
 
     function handleAnnulation(event){
@@ -166,7 +166,7 @@ function First_page_e(){
             <div>
                 <div>
                     <h1>Réservations en Attente</h1>
-                    <button onClick={handleHotelRoom}>Hotel Rooms</button>
+                    {/* <button onClick={handleHotelRoom}>Hotel Rooms</button> */}
                     <br/>
                     <div className="filter">
                         <label>Email : </label>

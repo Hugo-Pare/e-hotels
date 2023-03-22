@@ -20,6 +20,7 @@ const Navbar_e = () => {
           <a href="">Creer</a>
         </div>
       </div>
+      <a href="/employeeIn/hotel_rooms_e">Rooms</a>
       <a href="/employeeIn/info">Account Info</a>
       </div>
      
