@@ -1,10 +1,7 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef, useLayoutEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'react-datepicker/dist/react-datepicker.css';
 import './hotel_rooms.css'
-import { id } from 'date-fns/locale';
-import { set } from 'date-fns';
 
 function Hotel_rooms() {
   

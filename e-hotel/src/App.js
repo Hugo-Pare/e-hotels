@@ -17,6 +17,7 @@ import Reservation from './Client/Reservation'
 import Info_c from './Client/Info_c';
 import Welcome from './LoggedOut/Welcome';
 import Hotel_rooms_e from './Employee/hotel_rooms_e'
+import Hotels from './Client/Hotels'
 
 import { BrowserRouter as Router, Routes, Route, React} from 'react-router-dom';
 
@@ -32,7 +33,8 @@ function App() {
         </Route>
         <Route exact path="/clientIn">
           <Route exact path="/clientIn" element={<><Navbar_c/><First_page_c /></>} />
-          <Route exact path='/clientIn/info' element={<><Navbar_e />< Info_c/></>}/>
+          <Route exact path='/clientIn/info' element={<><Navbar_c />< Info_c/></>}/>
+          <Route exact path='/clientIn/hotels' element={<><Navbar_c />< Hotels/></>}/>
           <Route exact path="/clientIn/hotelRooms" element={<><Navbar_c/><Hotel_rooms /></>} />
           <Route exact path="/clientIn/infoChaine" element={<><Navbar_c/><Info_chaine /></>} />
           <Route exact path="/clientIn/hotelRooms/reservation" element={<><Navbar_c/><Reservation /></>} />

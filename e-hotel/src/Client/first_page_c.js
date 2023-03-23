@@ -1,4 +1,3 @@
-import { useLocation } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import './first_page_c.css';
@@ -25,7 +24,7 @@ function First_page_c() {
 
 
   const handleReservationClick = () => {
-      navigate('/clientIn/hotelRooms')
+      navigate('/clientIn/hotels')
   };
 
   function handleChaineClick(e,id_chaine, nom_chaine){
@@ -50,7 +49,6 @@ function First_page_c() {
 
 return(
     <div>
-    
       <div className="grid-container-client">
         <div className="grid-item-client-res" style={{backgroundImage: `url(${hotel})`, backgroundRepeat: 'no-repeat', padding: '10px'}}>
           <div className="bookRoom" style={{backgroundColor:'white', width:"fit-content", margin:"0"}}>
