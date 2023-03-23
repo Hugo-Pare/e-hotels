@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 function Hotels() {
 //   const [roomsAvailableDate, setRoomsAvailableDate] = useState([]);
 //   const [showRooms, setShowRooms] = useState([])
-//   const [chaineChecked, setChainesChecked] = useState([]);
+  const [chaineChecked, setChainesChecked] = useState();
 //   const [rating, setRating] = useState([]);
   const [chaines, setChaines] = useState();
 //   const [maxPrice, setMaxPrice] = useState();
@@ -19,30 +19,27 @@ function Hotels() {
   const [chainesLoaded, setChainesLoaded] = useState(false)
 //   const navigate = useNavigate();
   const firstUpdate = useRef(true);
-//   const secondUpdate = useRef(true);
-//   const thirdUpdate = useRef(true);
+  const secondUpdate = useRef(true);
+  const thirdUpdate = useRef(true);
 //   const fourthUpdate = useRef(true);
   useEffect(() => {
-    console.log("first")
     if(firstUpdate.current == true){
         getChaines()
-        console.log("in")
         firstUpdate.current = false
     }
-   
   }, [])
 
-//   useLayoutEffect(() => {
-//   if (firstUpdate.current) {
-//     firstUpdate.current = false;
-//     return;
-//   }
-//   if (secondUpdate.current) {
-//     secondUpdate.current = false;
-//     return;
-//   }
-// updateRooms()
-// }, [chaineChecked])
+  useLayoutEffect(() => {
+    if (secondUpdate.current) {
+        secondUpdate.current = false;
+        return;
+    }
+    if (thirdUpdate.current) {
+        thirdUpdate.current = false;
+        return;
+    }
+    listChecked(chaines)
+}, [chaines])
 
 //   async function getAllRooms() {
 //     fetch(`http://127.0.0.1:5000/rooms/info`)
@@ -74,7 +71,6 @@ async function getChaines(){
       }
       setChaines(chainesList)
       setChainesLoaded(true)
-      console.log(chainesList)
   });
 }
 
@@ -177,14 +173,16 @@ async function getChaines(){
 //     getRoomsForDates()
 //   };
 
-//   function listChecked () {
-//     let temp = []
-//     for (let i = 0; i<chaines.length ; i++){
-//       if (chaines[i].checked == true)
-//       temp.push(chaines[i].id)
-//     }
-//     setChainesChecked(temp)
-//   }
+  function listChecked (liste) {
+    let temp = []
+    for (let i = 0; i<liste.length ; i++){
+      if (liste[i].checked == true)
+      temp.push(liste[i].id)
+    }
+    console.log("temp")
+    console.log(temp)
+    setChainesChecked(temp)
+  }
   
 
 //   const handleReservation = () => {
@@ -212,23 +210,25 @@ async function getChaines(){
 //     setChainesChecked([])
 //   }
 
-//   const handleSelectedChaines = (e) => {
-//     chaines.map((chaine) => {
-//       if(chaine.id == e.target.id) {
-//         chaine.checked = !chaine.checked
-//       }
-//     })
-    
-//   }
+  const handleSelectedChaines = (e) => {
+    var temp = chaines
+    temp.map((chaine) => {
+      if(chaine.id == e.target.id) {
+        chaine.checked = !chaine.checked
+      }
+    })
+    setChaines(temp)
+    listChecked(temp)
+  }
 
   return (
     
-    <div className="hotel-rooms-container">
+    <div className="filter-panel"> <h3 style={{marginBottom:'0'}}>Filter Hotels</h3>
       {chainesLoaded ?
       <div className="chaines-filters">
                    {chaines.map(chaine => (
                     <div key={chaine.id}>
-                      <input key={chaine.id} id={chaine.id} type="checkbox"></input>
+                      <input key={chaine.id} id={chaine.id} type="checkbox" onClick={handleSelectedChaines}></input>
                       <label>{chaine.nom_chaine}</label>
                     </div>
                   ))}
