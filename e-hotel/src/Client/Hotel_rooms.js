@@ -7,11 +7,10 @@ import { id } from 'date-fns/locale';
 import { set } from 'date-fns';
 
 function Hotel_rooms() {
+  
   const [roomsAvailableDate, setRoomsAvailableDate] = useState([]);
   const [showRooms, setShowRooms] = useState([])
-  const [chaineChecked, setChainesChecked] = useState([]);
-  const [rating, setRating] = useState([]);
-  const [chaines, setChaines] = useState();
+  // const [rating, setRating] = useState([]);
   const [maxPrice, setMaxPrice] = useState();
   const [minPrice, setMinPrice] = useState();
   const [checkInDate, setCheckInDate] = useState();
@@ -19,19 +18,27 @@ function Hotel_rooms() {
   const [capacite, setCapacite] = useState();
   const [data, setData] = useState([]);
   const [loaded, setLoaded] = useState(false)
-  const [chainesLoaded, setChainesLoaded] = useState(false)
   const navigate = useNavigate();
   const firstUpdate = useRef(true);
   const secondUpdate = useRef(true);
-  const thirdUpdate = useRef(true);
-  const fourthUpdate = useRef(true);
   useEffect(() => {
-    getChaines()
     getAllRooms()
   }, [])
 
+  useLayoutEffect(() => {
+      if (firstUpdate.current) {
+        firstUpdate.current = false;
+        return;
+      }
+      if (secondUpdate.current) {
+        secondUpdate.current = false;
+        return;
+      }
+    updateRooms()
+    }, [roomsAvailableDate])
+
   async function getAllRooms() {
-    fetch(`http://127.0.0.1:5000/rooms/info`)
+    fetch(`http://127.0.0.1:5000/rooms?id_hotel=${sessionStorage.getItem("id_hotel")}`)
       .then(response => response.json())
       .then(function(json) {
         setData([json])
@@ -46,26 +53,14 @@ async function getRoomsForDates() {
       .then(response => response.json())
       .then(function(json) {
         setRoomsAvailableDate([json][0])
+        // updateRooms()
   });
 } else setRoomsAvailableDate([])
 }
 
-async function getChaines(){
-  fetch(`http://127.0.0.1:5000/chaines`)
-    .then(response => response.json())
-    .then(function(json) {
-      var chainesList = []
-      for(var i = 0; i < Object.keys(json).length; i++){
-        chainesList.push({nom_chaine : json[i]["nom_chaine"], checked : false, id :json[i]["id_chaine"]})
-      }
-      setChaines(chainesList)
-      setChainesLoaded(true)
-  });
-}
-
-  function handleRating(event) {
-    setRating(event.target.value)
-  };
+  // function handleRating(event) {
+  //   setRating(event.target.value)
+  // };
 
   function handleMaxPriceChange(event) {
     setMaxPrice(event.target.value)
@@ -92,9 +87,6 @@ async function getChaines(){
   }
 
 function valide (chambre){
-  if (chaineChecked.length> 0  && !chaineChecked.includes(chambre.id_chaine)){
-    return false
-  }
   if(maxPrice != null && maxPrice != "" && chambre.prix > parseFloat(maxPrice).toFixed(2)) {
     return false
   }
@@ -104,38 +96,13 @@ function valide (chambre){
   if(capacite != null && capacite > chambre.capacity){
     return false
   }
-  if(rating != null && rating > chambre.rating){
-    return false
-  }
+  // if(rating != null && rating > chambre.rating){
+  //   return false
+  // }
   return true
 }
 
-useLayoutEffect(() => {
-  if (firstUpdate.current) {
-    firstUpdate.current = false;
-    return;
-  }
-  if (secondUpdate.current) {
-    secondUpdate.current = false;
-    return;
-  }
-updateRooms()
-}, [chaineChecked])
-
-useLayoutEffect(() => {
-  if (thirdUpdate.current) {
-    thirdUpdate.current = false;
-    return;
-  }
-  if (fourthUpdate.current) {
-    fourthUpdate.current = false;
-    return;
-  }
-  listChecked()
-}, [roomsAvailableDate])
-
 const updateRooms = () => {
-  console.log(roomsAvailableDate)
   let indexes = []
   let tempList = []
   for(let i = 0 ; i <data[0].length; i++){
@@ -157,66 +124,35 @@ const updateRooms = () => {
   setShowRooms(tempList);
 }
   const search = () => {
+    if(checkInDate == null || checkOutDate == null){
+      alert("Selectionne une date Check-In et Check-Out SVP!")
+      return
+    }
     getRoomsForDates()
   };
-
-  function listChecked () {
-    let temp = []
-    for (let i = 0; i<chaines.length ; i++){
-      if (chaines[i].checked == true)
-      temp.push(chaines[i].id)
-    }
-    setChainesChecked(temp)
-  }
-  
 
   const handleReservation = () => {
     navigate('/clientIn/hotelRooms/reservation')
   }
 
   const clear = () => {
-    setLoaded(false)
-    setChainesLoaded(false)
-    setRating();
-    setMaxPrice();
-    setMinPrice();
-    setCheckInDate();
-    setCheckOutDate();
-    setCapacite();
-    clearChaines();
-    getChaines();
-    getAllRooms();
-  };
-
-  const clearChaines = () => {
-    for (var i = 0; i <chaines.length; i++){
-      chaines[i].checked = false
-    }
-    setChainesChecked([])
-  }
-
-  const handleSelectedChaines = (e) => {
-    chaines.map((chaine) => {
-      if(chaine.id == e.target.id) {
-        chaine.checked = !chaine.checked
-      }
-    })
+    window.location.reload(false);
+    // setLoaded(false)
+    // setRating();
     
-  }
+    // setMaxPrice();
+    // ref.current.value = '';
+    // this.ref.current.reset();
+    // setMinPrice();
+    // setCheckInDate();
+    // setCheckOutDate();
+    // setCapacite();
+    // getAllRooms();
+  };
 
   return (
     <div className="hotel-rooms-container">
-      {chainesLoaded ?
-        <div className="filter-panel"> <h3>Filter rooms</h3>
-          <div className="chaines-filters">
-            {chaines.map(chaine => (
-              <div key={chaine.id}>
-                <input key={chaine.id} id={chaine.id} type="checkbox" onClick={handleSelectedChaines}></input>
-                <label>{chaine.nom_chaine}</label>
-              </div>
-            ))}
-          </div>
-          <br/>
+        <div className="filter-panel"> <h2 style={{marginBottom:'0'}}>Filter rooms</h2>
           <div className="price-filter">
               <label style={{fontSize: "20px"}}>
               Prix Maximum:
@@ -260,7 +196,7 @@ const updateRooms = () => {
               <option value="7">7</option>
               </select>
             </div>
-            <div className="rating-filter">
+            {/* <div className="rating-filter">
               <label style={{fontSize: "20px"}}>
               Rating:
               </label>
@@ -274,35 +210,47 @@ const updateRooms = () => {
               <option value="5">5</option>
              
               </select>
-            </div>
+            </div> */}
 
             <div className="button-container">
               <button onClick={search}>Search</button>
               <button onClick={clear}>Clear</button>
             </div>
         </div>
-          :<div>Loading filters ...</div>}
 
 {loaded ?
       <div className="table-panel">
       <table className="room-table">
           <thead>
               <tr key="titles">
-                  <th>Prix</th>
-                  <th>Numéro de chambre</th>
-                  <th>Adresse</th>
-                  <th>Chaine</th>
-                  <th>Rating</th>
+              <th># Chambre</th>
+                <th>Prix</th>
+                <th>Capacité</th>
+                <th>TV</th>
+                <th>AC</th>
+                <th>Cafée</th>
+                <th>Fridge</th>
+                <th>Micro-Onde</th>
+                <th>Four</th>
+                <th>Vue</th>
+                  
+                  {/* <th>Rating</th> */}
               </tr>
           </thead>
           <tbody>
               {showRooms.map((chambre) => (
                   <tr key={(chambre.room_num)}>
-                      <td>{chambre.prix}</td>
-                      <td>{chambre.room_num}</td>
-                      <td>{chambre.street_num + " "+chambre.street_name + ", " + chambre.city+", "+chambre.province_state+" " +chambre.zip_code+ ", "+chambre.country}</td>
-                      <td>{chambre.chaine_name}</td>
-                      <td>{chambre.rating}</td>
+                    <td>{chambre.room_num}</td>
+                      <td>{chambre.prix}$</td>
+                      <td>{chambre.capacity}</td>
+                      <td>{chambre.tv.toString()}</td>
+                      <td>{chambre.ac.toString()}</td>
+                      <td>{chambre.coffee.toString()}</td>
+                      <td>{chambre.refrigerator.toString()}</td>
+                      <td>{chambre.microwave.toString()}</td>
+                      <td>{chambre.oven.toString()}</td>
+                      <td>{chambre.vue}</td>
+                      {/* <td>{chambre.rating}</td> */}
                       <td><button value={chambre.num} onClick={handleReservation}>Réserver</button></td>
                       
                   </tr>
