@@ -35,9 +35,20 @@ function First_page_c() {
     e.preventDefault()
     sessionStorage.setItem("id_chaine", id_chaine);
     sessionStorage.setItem("nom_chaine", nom_chaine);
-    navigate('/clientIn/infoChaine');
+    getHotels(id_chaine);
+   
   };
 
+  function getHotels(id_chaine){
+    fetch(`http://127.0.0.1:5000/hotels?id_chaine=${id_chaine}`)
+    .then(function(response){
+        return response.json()
+    })
+    .then(function(json){
+      sessionStorage.setItem("hotels", JSON.stringify(json));
+      navigate('/clientIn/infoChaine');
+    })
+  }
 
 
 return(

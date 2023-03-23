@@ -556,7 +556,8 @@ def get_hotels():
                 "email": data[i][8],
                 "rating": data[i][9],
                 "id_chaine": data[i][10],
-                "id_hotel": data[i][11]
+                "id_hotel": data[i][11],
+                # "country": data[i][12]
             })
 
         return json
