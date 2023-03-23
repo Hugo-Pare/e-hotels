@@ -381,13 +381,48 @@ def get_reservations_by_id(id_reservation):
     except Exception as e:
         print(e)
 
+@app.route('/reservations/canceled') 
+def get_reservations_canceled():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute('SELECT * FROM reservation WHERE canceler = true')
+        data = cursor.fetchall()
+        json = []
+
+        for i in range(len(data)):
+            json.append({
+                "id_reservation": data[i][0],
+                "id_hotel": data[i][1],
+                "num_chambre": data[i][2],
+                "id_email": data[i][3],
+                "date_checkin": data[i][4],
+                "date_checkout": data[i][5],
+                "frais_total": data[i][6],
+                "frais_restant": data[i][7],
+                "canceled": data[i][8],
+                "location": data[i][9]
+            })
+
+        return json
+
+    except Exception as e:
+        print(e)
+
 
 @app.route('/reservations/pending') 
 def get_reservations_pending():
     try:
         connection = get_db_connection()
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false')
+        args = request.args
+
+        email_client = args.get('email_client')
+
+        if(email_client is not None):
+            cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false AND LOWER(email_id) = LOWER(%s)', (email_client,))
+        else:
+            cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false')
         data = cursor.fetchall()
         json = []
 
@@ -458,7 +493,17 @@ def get_locations():
     try:
         connection = get_db_connection()
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cursor.execute('SELECT * FROM location')
+        args = request.args
+        email_client = args.get('email_client')
+        id_hotel = args.get('id_hotel')
+
+        if(email_client is not None):
+            cursor.execute('SELECT * FROM location WHERE LOWER(email_id) = LOWER(%s)', (email_client,))
+        elif(id_hotel is not None):
+            cursor.execute('SELECT * FROM location WHERE id_hotel = %s', (id_hotel,))
+        else:
+            cursor.execute('SELECT * FROM location')
+
         data = cursor.fetchall()
         json = []
 
@@ -494,6 +539,34 @@ def get_count_locations():
     except Exception as e:
         print(e)
 
+@app.route('/locations/<id_location>') 
+def get_locations_by_id_location(id_location):
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        
+        cursor.execute('SELECT * FROM location WHERE id_location = (%s)', (id_location,))
+        data = cursor.fetchall()
+        json = []
+
+        for i in range(len(data)):
+            json.append({
+                "id_location": data[i][0],
+                "frais_restant": data[i][1],
+                "frais_total": data[i][2],
+                "date_checkin": data[i][3],
+                "date_checkout": data[i][4],
+                "email_id": data[i][5],
+                "num_chambre": data[i][6],
+                "id_hotel": data[i][7],
+                "id_reservation": data[i][8],
+                "id_employe": data[i][9]
+            })
+
+        return json
+
+    except Exception as e:
+        print(e)
 
 @app.route('/chaines') 
 def get_chaines():
@@ -533,10 +606,14 @@ def get_hotels():
 
         #args
         id_chaine = args.get('id_chaine')
+        id_hotel = args.get('id_hotel')
 
-        if (id_chaine is not None):
+        if (id_chaine is not None and id_hotel is not None):
+            cursor.execute('SELECT * FROM hotel WHERE fk_chaine = (%s) AND id_hotel = (%s)', (id_chaine,id_hotel,))
+        elif(id_chaine is not None):
             cursor.execute('SELECT * FROM hotel WHERE fk_chaine = (%s)', (id_chaine,))
-
+        elif(id_hotel is not None):
+            cursor.execute('SELECT * FROM hotel WHERE id_hotel = (%s)', (id_hotel,))
         else:
             cursor.execute('SELECT * FROM hotel')
 
@@ -545,7 +622,7 @@ def get_hotels():
 
         for i in range(len(data)):
             json.append({
-                "street_name": data[i][0],
+                "country": data[i][0],
                 "province_state": data[i][1],
                 "city": data[i][2],
                 "street_name": data[i][3],
@@ -556,7 +633,7 @@ def get_hotels():
                 "email": data[i][8],
                 "rating": data[i][9],
                 "id_chaine": data[i][10],
-                "id_hotel": data[i][11]
+                "id_hotel": data[i][11],
             })
 
         return json
@@ -585,7 +662,7 @@ def get_hotels_by_country(country):
 
         for i in range(len(data)):
             json.append({
-                "street_name": data[i][0],
+                "country": data[i][0],
                 "province_state": data[i][1],
                 "city": data[i][2],
                 "street_name": data[i][3],
@@ -625,7 +702,7 @@ def get_hotels_by_country_and_province_state(country,province_state):
 
         for i in range(len(data)):
             json.append({
-                "street_name": data[i][0],
+                "country": data[i][0],
                 "province_state": data[i][1],
                 "city": data[i][2],
                 "street_name": data[i][3],
@@ -665,7 +742,7 @@ def get_hotels_by_country_and_province_state_and_city(country,province_state,cit
 
         for i in range(len(data)):
             json.append({
-                "street_name": data[i][0],
+                "country": data[i][0],
                 "province_state": data[i][1],
                 "city": data[i][2],
                 "street_name": data[i][3],
@@ -830,35 +907,53 @@ def get_rooms_available_by_date(checkin,checkout):
     try:
         connection = get_db_connection()
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        args = request.args
+        id_hotel = args.get('id_hotel')
 
-        cursor.execute(''' 
-            SELECT * FROM chambre WHERE CONCAT(id_hotel,num_chambre) NOT IN(
-                SELECT CONCAT(id_hotel,num_chambre) FROM reservation 
-                WHERE (date_checkin > (%s) AND date_checkin < (%s))
-                OR (date_checkout > (%s) AND date_checkout < (%s))
-                OR (date_checkin = (%s) AND date_checkout = (%s))
-                union
-                select concat(id_hotel,num_chambre) FROM location
-                where (date_checkin > (%s) AND date_checkin < (%s))
-                OR (date_checkout > (%s) AND date_checkout < (%s))
-                OR (date_checkin = (%s) AND date_checkout = (%s))
-            )
-        ''', (checkin,checkout,checkin,checkout,checkin,checkout,checkin,checkout,checkin,checkout,checkin,checkout,))
+        if(id_hotel is not None):
+            cursor.execute(''' 
+                SELECT * FROM chambre WHERE id_hotel = (%s) AND CONCAT(id_hotel,num_chambre) NOT IN(
+                    SELECT CONCAT(id_hotel,num_chambre) FROM reservation 
+                    WHERE (date_checkin > (%s) AND date_checkin < (%s))
+                    OR (date_checkout > (%s) AND date_checkout < (%s))
+                    OR (date_checkin = (%s) AND date_checkout = (%s))
+                    union
+                    select concat(id_hotel,num_chambre) FROM location
+                    where (date_checkin > (%s) AND date_checkin < (%s))
+                    OR (date_checkout > (%s) AND date_checkout < (%s))
+                    OR (date_checkin = (%s) AND date_checkout = (%s))
+                )
+            ''', (id_hotel,checkin,checkout,checkin,checkout,checkin,checkout,checkin,checkout,checkin,checkout,checkin,checkout,))
+        else:
+            cursor.execute(''' 
+                SELECT * FROM chambre WHERE CONCAT(id_hotel,num_chambre) NOT IN(
+                    SELECT CONCAT(id_hotel,num_chambre) FROM reservation 
+                    WHERE (date_checkin > (%s) AND date_checkin < (%s))
+                    OR (date_checkout > (%s) AND date_checkout < (%s))
+                    OR (date_checkin = (%s) AND date_checkout = (%s))
+                    union
+                    select concat(id_hotel,num_chambre) FROM location
+                    where (date_checkin > (%s) AND date_checkin < (%s))
+                    OR (date_checkout > (%s) AND date_checkout < (%s))
+                    OR (date_checkin = (%s) AND date_checkout = (%s))
+                )
+            ''', (checkin,checkout,checkin,checkout,checkin,checkout,checkin,checkout,checkin,checkout,checkin,checkout,))
+
         data = cursor.fetchall()
         json = []
 
         for i in range(len(data)):
             json.append({
-                # "prix": data[i][0],
-                # "problems": data[i][1],
-                # "capacity": data[i][2],
-                # "vue": data[i][3],
-                # "tv": data[i][4],
-                # "ac": data[i][5],
-                # "refrigerator": data[i][6],
-                # "microwave": data[i][7],
-                # "coffee": data[i][8],
-                # "oven": data[i][9],
+                "prix": data[i][0],
+                "problems": data[i][1],
+                "capacity": data[i][2],
+                "vue": data[i][3],
+                "tv": data[i][4],
+                "ac": data[i][5],
+                "refrigerator": data[i][6],
+                "microwave": data[i][7],
+                "coffee": data[i][8],
+                "oven": data[i][9],
                 "id_hotel": data[i][10],
                 "room_num": data[i][11]
         })
