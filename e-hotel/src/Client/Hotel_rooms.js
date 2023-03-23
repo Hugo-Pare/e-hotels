@@ -134,17 +134,6 @@ const updateRooms = () => {
 
   const clear = () => {
     window.location.reload(false);
-    // setLoaded(false)
-    // setRating();
-    
-    // setMaxPrice();
-    // ref.current.value = '';
-    // this.ref.current.reset();
-    // setMinPrice();
-    // setCheckInDate();
-    // setCheckOutDate();
-    // setCapacite();
-    // getAllRooms();
   };
 
   return (

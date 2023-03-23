@@ -4,8 +4,7 @@ import { useNavigate } from 'react-router-dom';
 // import './hotel_rooms.css'
 
 function Hotels() {
-//   const [roomsAvailableDate, setRoomsAvailableDate] = useState([]);
-//   const [showRooms, setShowRooms] = useState([])
+  const [showHotels, setHotels] = useState([])
   const [chaineChecked, setChainesChecked] = useState();
 //   const [rating, setRating] = useState([]);
   const [chaines, setChaines] = useState();
@@ -15,7 +14,7 @@ function Hotels() {
 //   const [checkOutDate, setCheckOutDate] = useState();
 //   const [capacite, setCapacite] = useState();
 //   const [data, setData] = useState([]);
-//   const [loaded, setLoaded] = useState(false)
+  const [loaded, setLoaded] = useState(false)
   const [chainesLoaded, setChainesLoaded] = useState(false)
 //   const navigate = useNavigate();
   const firstUpdate = useRef(true);
@@ -24,8 +23,9 @@ function Hotels() {
 //   const fourthUpdate = useRef(true);
   useEffect(() => {
     if(firstUpdate.current == true){
-        getChaines()
-        firstUpdate.current = false
+        getAllHotels();
+        getChaines();
+        firstUpdate.current = false;
     }
   }, [])
 
@@ -41,15 +41,14 @@ function Hotels() {
     listChecked(chaines)
 }, [chaines])
 
-//   async function getAllRooms() {
-//     fetch(`http://127.0.0.1:5000/rooms/info`)
-//       .then(response => response.json())
-//       .then(function(json) {
-//         setData([json])
-//         setShowRooms([json][0])
-//         setLoaded(true)
-//   });
-// }
+  async function getAllHotels() {
+    fetch(`http://127.0.0.1:5000/hotels`)
+      .then(response => response.json())
+      .then(function(json) {
+        setHotels(json)
+        setLoaded(true)
+  });
+}
 
 // async function getRoomsForDates() {
 //   if(checkInDate != null && checkOutDate != null){ 
@@ -189,19 +188,10 @@ async function getChaines(){
 //     navigate('/clientIn/hotelRooms/reservation')
 //   }
 
-//   const clear = () => {
-//     setLoaded(false)
-//     setChainesLoaded(false)
-//     setRating();
-//     setMaxPrice();
-//     setMinPrice();
-//     setCheckInDate();
-//     setCheckOutDate();
-//     setCapacite();
-//     clearChaines();
-//     getChaines();
-//     getAllRooms();
-//   };
+const clear = () => {
+    window.location.reload(false);
+  };
+
 
 //   const clearChaines = () => {
 //     for (var i = 0; i <chaines.length; i++){
@@ -222,7 +212,7 @@ async function getChaines(){
   }
 
   return (
-    
+    <div>
     <div className="filter-panel"> <h3 style={{marginBottom:'0'}}>Filter Hotels</h3>
       {chainesLoaded ?
       <div className="chaines-filters">
@@ -234,9 +224,23 @@ async function getChaines(){
                   ))}
                 </div>
       :<div>Loading filters ...</div>}
+      <div className="button-container">
+              {/* <button onClick={search}>Search</button> */}
+              <button onClick={clear}>Clear</button>
+        </div>
     </div>
+    {loaded ?
+        <div>
+        
+                {showHotels.map((hotel) => (
+                   <div>{hotel.id_hotel}</div>
+                ))}
+       
+         
+        </div>
+        : <div>Loading Rooms ...</div>}
       
-
+      </div>
   );      
 }
 export default Hotels;
