@@ -16,7 +16,8 @@ function LoginClient() {
         if (json.length === 0) {
           alert("S'il vous plait vous enregistrer avant.");
         } else {
-          navigate('/clientIn', {state: {clientEmail:email}});
+          sessionStorage.setItem("email_id", email)
+          navigate('/clientIn');
         }
       });
   }

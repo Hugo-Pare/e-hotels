@@ -5,9 +5,6 @@ import './first_page_c.css';
 import hotel from './hotel.jpg';
 
 function First_page_c() {
-  const location = useLocation();
-  sessionStorage.setItem("email_id", location.state.clientEmail)
-
   const navigate = useNavigate();
 
   const [chaines, setChaines] = useState()
