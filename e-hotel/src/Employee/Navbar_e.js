@@ -4,7 +4,7 @@ const Navbar_e = () => {
 
     return (
       <div className="topnav">
-      <a href="/">E-hotels</a>
+      <a href="/employeeIn">E-hotels</a>
       <div className="right">
       <div className="dropdown">
         <button className="dropbtn">Réservations</button>
@@ -22,7 +22,14 @@ const Navbar_e = () => {
       </div>
       <a href="/employeeIn/hotel_rooms_e">Rooms</a>
       <a href="">Hotel</a>
-      <a href="/employeeIn/info">Account Info</a>
+      <div className="dropdown">
+        <button className="dropbtn">Account</button>
+        <div className="dropdown-content">
+          <a href="/employeeIn/info">Info</a>
+          <a href="/">Log Out</a>
+        </div>
+      </div>
+      
       </div>
      
     </div>

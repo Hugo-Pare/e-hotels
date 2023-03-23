@@ -2,7 +2,7 @@ const Navbar_c = () => {
 
   return (
     <div className="topnav">
-    <a href="/">E-hotels</a>
+    <a href="/clientIn">E-hotels</a>
     <div className="right">
     <div className="dropdown">
       <button className="dropbtn">Réservations</button>
@@ -12,7 +12,13 @@ const Navbar_c = () => {
       </div>
     </div>
     <a href="">Locations</a>
-    <a href="/clientIn/info">Account Info</a>
+    <div className="dropdown">
+        <button className="dropbtn">Account</button>
+        <div className="dropdown-content">
+          <a href="/clientIn/info">Info</a>
+          <a href="/">Log Out</a>
+        </div>
+      </div>
     </div>
   </div>
 )

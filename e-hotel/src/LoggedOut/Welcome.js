@@ -1,5 +1,7 @@
 function Welcome() {
 
+  sessionStorage.clear()
+
 return(
     <div className="center">
      <h1>Bienvenue a e-hotels!</h1>
