@@ -20,7 +20,7 @@ function Info_chaine() {
 
   return(
     <div>
-      <div className='center'>  <h1>Hotels {nom_chaine}</h1></div>
+      <div className='center'><h1>Hotels {nom_chaine}</h1></div>
   
     <div>
 

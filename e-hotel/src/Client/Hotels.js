@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef, useLayoutEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
+import './info_chaine.css';
+import hotelImg from './hotelDefault.jpg'
 // import 'react-datepicker/dist/react-datepicker.css';
 // import './hotel_rooms.css'
 
@@ -49,16 +51,6 @@ function Hotels() {
         setLoaded(true)
   });
 }
-
-// async function getRoomsForDates() {
-//   if(checkInDate != null && checkOutDate != null){ 
-//   fetch(`http://127.0.0.1:5000/rooms/available/${checkInDate}/${checkOutDate}`)
-//       .then(response => response.json())
-//       .then(function(json) {
-//         setRoomsAvailableDate([json][0])
-//   });
-// } else setRoomsAvailableDate([])
-// }
 
 async function getChaines(){
   fetch(`http://127.0.0.1:5000/chaines`)
@@ -182,11 +174,6 @@ async function getChaines(){
     console.log(temp)
     setChainesChecked(temp)
   }
-  
-
-//   const handleReservation = () => {
-//     navigate('/clientIn/hotelRooms/reservation')
-//   }
 
 const clear = () => {
     window.location.reload(false);
@@ -199,6 +186,10 @@ const clear = () => {
 //     }
 //     setChainesChecked([])
 //   }
+
+const handleClick = () => {
+    console.log("clicked")
+}
 
   const handleSelectedChaines = (e) => {
     var temp = chaines
@@ -233,7 +224,15 @@ const clear = () => {
         <div>
         
                 {showHotels.map((hotel) => (
-                   <div>{hotel.id_hotel}</div>
+
+                    <div className="card" key={hotel.id_hotel} onClick={(e) => handleClick(e, hotel.id_hotel)}>
+                        <img src={hotelImg} alt="hotel" style={{width:'100%'}}/>
+                        <p>{hotel.street_num}, {hotel.street_name}, {hotel.city}</p>
+                        <p>{hotel.province_state}, {hotel.country}</p>
+                        <p>{hotel.email}</p>
+                        <p>{hotel.telephone}</p>
+                    </div> 
+                //    <div>{hotel.id_hotel}</div>
                 ))}
        
          
