@@ -634,10 +634,6 @@ def get_hotels():
                 "rating": data[i][9],
                 "id_chaine": data[i][10],
                 "id_hotel": data[i][11],
-<<<<<<< HEAD
-                # "country": data[i][12]
-=======
->>>>>>> 5692da76200ed2e812301f00afd981dea75fc214
             })
 
         return json
