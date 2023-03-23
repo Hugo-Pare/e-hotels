@@ -28,6 +28,7 @@ function First_page_e(){
         })
         .then(function(data){
             id_hotel = data[0].id_hotel
+            sessionStorage.setItem("hotel_id", id_hotel);
             setIdHotel(data[0].id_hotel)
             getAllReservations()
             console.log(data)
