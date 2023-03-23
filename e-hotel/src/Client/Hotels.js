@@ -203,8 +203,8 @@ const handleClick = () => {
   }
 
   return (
-    <div>
-    <div className="filter-panel"> <h3 style={{marginBottom:'0'}}>Filter Hotels</h3>
+    <div className="grid-container-client">
+    <div className="filter-panel fit"> <h3 style={{marginBottom:'0'}}>Filter Hotels</h3>
       {chainesLoaded ?
       <div className="chaines-filters">
                    {chaines.map(chaine => (
@@ -221,7 +221,7 @@ const handleClick = () => {
         </div>
     </div>
     {loaded ?
-        <div>
+        <div className="grid-container-hotels">
         
                 {showHotels.map((hotel) => (
 
