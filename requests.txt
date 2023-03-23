@@ -20,25 +20,26 @@ GET:
 	/reservations
 	/reservations/count
 	/reservations/id_reservation
-[x]	/reservations/canceled/
+	/reservations/canceled/
 	/reservations/pending/
-[x]	/reservations/pending?email_client=X
+	/reservations/pending?email_client=X
 	/reservations/pending/id_hotel
 	/reservations/pending/id_hotel?id_reservation=X
 	/reservations/pending/id_hotel?email_client=X
 	/reservations/pending/id_hotel?id_reservation=X&email_client=X
 
 	/locations
-[x]	/locations?email_client=X
+	/locations?id_hotel=X
+	/locations?email_client=X
 	/locations/count
-[x]	/locations/id_location
-[x] /location/id_hotel
+	/locations/id_location
 
 	/chaines
 
 	/hotels
-[x] /hotels/id_hotel
- 	/hotels?id_chaine=X
+	/hotels?id_hotel=X
+	/hotels?id_chaine=X
+ 	/hotels?id_chaine=X&id_hotel=X
  	/hotels/country
  	/hotels/country?id_chaine=X
     	/hotels/country/province_state
@@ -50,7 +51,7 @@ GET:
 	/rooms/info
 	/rooms/info/id_hotel/room_num
 	/rooms/available/checkin/checkout
-[x] /rooms/available/id_hotel/checkin/checkout
+	/rooms/available/checkin/checkout?id_hotel=X
 	/rooms/id_hotel
 
 PATCH:
@@ -65,8 +66,3 @@ PATCH:
 	/hotels/info/id_hotel
 
 	/rooms/info/id_hotel/room_num
-
-DELETE:
-[x]	/hotels/id_hotel
-
-[x]	/rooms/id_hotel/room_num
