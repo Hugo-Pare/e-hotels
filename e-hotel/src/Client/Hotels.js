@@ -6,23 +6,21 @@ import hotelImg from './hotelDefault.jpg'
 // import './hotel_rooms.css'
 
 function Hotels() {
+  const [data, setData] = useState()
   const [showHotels, setHotels] = useState([])
   const [chaineChecked, setChainesChecked] = useState();
+  const [disabledProvince, setDisabledProvince] = useState(true);
+  const [disabledVille, setDisabledVille] = useState(true);
+  const [pays, setPays] = useState();
 //   const [rating, setRating] = useState([]);
   const [chaines, setChaines] = useState();
-//   const [maxPrice, setMaxPrice] = useState();
-//   const [minPrice, setMinPrice] = useState();
-//   const [checkInDate, setCheckInDate] = useState();
-//   const [checkOutDate, setCheckOutDate] = useState();
-//   const [capacite, setCapacite] = useState();
-//   const [data, setData] = useState([]);
   const [loaded, setLoaded] = useState(false)
   const [chainesLoaded, setChainesLoaded] = useState(false)
-//   const navigate = useNavigate();
+  const navigate = useNavigate();
   const firstUpdate = useRef(true);
   const secondUpdate = useRef(true);
   const thirdUpdate = useRef(true);
-//   const fourthUpdate = useRef(true);
+
   useEffect(() => {
     if(firstUpdate.current == true){
         getAllHotels();
@@ -71,41 +69,8 @@ async function getChaines(){
 //     setRating(event.target.value)
 //   };
 
-//   function handleMaxPriceChange(event) {
-//     setMaxPrice(event.target.value)
-//   };
-
-//   const handleMinPriceChange = (event) => {
-//     setMinPrice(event.target.value);
-//   };
-
-//   const handleCheckIn = (date) => {
-//     setCheckInDate(date.target.value);
-//   };
-//   const handleCheckOut = (date) => {
-//     setCheckOutDate(date.target.value);
-//   };
-
-//   const handleCapacite = (event) => {
-//     if(event.target.value === "null"){
-//       setCapacite(null)
-//     }
-//     else{
-//       setCapacite(event.target.value)
-//     }
-//   }
-
 // function valide (chambre){
 //   if (chaineChecked.length> 0  && !chaineChecked.includes(chambre.id_chaine)){
-//     return false
-//   }
-//   if(maxPrice != null && maxPrice != "" && chambre.prix > parseFloat(maxPrice).toFixed(2)) {
-//     return false
-//   }
-//   if(minPrice != null && minPrice != "" && chambre.prix < parseFloat(minPrice).toFixed(2)) {
-//     return false
-//   }
-//   if(capacite != null && capacite > chambre.capacity){
 //     return false
 //   }
 //   if(rating != null && rating > chambre.rating){
@@ -113,30 +78,6 @@ async function getChaines(){
 //   }
 //   return true
 // }
-
-// useLayoutEffect(() => {
-//   if (firstUpdate.current) {
-//     firstUpdate.current = false;
-//     return;
-//   }
-//   if (secondUpdate.current) {
-//     secondUpdate.current = false;
-//     return;
-//   }
-// updateRooms()
-// }, [chaineChecked])
-
-// useLayoutEffect(() => {
-//   if (thirdUpdate.current) {
-//     thirdUpdate.current = false;
-//     return;
-//   }
-//   if (fourthUpdate.current) {
-//     fourthUpdate.current = false;
-//     return;
-//   }
-//   listChecked()
-// }, [roomsAvailableDate])
 
 // const updateRooms = () => {
 //   console.log(roomsAvailableDate)
@@ -164,7 +105,12 @@ async function getChaines(){
 //     getRoomsForDates()
 //   };
 
-  function listChecked (liste) {
+  function updateHotels() {
+
+
+  }
+
+  function listChecked(liste) {
     let temp = []
     for (let i = 0; i<liste.length ; i++){
       if (liste[i].checked == true)
@@ -175,21 +121,10 @@ async function getChaines(){
     setChainesChecked(temp)
   }
 
-const clear = () => {
-    window.location.reload(false);
-  };
-
-
-//   const clearChaines = () => {
-//     for (var i = 0; i <chaines.length; i++){
-//       chaines[i].checked = false
-//     }
-//     setChainesChecked([])
-//   }
-
-const handleClick = () => {
-    console.log("clicked")
-}
+  function handleClick(hotel_id) {
+    sessionStorage.setItem("hotel_id", hotel_id)
+    navigate('/clientIn/hotelRooms');
+  }
 
   const handleSelectedChaines = (e) => {
     var temp = chaines
@@ -201,10 +136,34 @@ const handleClick = () => {
     setChaines(temp)
     listChecked(temp)
   }
+  
+  function handleRating() {
+    console.log("in Rating")
+  }
+
+  function handlePays(event) {
+    if(event.target.value == null) {
+      setDisabledProvince(true)
+      setDisabledVille(true)
+    } else {
+      setDisabledProvince(false)
+      setDisabledVille(true)
+    }
+    setPays(event.target.value)
+  }
+
+  function search() {
+    updateHotels()
+  }
+
+  function clear () {
+    window.location.reload(false);
+  };
 
   return (
     <div className="grid-container-client">
     <div className="filter-panel fit"> <h3 style={{marginBottom:'0'}}>Filter Hotels</h3>
+    <h4 style={{marginBottom:'0'}}>Chaines:</h4>
       {chainesLoaded ?
       <div className="chaines-filters">
                    {chaines.map(chaine => (
@@ -215,8 +174,47 @@ const handleClick = () => {
                   ))}
                 </div>
       :<div>Loading filters ...</div>}
+       <div className="rating-filter">
+              <h4 style={{marginBottom: "0"}}>
+              Rating:
+              </h4>
+              <select onChange={handleRating}>
+              <option value="null">Faites selection</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              </select>
+            </div>
+
+        <div className='zone-filter'>
+
+          <h4 style={{marginBottom: "0"}}>
+              Pays:
+              </h4>
+              <select onChange={handlePays}>
+              <option value="null">Faites selection</option>
+              <option value="Canada">Canada</option>
+              <option value="Etats-Unis">Etats-Unis</option>
+              </select>
+
+              <h4 style={{marginBottom: "0"}}>
+              Province:
+              </h4>
+              <select disabled={disabledProvince} onChange={handleRating}>
+              <option value="null">Faites selection</option>
+              </select>
+
+              <h4 style={{marginBottom: "0"}}>
+              Ville:
+              </h4>
+              <select disabled={disabledVille} onChange={handleRating}>
+              <option value="null">Faites selection</option>
+              </select>
+        </div>
       <div className="button-container">
-              {/* <button onClick={search}>Search</button> */}
+              <button onClick={search}>Search</button>
               <button onClick={clear}>Clear</button>
         </div>
     </div>
@@ -225,7 +223,7 @@ const handleClick = () => {
         
                 {showHotels.map((hotel) => (
 
-                    <div className="card" key={hotel.id_hotel} onClick={(e) => handleClick(e, hotel.id_hotel)}>
+                    <div className="card" key={hotel.id_hotel} onClick={() => handleClick(hotel.id_hotel)}>
                         <img src={hotelImg} alt="hotel" style={{width:'100%'}}/>
                         <p>{hotel.street_num}, {hotel.street_name}, {hotel.city}</p>
                         <p>{hotel.province_state}, {hotel.country}</p>

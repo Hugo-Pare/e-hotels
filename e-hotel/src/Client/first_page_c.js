@@ -5,7 +5,6 @@ import hotel from './hotel.jpg';
 
 function First_page_c() {
   const navigate = useNavigate();
-
   const [chaines, setChaines] = useState()
   const [loaded, setLoaded] = useState(false)
 
@@ -57,7 +56,8 @@ return(
           </div>
         </div>
         <div>
-        <h2>Chaînes</h2>
+          <div style={{textAlign:'center'}}> <h2>Chaînes</h2></div>
+       
         <div className="grid-item-client">
         {loaded ? 
         <>
