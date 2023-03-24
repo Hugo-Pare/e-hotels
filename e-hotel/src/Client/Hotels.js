@@ -46,6 +46,7 @@ function Hotels() {
       .then(response => response.json())
       .then(function(json) {
         setHotels(json)
+        setData(json)
         setLoaded(true)
   });
 }
@@ -142,7 +143,8 @@ async function getChaines(){
   }
 
   function handlePays(event) {
-    if(event.target.value == null) {
+    console.log(event.target.value);
+    if(event.target.value == 'null') {
       setDisabledProvince(true)
       setDisabledVille(true)
     } else {
