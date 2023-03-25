@@ -82,7 +82,7 @@ function Edit_hotel_room(){
             console.log(json)
             setPrix(data.prix)
             if (data.problems === null){
-                setProblemes(null)
+                setProblemes("")
             } else{
                 setProblemes(data.problems)
             }
@@ -187,7 +187,7 @@ function Edit_hotel_room(){
             <label>
                 Problemes:
                 <br/>
-                <input size="75" type="text" name="problemes" value={problemes} disabled={disabled} onChange={handleProblemes} />
+                <textarea rows={5} cols={50} name="problemes" value={problemes} disabled={disabled} onChange={handleProblemes} />
             </label>
             <br/>
             <label>
