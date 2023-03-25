@@ -993,6 +993,76 @@ def get_rooms_by_hotel_id(id_hotel):
     except Exception as e:
         print(e)
 
+@app.route('/canada/provinces') 
+def get_canada_provinces():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute('SELECT DISTINCT(province_state) FROM hotel WHERE pays = (%s)', ('Canada',))
+        data = cursor.fetchall()
+        provinces = []
+
+        for i in range(len(data)):
+            provinces.append(data[i][0])
+
+        return provinces
+
+    except Exception as e:
+        print(e)
+
+@app.route('/canada/cities') 
+def get_canada_cities():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+        cursor.execute('SELECT province_state,ville FROM hotel WHERE pays = (%s) GROUP BY province_state,ville', ('Canada',))
+        data = cursor.fetchall()
+        json = []
+
+        for i in range(len(data)):
+            json.append({data[i][0]: data[i][1]})
+
+        return json
+
+    except Exception as e:
+        print(e)
+
+@app.route('/us/states') 
+def get_us_states():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute('SELECT DISTINCT(province_state) FROM hotel WHERE pays = (%s)', ('Etats-Unis',))
+        data = cursor.fetchall()
+        states = []
+
+        for i in range(len(data)):
+            states.append(data[i][0])
+
+        return states
+
+    except Exception as e:
+        print(e)
+
+@app.route('/us/cities') 
+def get_us_cities():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+        cursor.execute('SELECT province_state,ville FROM hotel WHERE pays = (%s) GROUP BY province_state,ville', ('Etats-Unis',))
+        data = cursor.fetchall()
+        json = []
+
+        for i in range(len(data)):
+            json.append({data[i][0]: data[i][1]})
+
+        return json
+
+    except Exception as e:
+        print(e)
+
 @app.route('/clients/info/<email>', methods=['PATCH'])
 def update_client_info_by_email(email):
     try:

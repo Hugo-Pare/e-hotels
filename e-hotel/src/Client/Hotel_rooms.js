@@ -138,39 +138,39 @@ const updateRooms = () => {
 
   return (
     <div className="hotel-rooms-container">
-        <div className="filter-panel"> <h2 style={{marginBottom:'0'}}>Filter rooms</h2>
+        <div className="filter-panel"> <h3>Filter rooms</h3>
           <div className="price-filter">
-              <label style={{fontSize: "20px"}}>
+              <h4 style={{marginTop:'0'}}>
               Prix Maximum:
               <br/>
               <input  type="number" value={maxPrice} onChange={handleMaxPriceChange} />
-              </label>
-              <br/>
-              <label style={{fontSize: "20px"}}>
+              </h4>
+              
+              <h4 style={{marginTop:'0'}}>
               Prix Minimum:
               <br/>
               <input  type="number" value={minPrice} onChange={handleMinPriceChange} />
-              </label>
+              </h4>
             </div>
             <div className="date-filter">
-              <label style={{fontSize: "20px"}}>
+            <h4 style={{marginTop:'0'}}>
               Check-in date:
               <div className="date-picker">
               <input type="date" value={checkInDate} onChange={handleCheckIn}></input>
               </div>
-              </label>
-              <label style={{fontSize: "20px"}}>
+              </h4>
+              <h4 style={{marginTop:'0'}}>
               Check-out date:
               <div className="date-picker">
               <input type="date" value={checkOutDate} onChange={handleCheckOut}></input>
               </div>
-              </label>
+              </h4>
             </div>
             <div className="capacite-filter">
-              <label style={{fontSize: "20px"}}>
+            <h4 style={{marginTop:'0', marginBottom:'0'}}>
               Capacité:
-              </label>
-              <br/>
+              </h4>
+            
               <select onChange={handleCapacite}>
               <option value="null">Faites selection</option>
               <option value="1">1</option>
