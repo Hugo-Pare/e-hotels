@@ -21,7 +21,7 @@ const Navbar_e = () => {
         </div>
       </div>
       <a href="/employeeIn/hotel_rooms_e">Rooms</a>
-      <a href="">Hotel</a>
+      <a href="/employeeIn/edit_hotel">Hotel</a>
       <div className="dropdown">
         <button className="dropbtn">Account</button>
         <div className="dropdown-content">

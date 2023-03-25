@@ -127,10 +127,6 @@ function First_page_e(){
         });
     }
 
-    function handleHotelRoom(){
-        navigate('/employeeIn/hotel_rooms_e');
-    }
-
     function handleAnnulation(event){
         const id_reservation = event.target.value
         // alert pour s'assurer d'annuler la réservation
