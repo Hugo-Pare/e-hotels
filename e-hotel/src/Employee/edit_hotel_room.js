@@ -2,16 +2,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { set } from "date-fns";
 import { event } from "jquery";
-
+import { useNavigate, useLocation } from "react-router-dom";
 import React, {useState, useEffect} from "react";
+
 function Edit_hotel_room(){
     let id_hotel = sessionStorage.getItem("hotel_id")
+    const numChambre = useLocation().state.numChambre
     let data;
-    let numChambre = sessionStorage.getItem("num_chambre");
     const [prix, setPrix] = useState();
     const [problemes, setProblemes] = useState();
     const [capacite, setCapacite] = useState();
-    const [hotelVue, setHotelVue] = useState();
+    const [hotelVue, setHotelVue] = useState(null);
     const [tv, setTv] = useState();
     const [ac, setAc] = useState();
     const [refrigerateur, setRefrigerateur] = useState();
@@ -19,6 +20,7 @@ function Edit_hotel_room(){
     const [cafe, setCafe] = useState();
     const[four, setFour] = useState();
     const [disabled, setDisabled] = useState(true);
+    const [loaded, setLoaded] = useState(false);
     const regex_prix = /\d+(\.\d{2})?/;
 
     useEffect(() => {
@@ -27,23 +29,36 @@ function Edit_hotel_room(){
 
 
     async function updateToDataBase() {
-        if (hotelVue == ""){
-            setHotelVue(null)
+        let json;
+        if (hotelVue == "null"){
+            json = {
+                "prix": prix,
+                "problems": problemes.toString(),
+                "capacity": capacite,
+                "vue": null,
+                "tv": tv,
+                "ac": ac,
+                "refrigerator": refrigerateur,
+                "microwave": microonede,
+                "coffee": cafe,
+                "oven": four
+            };
         }
-        const json = {
-            "prix": prix,
-            "problems": problemes,
-            "capacity": capacite,
-            "vue": hotelVue,
-            "tv": tv,
-            "ac": ac,
-            "refrigerator": refrigerateur,
-            "microwave": microonede,
-            "coffee": cafe,
-            "oven": four
-        };
+        else{
+            json = {
+                "prix": prix,
+                "problems": problemes.toString(),
+                "capacity": capacite,
+                "vue": hotelVue,
+                "tv": tv,
+                "ac": ac,
+                "refrigerator": refrigerateur,
+                "microwave": microonede,
+                "coffee": cafe,
+                "oven": four
+            };
+        }
         console.log(JSON.stringify(json))
-    
         fetch(`http://127.0.0.1:5000/rooms/info/${id_hotel}/${numChambre}`, {
             method: "PATCH",
             mode: "cors",
@@ -57,24 +72,23 @@ function Edit_hotel_room(){
             console.log(json)
         })
     }
-   
     async function fetchChambreInfo() {
-        console.log({numChambre})
         fetch(`http://127.0.0.1:5000/rooms/info/${id_hotel}/${numChambre}`)
           .then(response => response.json())
           .then(
             json => {
             console.log(json)
             data = json[0]
+            console.log(json)
             setPrix(data.prix)
-            if (data.problems == null){
-                setProblemes("")
+            if (data.problems === null){
+                setProblemes(null)
             } else{
                 setProblemes(data.problems)
             }
             setCapacite(data.capacity)
-            if (data.vue == null){
-                setHotelVue("")
+            if (data.vue === null){
+                setHotelVue(null)
             } else{
                 setHotelVue(data.vue)
             }
@@ -84,6 +98,7 @@ function Edit_hotel_room(){
             setMicroonde(data.microwave)
             setCafe(data.coffee)
             setFour(data.oven)
+            setLoaded(true)
           }
           );
       }
@@ -161,6 +176,8 @@ function Edit_hotel_room(){
 
         <div>
             <h2>Information de la chambre {numChambre}</h2>
+{ loaded ? 
+<>
             <label>
                 Prix:
                 <br/>
@@ -170,21 +187,21 @@ function Edit_hotel_room(){
             <label>
                 Problemes:
                 <br/>
-                <input type="text" name="problemes" value={problemes} disabled={disabled} onChange={handleProblemes} />
+                <input size="75" type="text" name="problemes" value={problemes} disabled={disabled} onChange={handleProblemes} />
             </label>
             <br/>
             <label>
                 Capacité:
                 <br/>
                 <select value={capacite} disabled={disabled} onChange={handleCapacite}>
-                    <option value="un"> 1 </option>
-                    <option value="deux"> 2 </option>
-                    <option value="trois"> 3 </option>
-                    <option value="quatre"> 4 </option>
-                    <option value="cinq"> 5 </option>
-                    <option value="six"> 6 </option>
-                    <option value="sept"> 7 </option>
-                    <option value="huit"> 8 </option>
+                    <option value="1"> 1 </option>
+                    <option value="2"> 2 </option>
+                    <option value="3"> 3 </option>
+                    <option value="4"> 4 </option>
+                    <option value="5"> 5 </option>
+                    <option value="6"> 6 </option>
+                    <option value="7"> 7 </option>
+                    <option value="8"> 8 </option>
                 </select>
             </label>
             <br/>
@@ -192,7 +209,7 @@ function Edit_hotel_room(){
                 Vue:
                 <br/>
                 <select value={hotelVue} disabled={disabled} onChange={handleHotelVue}>
-                    <option value=""></option>
+                    <option value="null"></option>
                     <option value="Mer">Mer</option>
                     <option value="Montagne">Montagne</option>
                     <option value="Foret">Foret</option>
@@ -236,6 +253,8 @@ function Edit_hotel_room(){
             </label>
             <br/>
             <br/>
+</>
+: <div>Loading Rooms ...</div>}
            {disabled ?
             <button onClick={handleEdit}>Edit</button>:
             <div><button onClick={save}>Save</button>
