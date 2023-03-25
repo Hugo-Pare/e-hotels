@@ -1,19 +1,18 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef, useLayoutEffect} from 'react';
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { navigate, useLocation, useNavigate } from "react-router-dom";
 import 'react-datepicker/dist/react-datepicker.css';
 
 
 function Hotel_rooms_e() {
   const [showRooms, setShowRooms] = useState([])
+  const navigate = useNavigate();
   const idHotel = sessionStorage.getItem("hotel_id")
   const [numChambre, setNumChambre] = useState([]);
   const [data, setData] = useState([]);
   const [loaded, setLoaded] = useState(false)
-  // const navigate = useNavigate();
   useEffect(() => {
-    getHotelId()
-    getAllRooms
+    getAllRooms()
   }, [])
 
 function handleNumChambreChange(event){
@@ -21,7 +20,8 @@ function handleNumChambreChange(event){
 }
 
 function handleEdit(){
-  Navigate('/employeeIn/edit_hotel_room')
+  sessionStorage.setItem("num_chambre", numChambre)
+  navigate('/employeeIn/edit_hotel_room')
 }
 
   async function getAllRooms() {

@@ -5,8 +5,9 @@ import { event } from "jquery";
 
 import React, {useState, useEffect} from "react";
 function Edit_hotel_room(){
-    let id_hotel = sessionStorage.getItem("id")
+    let id_hotel = sessionStorage.getItem("hotel_id")
     let data;
+    let numChambre = sessionStorage.getItem("num_chambre");
     const [prix, setPrix] = useState();
     const [problemes, setProblemes] = useState();
     const [capacite, setCapacite] = useState();
@@ -18,50 +19,37 @@ function Edit_hotel_room(){
     const [cafe, setCafe] = useState();
     const[four, setFour] = useState();
     const [disabled, setDisabled] = useState(true);
-    const regex_prix = /^[a-zA-Z]{2,}$/;
-    const regex_probleme = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/; 
-    const regex_capacite = /^\d{10,12}$/;
-    const regex_hotelVue = /^\d{1,8}$/;
+    const regex_prix = /\d+(\.\d{2})?/;
 
     useEffect(() => {
-      fetchHotelRoomInfo()
+      fetchChambreInfo()
     }, [])
 
-    async function getHotelId(){
-        fetch(`http://127.0.0.1:5000/employes?id_employe=${id_employe}`)
-        .then(function(response){
-            return response.json()
-        })
-        .then(response => response.json())
-        .then(function(data){
-            idHotel = data[0].id_hotel
-            setIdHotel(data[0].id_hotel)
-            
-            
-        })
-    }
 
     async function updateToDataBase() {
-
-      const json = {
-        "price": prix,
-        "problems": problemes,
-        "capacity": capacite,
-        "view": hotelVue,
-        "television": tv,
-        "airConditioning": ac,
-        "fridge": refrigerateur,
-        "microwave": microonede,
-        "cofee": cafe,
-        "oven": four
-    }
-      
-      fetch(`http://127.0.0.1:5000/employes/info/${id_employe}`, {
+        if (hotelVue == ""){
+            setHotelVue(null)
+        }
+        const json = {
+            "prix": prix,
+            "problems": problemes,
+            "capacity": capacite,
+            "vue": hotelVue,
+            "tv": tv,
+            "ac": ac,
+            "refrigerator": refrigerateur,
+            "microwave": microonede,
+            "coffee": cafe,
+            "oven": four
+        };
+        console.log(JSON.stringify(json))
+    
+        fetch(`http://127.0.0.1:5000/rooms/info/${id_hotel}/${numChambre}`, {
             method: "PATCH",
-            mode:"cors",
+            mode: "cors",
             body: JSON.stringify(json),
             headers: {
-              "Access-Control-Allow-Origin": "*",
+                "Access-Control-Allow-Origin": "*"
             }
         })
         .then(response => response.json())
@@ -70,35 +58,42 @@ function Edit_hotel_room(){
         })
     }
    
-    async function fetchEmployeeInfo() {
-        fetch(`http://127.0.0.1:5000/employes?id_employe=${id_employe}`)
+    async function fetchChambreInfo() {
+        console.log({numChambre})
+        fetch(`http://127.0.0.1:5000/rooms/info/${id_hotel}/${numChambre}`)
           .then(response => response.json())
           .then(
             json => {
             console.log(json)
             data = json[0]
-            setPrenom(data.firstname)
-            setNom(data.lastname)
-            setPays(data.country)
-            setProvinceState(data.province_state)
-            setVille(data.city)
-            setPostal(data.zip_code)
-            setRue(data.street_name)
-            setNumRue(data.street_num)
-            setEmail(data.email)
-            setPoste(data.poste)
-            setSalaire(data.salaire)
-            setTelephone(data.telephone)
+            setPrix(data.prix)
+            if (data.problems == null){
+                setProblemes("")
+            } else{
+                setProblemes(data.problems)
+            }
+            setCapacite(data.capacity)
+            if (data.vue == null){
+                setHotelVue("")
+            } else{
+                setHotelVue(data.vue)
+            }
+            setTv(data.tv)
+            setAc(data.ac)
+            setRefrigerateur(data.refrigerator)
+            setMicroonde(data.microwave)
+            setCafe(data.coffee)
+            setFour(data.oven)
           }
           );
       }
 
       function reset() {
-        fetchEmployeeInfo()
+        fetchChambreInfo()
       }
 
       function cancel() {
-        fetchEmployeeInfo();
+        fetchChambreInfo();
         setDisabled(true)
       }
 
@@ -114,32 +109,38 @@ function Edit_hotel_room(){
         setCapacite(event.target.value)
       }
 
-      function handlehotelVue(event) {
+      function handleHotelVue(event) {
         setHotelVue(event.target.value)
       }
 
       function handleAc(event) {
-        setAc(event.target.value)
+        const value = event.target.checked ? true : false;
+        setAc(value)
       }
 
       function handleTv(event) {
-        setTv(event.target.value)
+        const value = event.target.checked ? true : false;
+        setTv(value)
       }
 
       function handleCafe(event) {
-        setCafe(event.target.value)
+        const value = event.target.checked ? true : false;
+        setCafe(value);
       }
 
       function handleRefrigerateur(event) {
-        setRefrigerateur(event.target.value)
+        const value = event.target.checked ? true : false;
+        setRefrigerateur(value)
       }
 
       function handleMicroonde(event) {
-        setMicroonde(event.target.value)
+        const value = event.target.checked ? true : false;
+        setMicroonde(value)
       }
 
       function handleFour(event) {
-        setFour(event.target.value)
+        const value = event.target.checked ? true : false;
+        setFour(value)
       }
 
       function handleEdit() {
@@ -147,28 +148,11 @@ function Edit_hotel_room(){
       }
 
       function save() {
-        if (!prenom|| !nom || !pays || !provinceState || !ville || !postal || !rue || !numRue || !poste || !salaire || !email || !telephone) {
-          alert("S'il vous plait remplir tout les champs");
-          return;
-        }
         if (!regex_prix.test(prix)) {
-          alert("Le prénom doit avoir au moins 2 lettres et ne doit contenir que des lettres alphabétiques.");
+          alert("Entrz un prix valide");
           return;
         }
-        if (!regex_probleme.test(problemes)) {
-          alert("Le prénom doit avoir au moins 2 lettres et ne doit contenir que des lettres alphabétiques.");
-          return;
-        }
-   
-        if(!regex_hotelVue.test(hotelVue)) {
-          alert("La ville n'est pas valide");
-          return;
-        }
-
-        if(!regex_capacite.test(capacite)){
-          alert("Le nom de rue n'est pas valide");
-          return;
-        } 
+        
         setDisabled(!disabled)
         updateToDataBase()
       }
@@ -176,80 +160,79 @@ function Edit_hotel_room(){
     return(
 
         <div>
-            <h3>Information de la chambre {}</h3>
-            <label>
-                Numéro de chambre:
-                <br/>
-                <input type="name" name="name" value={num_chambre} disabled={disabled}/>
-            </label>
-            <br/>
+            <h2>Information de la chambre {numChambre}</h2>
             <label>
                 Prix:
                 <br/>
-                <input type="name" name="lastname" value={nom} disabled={disabled} onChange={handleNom}/>
+                <input type="price" name="prix" value={prix} disabled={disabled} onChange={handlePrix}/>
             </label>
             <br/>
             <label>
                 Problemes:
                 <br/>
-                <select value={pays} disabled={disabled} onChange={handlePays}>
-                  <option value="Canada">Canada</option>
-                  <option value="Etats-Unis">États-Unis</option>
-                </select>
+                <input type="text" name="problemes" value={problemes} disabled={disabled} onChange={handleProblemes} />
             </label>
             <br/>
             <label>
                 Capacité:
                 <br/>
-                <input value={provinceState} disabled={disabled} onChange={handleProvince}/>
+                <select value={capacite} disabled={disabled} onChange={handleCapacite}>
+                    <option value="un"> 1 </option>
+                    <option value="deux"> 2 </option>
+                    <option value="trois"> 3 </option>
+                    <option value="quatre"> 4 </option>
+                    <option value="cinq"> 5 </option>
+                    <option value="six"> 6 </option>
+                    <option value="sept"> 7 </option>
+                    <option value="huit"> 8 </option>
+                </select>
             </label>
             <br/>
-           
             <label>
                 Vue:
                 <br/>
-                <input value={ville}  disabled={disabled} onChange={handleVille}/>
+                <select value={hotelVue} disabled={disabled} onChange={handleHotelVue}>
+                    <option value=""></option>
+                    <option value="Mer">Mer</option>
+                    <option value="Montagne">Montagne</option>
+                    <option value="Foret">Foret</option>
+                </select>
             </label>
             <br/>
             <label>
                 Télévision:
                 <br/>
-                <input value={postal}  disabled={disabled} onChange={handlePostal}/>
+                <input type="checkbox" checked={tv} value={tv}  disabled={disabled} onChange={handleTv}/>
             </label>
             <br/>
             <label>
                 Air Climatisé:
                 <br/>
-                <input value={rue}  disabled={disabled} onChange={handleRue}/>
+                <input type="checkbox" checked={ac} value={ac}  disabled={disabled} onChange={handleAc}/>
             </label>
             <br/>
             <label>
                 Refrigerateur:
                 <br/>
-                <input value={numRue}  disabled={disabled} onChange={handleNumRue}/>
+                <input type="checkbox" checked={refrigerateur} value={refrigerateur}  disabled={disabled} onChange={handleRefrigerateur}/>
             </label>
             <br/>
             <label>
                 Microonde:
                 <br/>
-                <select  value={poste} disabled={disabled} onChange={handlePoste}>
-                  <option value="Valet">Valet</option>
-                  <option value="Concierge">Concierge</option>
-                  <option value="Receptionniste">Receptionniste</option>
-                  <option value="Gestionnaire">Gestionnaire</option>
-                </select>
+                <input type="checkbox" checked={microonede} value={microonede}  disabled={disabled} onChange={handleMicroonde}/>
             </label>
             <br/>
             <label>
                 Cafe:
                 <br/>
-                <input disabled={disabled} value={salaire} onChange={handleSalaire}/>
+                <input type="checkbox" checked={cafe} disabled={disabled} value={cafe} onChange={handleCafe}/>
             </label>
             <br/>
             <label>
                 Four:
                 <br/>
-                <input disabled={disabled} value={email} onChange={handleEmail}/>
+                <input type="checkbox" checked={four} disabled={disabled} value={four} onChange={handleFour}/>
             </label>
             <br/>
             <br/>
