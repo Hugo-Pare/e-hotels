@@ -1,37 +1,27 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useRef, useLayoutEffect} from 'react';
-import { useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import 'react-datepicker/dist/react-datepicker.css';
 
 
 function Hotel_rooms_e() {
   const [showRooms, setShowRooms] = useState([])
-  const id_employe = sessionStorage.getItem("id")
+  const idHotel = sessionStorage.getItem("hotel_id")
   const [numChambre, setNumChambre] = useState([]);
   const [data, setData] = useState([]);
   const [loaded, setLoaded] = useState(false)
   // const navigate = useNavigate();
-  const [idHotel, setIdHotel] = useState("")
   useEffect(() => {
     getHotelId()
-    getAllRooms()
+    getAllRooms
   }, [])
 
-  async function getHotelId(){
-    fetch(`http://127.0.0.1:5000/employes?id_employe=${id_employe}`)
-    .then(function(response){
-        return response.json()
-    })
-    .then(function(data){
-        idHotel = data[0].id_hotel //setting constant variable?
-        setIdHotel(data[0].id_hotel) //why pass a set variable?
-        getAllRooms()
-        parseInt(idHotel);
-        console.log(data)
-    })
-}
 function handleNumChambreChange(event){
   setNumChambre(event.target.value)
+}
+
+function handleEdit(){
+  Navigate('/employeeIn/edit_hotel_room')
 }
 
   async function getAllRooms() {
@@ -47,14 +37,23 @@ function handleNumChambreChange(event){
 
 function handleClear(){
   setNumChambre("")
-  setData([])
-  getHotelId()
+  getAllRooms()
 }
 
-function handleSearch(){
-  console.log("clicked search")
-  console.log("Numéro de chmabre: "+ numChambre)
-  //getRoom(numChambre)
+function handleSearch() {
+  console.log("clicked search");
+  console.log("Numéro de chambre: " + numChambre);
+  console.log(showRooms)
+  if (numChambre) {
+    const room = showRooms.find(chambre => chambre.room_num == numChambre);
+    if (room) {
+      setShowRooms([room]);
+    } else {
+      setShowRooms([]);
+    }
+  } else {
+    getAllRooms();
+  }
 }
 
 
@@ -81,7 +80,7 @@ function handleSearch(){
               {showRooms.map((chambre) => (
                   <tr key={(chambre.room_num)}>
                       <td>{chambre.room_num}</td>
-                      <td><button value={chambre.num}>Edit</button></td>
+                      <td><button onClick={handleEdit} value={chambre.num}>Edit</button></td>
                       
                   </tr>
               ))}
