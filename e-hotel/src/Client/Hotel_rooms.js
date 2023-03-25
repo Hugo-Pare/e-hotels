@@ -100,14 +100,13 @@ function valide (chambre){
 }
 
 const updateRooms = () => {
-  // console.log(roomsAvailableDate)
-  let test = []
+  console.log(roomsAvailableDate)
   let indexes = []
   let tempList = []
   for(let i = 0 ; i <data.length; i++){
     if (true == valide(data[i])){
-          for(let n = 0; n<test.length;n++){
-            if(test[n].room_num == data[i].room_num){
+          for(let n = 0; n<roomsAvailableDate.length;n++){
+            if(roomsAvailableDate[n].room_num == data[i].room_num){
               indexes.push(i)
             }
           }
@@ -119,26 +118,6 @@ const updateRooms = () => {
   }
   setShowRooms(tempList);
 }
-
-// const updateRooms = () => {
-//   console.log(roomsAvailableDate)
-//   let indexes = []
-//   let tempList = []
-//   for(let i = 0 ; i <data.length; i++){
-//     if (true == valide(data[i])){
-//           for(let n = 0; n<roomsAvailableDate.length;n++){
-//             if(roomsAvailableDate[n].room_num == data[i].room_num){
-//               indexes.push(i)
-//             }
-//           }
-//         }
-//       }
-//   console.log(indexes)
-//   for(let i = 0 ; i<indexes.length; i++){
-//     tempList.push(data[indexes[i]])
-//   }
-//   setShowRooms(tempList);
-// }
 
   const search = () => {
     if(checkInDate == null || checkOutDate == null){
