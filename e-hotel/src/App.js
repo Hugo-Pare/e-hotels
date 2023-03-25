@@ -45,6 +45,8 @@ function App() {
             <Route exact path="/employeeIn/info" element={<><Navbar_e />< Info_e/></>} />
             <Route exact path='/employeeIn/location' element={<><Navbar_e />< Location/></>}/>
             <Route exact path='/employeeIn/hotel_rooms_e' element={<><Navbar_e />< Hotel_rooms_e/></>}/>
+            <Route exact path='/employeeIn/edit_hotel_room' element={<><Navbar_e />< Edit_hotel_room/></>}/>
+
             <Route exact path="/employeeIn/createLocation" element={<><Navbar_e />< CreateLocation/></>}></Route>
         </Route>
       </Routes>
