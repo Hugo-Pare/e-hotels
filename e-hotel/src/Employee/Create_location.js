@@ -23,7 +23,7 @@ function Create_location() {
         getAllRooms()
       }, [])
 
-      useLayoutEffect(() => {
+    useLayoutEffect(() => {
         if(ref.current == false){
             ref.current = true
             return
@@ -33,7 +33,7 @@ function Create_location() {
             return
         }
         updateRooms();
-      }, [roomsForDate])
+    }, [roomsForDate])
 
     function getAllRooms() {
         fetch(`http://127.0.0.1:5000/rooms/${hotel_id}`)
@@ -50,12 +50,22 @@ function Create_location() {
             .then(response => response.json())
             .then(function(json) {
                 setRoomsForDate(json)
-            // updateRooms();
         });
       }
 
       function updateRooms() {
-        console.log("in")
+        let indexes = []
+        let tempList = []
+        for (let i=0; i<data.length; i++){
+            if(validate(data[i])){
+                indexes.push(i)
+            }
+        }
+
+        for(let i = 0 ; i<indexes.length; i++){
+            tempList.push(data[indexes[i]])
+          }
+          setShowRooms(tempList);
       }
 
       function validate() {

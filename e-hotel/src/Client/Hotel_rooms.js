@@ -31,7 +31,6 @@ function Hotel_rooms() {
         secondUpdate.current = false;
         return;
       }
-      console.log("hey")
     updateRooms()
     }, [roomsAvailableDate])
 
@@ -100,7 +99,6 @@ function valide (chambre){
 }
 
 const updateRooms = () => {
-  console.log(roomsAvailableDate)
   let indexes = []
   let tempList = []
   for(let i = 0 ; i <data.length; i++){
@@ -112,7 +110,6 @@ const updateRooms = () => {
           }
         }
       }
-  console.log(indexes)
   for(let i = 0 ; i<indexes.length; i++){
     tempList.push(data[indexes[i]])
   }
