@@ -54,6 +54,11 @@ GET:
 	/rooms/available/checkin/checkout?id_hotel=X
 	/rooms/id_hotel
 
+	/canada/provinces
+	/canada/cities
+	/us/states
+	/us/cities
+
 PATCH:
 	/clients/info/email_client
 
