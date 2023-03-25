@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef, useLayoutEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import './info_chaine.css';
 import hotelImg from './hotelDefault.jpg'
-// import 'react-datepicker/dist/react-datepicker.css';
-// import './hotel_rooms.css'
 
 function Hotels() {
   const [data, setData] = useState()
@@ -11,8 +9,10 @@ function Hotels() {
   const [chaineChecked, setChainesChecked] = useState();
   const [disabledProvince, setDisabledProvince] = useState(true);
   const [disabledVille, setDisabledVille] = useState(true);
-  const [pays, setPays] = useState();
-//   const [rating, setRating] = useState([]);
+  const [pays, setPays] = useState("null");
+  const [province, setProvince] = useState("null");
+  const [ville, setVille] = useState("null");
+  const [rating, setRating] = useState([]);
   const [chaines, setChaines] = useState();
   const [loaded, setLoaded] = useState(false)
   const [chainesLoaded, setChainesLoaded] = useState(false)
@@ -41,7 +41,7 @@ function Hotels() {
     listChecked(chaines)
 }, [chaines])
 
-  async function getAllHotels() {
+async function getAllHotels() {
     fetch(`http://127.0.0.1:5000/hotels`)
       .then(response => response.json())
       .then(function(json) {
@@ -64,52 +64,43 @@ async function getChaines(){
   });
 }
 
-
-
-//   function handleRating(event) {
-//     setRating(event.target.value)
-//   };
-
-// function valide (chambre){
-//   if (chaineChecked.length> 0  && !chaineChecked.includes(chambre.id_chaine)){
-//     return false
-//   }
-//   if(rating != null && rating > chambre.rating){
-//     return false
-//   }
-//   return true
-// }
-
-// const updateRooms = () => {
-//   console.log(roomsAvailableDate)
-//   let indexes = []
-//   let tempList = []
-//   for(let i = 0 ; i <data[0].length; i++){
-//     if (true == valide(data[0][i])){
-//       if(roomsAvailableDate.length > 0) {
-//           for(let n = 0; n<roomsAvailableDate.length;n++){
-//             if(roomsAvailableDate[n].room_num == data[0][i].room_num && roomsAvailableDate[n].id_hotel == data[0][i].id_hotel){
-//               indexes.push(i)
-//             }
-//           }
-//       } else {
-//         indexes.push(i)
-//       }
-//     }
-//   }
-//   for(let i = 0 ; i<indexes.length; i++){
-//     tempList.push(data[0][indexes[i]])
-//   }
-//   setShowRooms(tempList);
-// }
-//   const search = () => {
-//     getRoomsForDates()
-//   };
-
-  function updateHotels() {
-
-
+function valide (hotel){
+  if (chaineChecked.length> 0  && !chaineChecked.includes(hotel.id_chaine)){
+    console.log("checked")
+    return false
   }
+  if(rating != null && rating > hotel.rating){
+    console.log("rating")
+    return false
+  }
+  if(pays != 'null' && pays != hotel.country){
+    console.log(pays)
+    return false
+  }
+  if(province != 'null' && province != hotel.province){
+    return false
+  }
+  if(ville != 'null' && ville != hotel.ville){
+    return false
+  }
+  return true
+}
+
+function updateHotels(){
+  let indexes = [];
+  let tempList = [];
+  console.log(data)
+  for(let i = 0 ; i <data.length; i++){
+    if (true == valide(data[i])){
+      indexes.push(i)
+    }
+  }
+  for(let i = 0 ; i<indexes.length; i++){
+    tempList.push(data[indexes[i]])
+  }
+  setHotels(tempList);
+  setLoaded(true)
+}
 
   function listChecked(liste) {
     let temp = []
@@ -117,8 +108,6 @@ async function getChaines(){
       if (liste[i].checked == true)
       temp.push(liste[i].id)
     }
-    console.log("temp")
-    console.log(temp)
     setChainesChecked(temp)
   }
 
@@ -138,13 +127,25 @@ async function getChaines(){
     listChecked(temp)
   }
   
-  function handleRating() {
-    console.log("in Rating")
+  function handleRating(event) {
+    setRating(event.target.value)
+  }
+
+  function handleProvince(event) {
+    if(event.target.value == "null") {
+      setDisabledVille(true)
+    } else {
+      setDisabledVille(false)
+    }
+    setProvince(event.target.value);
+  }
+
+  function handleVille(event){
+    setVille(event.target.value);
   }
 
   function handlePays(event) {
-    console.log(event.target.value);
-    if(event.target.value == 'null') {
+    if(event.target.value == "null") {
       setDisabledProvince(true)
       setDisabledVille(true)
     } else {
@@ -155,6 +156,7 @@ async function getChaines(){
   }
 
   function search() {
+    setLoaded(false)
     updateHotels()
   }
 
@@ -204,14 +206,15 @@ async function getChaines(){
               <h4 style={{marginBottom: "0"}}>
               Province:
               </h4>
-              <select disabled={disabledProvince} onChange={handleRating}>
+              <select disabled={disabledProvince} onChange={handleProvince}>
               <option value="null">Faites selection</option>
+              <option value="test">Test</option>
               </select>
 
               <h4 style={{marginBottom: "0"}}>
               Ville:
               </h4>
-              <select disabled={disabledVille} onChange={handleRating}>
+              <select disabled={disabledVille} onChange={handleVille}>
               <option value="null">Faites selection</option>
               </select>
         </div>
@@ -221,21 +224,18 @@ async function getChaines(){
         </div>
     </div>
     {loaded ?
+    
         <div className="grid-container-hotels">
-        
+          {console.log(showHotels)}
                 {showHotels.map((hotel) => (
-
                     <div className="card" key={hotel.id_hotel} onClick={() => handleClick(hotel.id_hotel)}>
                         <img src={hotelImg} alt="hotel" style={{width:'100%'}}/>
                         <p>{hotel.street_num}, {hotel.street_name}, {hotel.city}</p>
                         <p>{hotel.province_state}, {hotel.country}</p>
                         <p>{hotel.email}</p>
                         <p>{hotel.telephone}</p>
-                    </div> 
-                //    <div>{hotel.id_hotel}</div>
+                    </div>
                 ))}
-       
-         
         </div>
         : <div>Loading Rooms ...</div>}
       

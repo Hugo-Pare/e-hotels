@@ -203,7 +203,6 @@ function Info_e(){
       }
 
     return(
-
         <div>
             <h3>Information de l'employé</h3>
             <label>
@@ -294,7 +293,5 @@ function Info_e(){
             <button onClick={cancel}>Cancel</button></div>
            }
         </div>
-
     );
-
 } export default Info_e;
