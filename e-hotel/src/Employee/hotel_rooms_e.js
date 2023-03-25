@@ -7,7 +7,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 function Hotel_rooms_e() {
   const [showRooms, setShowRooms] = useState([])
   const navigate = useNavigate();
-  const idHotel = sessionStorage.getItem("hotel_id")
+  const hotel_good_id = sessionStorage.getItem("hotel_id")
   const [numChambre, setNumChambre] = useState([]);
   const [data, setData] = useState([]);
   const [loaded, setLoaded] = useState(false)
@@ -19,14 +19,18 @@ function handleNumChambreChange(event){
   setNumChambre(event.target.value)
 }
 
-function handleEdit(){
-  sessionStorage.setItem("num_chambre", numChambre)
-  navigate('/employeeIn/edit_hotel_room')
+function handleEdit(event){
+  const num_chambre = event.target.value
+  navigate('/employeeIn/edit_hotel_room', {
+    state: {
+      numChambre: num_chambre,
+    }
+  })
 }
 
   async function getAllRooms() {
-    console.log(idHotel)
-    fetch(`http://127.0.0.1:5000/rooms?id_hotel${idHotel}`)
+    console.log({hotel_good_id})
+    fetch(`http://127.0.0.1:5000/rooms/${hotel_good_id}`)
       .then(response => response.json())
       .then(function(json) {
         setData([json])
@@ -80,7 +84,7 @@ function handleSearch() {
               {showRooms.map((chambre) => (
                   <tr key={(chambre.room_num)}>
                       <td>{chambre.room_num}</td>
-                      <td><button onClick={handleEdit} value={chambre.num}>Edit</button></td>
+                      <td><button onClick={handleEdit} value={chambre.room_num}>Edit</button></td>
                       
                   </tr>
               ))}
