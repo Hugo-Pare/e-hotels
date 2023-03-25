@@ -19,6 +19,7 @@ import Welcome from './LoggedOut/Welcome';
 import Hotel_rooms_e from './Employee/hotel_rooms_e';
 import Hotels from './Client/Hotels';
 import CreateLocation from './Employee/Create_location';
+import Edit_hotel_room from './Employee/Edit_hotel_room';
 
 import { BrowserRouter as Router, Routes, Route, React} from 'react-router-dom';
 
