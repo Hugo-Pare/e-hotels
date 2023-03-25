@@ -4,23 +4,33 @@ import { useNavigate } from 'react-router-dom';
 function Create_location() {
   
     // const [showRooms, setShowRooms] = useState([])
-    const [checkInDate, setCheckIn] = useState()
-    const [checkOutDate, setCheckOut] = useState()
-    const [minPrice, setMinPrice] = useState()
-    const [maxPrice, setMaxPrice] = useState()
-    const [capacite, setCapacite] = useState()
-    const [rating, setRating] = useState()
+    const [checkInDate, setCheckIn] = useState();
+    const [checkOutDate, setCheckOut] = useState();
+    const [minPrice, setMinPrice] = useState();
+    const [maxPrice, setMaxPrice] = useState();
+    const [capacite, setCapacite] = useState();
+    const [rating, setRating] = useState();
+    const [loaded, setLoaded] = useState(false);
+    const [data, setData] = useState();
+    const [showRooms, setShowRooms] = useState();
 
     const hotel_id = sessionStorage.getItem("hotel_id")
+
     useEffect(() => {
         getAllRooms()
       }, [])
+
+    //   useLayoutEffect(() => {
+        
+    //   }, [showRooms])
 
     function getAllRooms() {
         fetch(`http://127.0.0.1:5000/rooms/${hotel_id}`)
           .then(response => response.json())
           .then(function(json) {
-            console.log(json)
+            setData(json);
+            setShowRooms(json);
+            setLoaded(true)
       });
     }
 
@@ -56,51 +66,52 @@ function Create_location() {
         setRating(event.target.value)
       }
       function search() {
-        if (checkInDate == null && checkOutDate == null) {
+        if (checkInDate == null || checkOutDate == null) {
             alert("SVP selectione une date checkin et checkout!")
             return null;
         }
+        setLoaded(false)
       }
       function clear() {
         window.location.reload(false);
       }
+      function handleLocation() {
+        console.log("location");
+      }
 
   return (
-    <div>
-  
+    <div className="hotel-rooms-container">
         <div className="filter-panel"> <h3>Filter rooms</h3>
           <div className="price-filter">
-              <label style={{fontSize: "20px"}}>
+              <h4 style={{marginTop: "0"}}>
               Prix Maximum:
               <br/>
               <input  type="number" value={maxPrice} onChange={handleMaxPriceChange} />
-              </label>
-              <br/>
-              <label style={{fontSize: "20px"}}>
+              </h4>
+              <h4 style={{marginTop: "0"}}>
               Prix Minimum:
               <br/>
               <input  type="number" value={minPrice} onChange={handleMinPriceChange} />
-              </label>
+              </h4>
             </div>
             <div className="date-filter">
-              <label style={{fontSize: "20px"}}>
+            <h4 style={{marginTop: "0"}}>
               Check-in date:
               <div className="date-picker">
               <input type="date" value={checkInDate} onChange={handleCheckIn}></input>
               </div>
-              </label>
-              <label style={{fontSize: "20px"}}>
+              </h4>
+              <h4 style={{marginTop: "0"}}>
               Check-out date:
               <div className="date-picker">
               <input type="date" value={checkOutDate} onChange={handleCheckOut}></input>
               </div>
-              </label>
+              </h4>
             </div>
             <div className="capacite-filter">
-              <label style={{fontSize: "20px"}}>
+              <h4 style={{marginTop: "0", marginBottom:'0'}}>
               Capacité:
-              </label>
-              <br/>
+              </h4>
               <select onChange={handleCapacite}>
               <option value="null">Faites selection</option>
               <option value="1">1</option>
@@ -113,10 +124,9 @@ function Create_location() {
               </select>
             </div>
             <div className="rating-filter">
-              <label style={{fontSize: "20px"}}>
+              <h4 style={{ marginBottom:"0"}}>
               Rating:
-              </label>
-              <br/>
+              </h4>
               <select onChange={handleRating}>
               <option value="null">Faites selection</option>
               <option value="1">1</option>
@@ -124,7 +134,6 @@ function Create_location() {
               <option value="3">3</option>
               <option value="4">4</option>
               <option value="5">5</option>
-             
               </select>
             </div>
 
@@ -133,7 +142,48 @@ function Create_location() {
               <button onClick={clear}>Clear</button>
             </div>
         </div>
-          </div>
+        {loaded ?
+      <div className="table-panel">
+      <table className="room-table">
+          <thead>
+              <tr key="titles">
+              <th># Chambre</th>
+                <th>Prix</th>
+                <th>Capacité</th>
+                <th>TV</th>
+                <th>AC</th>
+                <th>Cafée</th>
+                <th>Fridge</th>
+                <th>Micro-Onde</th>
+                <th>Four</th>
+                <th>Vue</th>
+                  
+                  {/* <th>Rating</th> */}
+              </tr>
+          </thead>
+          <tbody>
+              {showRooms.map((chambre) => (
+                  <tr key={(chambre.room_num)}>
+                    <td>{chambre.room_num}</td>
+                      <td>{chambre.prix}$</td>
+                      <td>{chambre.capacity}</td>
+                      <td>{chambre.tv.toString()}</td>
+                      <td>{chambre.ac.toString()}</td>
+                      <td>{chambre.coffee.toString()}</td>
+                      <td>{chambre.refrigerator.toString()}</td>
+                      <td>{chambre.microwave.toString()}</td>
+                      <td>{chambre.oven.toString()}</td>
+                      <td>{chambre.vue}</td>
+                      {/* <td>{chambre.rating}</td> */}
+                      <td><button value={chambre.num} onClick={handleLocation}>Location</button></td>
+                      
+                  </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
+      : <div>Loading Rooms ...</div>}
+    </div>
   );      
     }
 export default Create_location;
