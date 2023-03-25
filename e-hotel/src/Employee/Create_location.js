@@ -13,6 +13,9 @@ function Create_location() {
     const [loaded, setLoaded] = useState(false);
     const [data, setData] = useState();
     const [showRooms, setShowRooms] = useState();
+    const [roomsForDate, setRoomsForDate] = useState();
+    const ref = useRef(false);
+    const ref2 = useRef(false);
 
     const hotel_id = sessionStorage.getItem("hotel_id")
 
@@ -20,9 +23,17 @@ function Create_location() {
         getAllRooms()
       }, [])
 
-    //   useLayoutEffect(() => {
-        
-    //   }, [showRooms])
+      useLayoutEffect(() => {
+        if(ref.current == false){
+            ref.current = true
+            return
+        }
+        if(ref2.current == false){
+            ref2.current = true
+            return
+        }
+        updateRooms();
+      }, [roomsForDate])
 
     function getAllRooms() {
         fetch(`http://127.0.0.1:5000/rooms/${hotel_id}`)
@@ -35,15 +46,22 @@ function Create_location() {
     }
 
     async function getRoomsForDates() {
-        fetch(`http://127.0.0.1:5000/rooms/available/${checkInDate}/${checkOutDate}/?id_hotel=${hotel_id}`)
-        
-        // fetch(`http://127.0.0.1:5000/rooms/available/?id_hotel=${hotel_id}`)
+        fetch(`http://127.0.0.1:5000/rooms/available/${checkInDate}/${checkOutDate}?id_hotel=${hotel_id}`)
             .then(response => response.json())
             .then(function(json) {
-           console.log(json)
+                setRoomsForDate(json)
+            // updateRooms();
         });
       }
-      
+
+      function updateRooms() {
+        console.log("in")
+      }
+
+      function validate() {
+
+      }
+
       function handleMaxPriceChange(event) {
         setMaxPrice(event.target.value)
       }
@@ -71,6 +89,7 @@ function Create_location() {
             return null;
         }
         setLoaded(false)
+        getRoomsForDates();
       }
       function clear() {
         window.location.reload(false);

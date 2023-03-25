@@ -31,6 +31,7 @@ function Hotel_rooms() {
         secondUpdate.current = false;
         return;
       }
+      console.log("hey")
     updateRooms()
     }, [roomsAvailableDate])
 
@@ -38,9 +39,8 @@ function Hotel_rooms() {
     fetch(`http://127.0.0.1:5000/rooms/${sessionStorage.getItem("hotel_id")}`)
       .then(response => response.json())
       .then(function(json) {
-        // console.log(json)
-        setData([json])
-        setShowRooms([json][0])
+        setData(json)
+        setShowRooms(json)
         setLoaded(true)
   });
 }
@@ -50,8 +50,7 @@ async function getRoomsForDates() {
   fetch(`http://127.0.0.1:5000/rooms/available/${checkInDate}/${checkOutDate}?id_hotel=${sessionStorage.getItem("hotel_id")}`)
       .then(response => response.json())
       .then(function(json) {
-        console.log(json)
-        setRoomsAvailableDate([json][0])
+        setRoomsAvailableDate(json)
   });
 } else setRoomsAvailableDate([])
 }
@@ -101,26 +100,46 @@ function valide (chambre){
 }
 
 const updateRooms = () => {
+  // console.log(roomsAvailableDate)
+  let test = []
   let indexes = []
   let tempList = []
-  for(let i = 0 ; i <data[0].length; i++){
-    if (true == valide(data[0][i])){
-      if(roomsAvailableDate.length > 0) {
-          for(let n = 0; n<roomsAvailableDate.length;n++){
-            if(roomsAvailableDate[n].room_num == data[0][i].room_num && roomsAvailableDate[n].id_hotel == data[0][i].id_hotel){
+  for(let i = 0 ; i <data.length; i++){
+    if (true == valide(data[i])){
+          for(let n = 0; n<test.length;n++){
+            if(test[n].room_num == data[i].room_num){
               indexes.push(i)
             }
           }
-      } else {
-        indexes.push(i)
+        }
       }
-    }
-  }
+  console.log(indexes)
   for(let i = 0 ; i<indexes.length; i++){
-    tempList.push(data[0][indexes[i]])
+    tempList.push(data[indexes[i]])
   }
   setShowRooms(tempList);
 }
+
+// const updateRooms = () => {
+//   console.log(roomsAvailableDate)
+//   let indexes = []
+//   let tempList = []
+//   for(let i = 0 ; i <data.length; i++){
+//     if (true == valide(data[i])){
+//           for(let n = 0; n<roomsAvailableDate.length;n++){
+//             if(roomsAvailableDate[n].room_num == data[i].room_num){
+//               indexes.push(i)
+//             }
+//           }
+//         }
+//       }
+//   console.log(indexes)
+//   for(let i = 0 ; i<indexes.length; i++){
+//     tempList.push(data[indexes[i]])
+//   }
+//   setShowRooms(tempList);
+// }
+
   const search = () => {
     if(checkInDate == null || checkOutDate == null){
       alert("Selectionne une date Check-In et Check-Out SVP!")
