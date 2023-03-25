@@ -17,7 +17,7 @@ const Navbar_e = () => {
         <button className="dropbtn">Locations</button>
         <div className="dropdown-content">
           <a href="">Existantes</a>
-          <a href="">Creer</a>
+          <a href="/employeeIn/createLocation">Creer</a>
         </div>
       </div>
       <a href="/employeeIn/hotel_rooms_e">Rooms</a>

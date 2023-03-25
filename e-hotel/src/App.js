@@ -1,24 +1,25 @@
 /* eslint-disable react/jsx-pascal-case */
 import './App.css';
 import './Employee.css';
-import Signup_client from './LoggedOut/signup_client.js'
-import First_page_c from './Client/first_page_c'
-import First_page_e from './Employee/first_page_e'
+import Signup_client from './LoggedOut/signup_client.js';
+import First_page_c from './Client/first_page_c';
+import First_page_e from './Employee/first_page_e';
 import Navbar from './LoggedOut/Navbar';
 import Navbar_c from './Client/Navbar_c';
 import Navbar_e from './Employee/Navbar_e';
 import LoginEmployee from './LoggedOut/Login_e';
 import LoginClient from './LoggedOut/Login_c';
 import Info_e from './Employee/info_e';
-import Location from './Employee/location'
-import Hotel_rooms from './Client/Hotel_rooms'
-import Info_chaine from './Client/Info_chaine'
-import Reservation from './Client/Reservation'
+import Location from './Employee/location';
+import Hotel_rooms from './Client/Hotel_rooms';
+import Info_chaine from './Client/Info_chaine';
+import Reservation from './Client/Reservation';
 import Info_c from './Client/Info_c';
 import Welcome from './LoggedOut/Welcome';
-import Hotel_rooms_e from './Employee/hotel_rooms_e'
-import Hotels from './Client/Hotels'
-import Edit_hotel_room from './Employee/edit_hotel_room'
+import Hotel_rooms_e from './Employee/hotel_rooms_e';
+import Hotels from './Client/Hotels';
+import CreateLocation from './Employee/Create_location';
+import Edit_hotel_room from './Employee/Edit_hotel_room';
 
 import { BrowserRouter as Router, Routes, Route, React} from 'react-router-dom';
 
@@ -47,7 +48,7 @@ function App() {
             <Route exact path='/employeeIn/hotel_rooms_e' element={<><Navbar_e />< Hotel_rooms_e/></>}/>
             <Route exact path='/employeeIn/edit_hotel_room' element={<><Navbar_e />< Edit_hotel_room/></>}/>
 
-
+            <Route exact path="/employeeIn/createLocation" element={<><Navbar_e />< CreateLocation/></>}></Route>
         </Route>
       </Routes>
     </Router>

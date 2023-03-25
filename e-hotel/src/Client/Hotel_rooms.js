@@ -38,7 +38,7 @@ function Hotel_rooms() {
     fetch(`http://127.0.0.1:5000/rooms/${sessionStorage.getItem("hotel_id")}`)
       .then(response => response.json())
       .then(function(json) {
-        console.log(json)
+        // console.log(json)
         setData([json])
         setShowRooms([json][0])
         setLoaded(true)
@@ -50,6 +50,7 @@ async function getRoomsForDates() {
   fetch(`http://127.0.0.1:5000/rooms/available/${checkInDate}/${checkOutDate}?id_hotel=${sessionStorage.getItem("hotel_id")}`)
       .then(response => response.json())
       .then(function(json) {
+        console.log(json)
         setRoomsAvailableDate([json][0])
   });
 } else setRoomsAvailableDate([])
