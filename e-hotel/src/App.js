@@ -40,7 +40,7 @@ function App() {
           <Route exact path='/clientIn/hotels' element={<><Navbar_c />< Hotels/></>}/>
           <Route exact path="/clientIn/hotelRooms" element={<><Navbar_c/><Hotel_rooms /></>} />
           <Route exact path="/clientIn/infoChaine" element={<><Navbar_c/><Info_chaine /></>} />
-          <Route exact path="/clientIn/hotelRooms/reservation" element={<><Navbar_c/><Reservation /></>} />
+          <Route exact path="/clientIn/reservation" element={<><Navbar_c/><Reservation /></>} />
         </Route>
         <Route exact path="/employeeIn">
             <Route exact path="/employeeIn" element={<><Navbar_e /><First_page_e /></>} />
@@ -49,7 +49,6 @@ function App() {
             <Route exact path='/employeeIn/hotel_rooms_e' element={<><Navbar_e />< Hotel_rooms_e/></>}/>
             <Route exact path='/employeeIn/edit_hotel_room' element={<><Navbar_e />< Edit_hotel_room/></>}/>
             <Route exact path='/employeeIn/edit_hotel' element={<><Navbar_e />< Edit_hotel/></>}/>
-
             <Route exact path="/employeeIn/createLocation" element={<><Navbar_e />< CreateLocation/></>}></Route>
         </Route>
       </Routes>
