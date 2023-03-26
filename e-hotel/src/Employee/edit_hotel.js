@@ -257,6 +257,7 @@ function Edit_hotel(){
                 <input disabled={disabled} value={telephone} onChange={handleTelephone}/>
             </label>
             <br/>
+            <br/>
            {disabled ?
             <button onClick={handleEdit}>Edit</button>:
             <div><button onClick={save}>Save</button>

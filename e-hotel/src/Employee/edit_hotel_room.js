@@ -254,7 +254,7 @@ function Edit_hotel_room(){
             <br/>
             <br/>
 </>
-: <div>Loading Rooms ...</div>}
+: <div>Loading Information ...</div>}
            {disabled ?
             <button onClick={handleEdit}>Edit</button>:
             <div><button onClick={save}>Save</button>
