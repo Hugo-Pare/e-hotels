@@ -121,6 +121,14 @@ const updateRooms = () => {
       alert("Selectionne une date Check-In et Check-Out SVP!")
       return
     }
+  if(checkInDate < new Date().toISOString().split('T')[0]){
+    alert("La date de checkin doit soit etre aujourdhui ou une journée qui suit!")
+    return null;
+  }
+  if (checkInDate >= checkOutDate){
+    alert("La date de checkout doit venir apres la date de checkin")
+    return null;
+  }
     getRoomsForDates()
   };
 
