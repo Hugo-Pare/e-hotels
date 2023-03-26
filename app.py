@@ -1038,7 +1038,8 @@ def get_canada_cities():
             for j in range(len(cities[i])):
                 tmp.append(cities[i][j])
             json.append({
-                provinces[i]: tmp
+                "province": provinces[i],
+                "ville": tmp
             })
 
         return json

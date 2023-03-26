@@ -91,16 +91,13 @@ function getUsCities() {
   .then(response => response.json())
   .then(function(json) {
     setVilleUs(json)
-    // villeUs = json;
-    console.log(json)
 });
 }
 function getCanCities() {
   fetch('http://127.0.0.1:5000/canada/cities')
   .then(response => response.json())
   .then(function(json) {
-    
-    // villeCan = json;
+    setVilleCan(json)
 });
 }
 
@@ -246,12 +243,13 @@ function updateHotels(){
               <option value="null">Faites selection</option>
               {listProvince.map((province) => (<option value={province}>{province}</option>))}
               </select>
-              {/* <h4 style={{marginBottom: "0"}}>
+              <h4 style={{marginBottom: "0"}}>
                         Ville:
                         </h4>
                         <select disabled={disabledVille} onChange={handleVille}>
                         <option value="null">Faites selection</option>
-                        </select> */}
+                        {villeCan.map((prov) => (prov.province == province ? prov.ville.map((villeNom) => (<option value={villeNom}>{villeNom}</option>)):<></>) )}
+                        </select>
                         </div>:<></>}
 
               {pays == "Etats-Unis" ? <div> <h4 style={{marginBottom: "0"}}>
@@ -262,7 +260,6 @@ function updateHotels(){
               {listState.map((state) => (<option value={state}>{state}</option>))}
               </select>
               <h4 style={{marginBottom: "0"}}>
-                {console.log(villeUs)}
                         Ville:
                         </h4>
                         <select disabled={disabledVille} onChange={handleVille}>
