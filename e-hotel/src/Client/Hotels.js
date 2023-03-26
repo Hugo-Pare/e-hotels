@@ -14,8 +14,8 @@ function Hotels() {
   const [ville, setVille] = useState("null");
   const [listProvince, setListProvince] = useState([]);
   const [listState, setListState] = useState([]);
-  let villeUs = [];
-  let villeCan = [];
+  const [villeUs, setVilleUs] = useState([]);
+  const [villeCan, setVilleCan] = useState([]);
   const [rating, setRating] = useState([]);
   const [chaines, setChaines] = useState();
   const [loaded, setLoaded] = useState(false)
@@ -90,15 +90,17 @@ function getUsCities() {
   fetch('http://127.0.0.1:5000/us/cities')
   .then(response => response.json())
   .then(function(json) {
-    villeUs = json;
+    setVilleUs(json)
+    // villeUs = json;
+    console.log(json)
 });
 }
 function getCanCities() {
   fetch('http://127.0.0.1:5000/canada/cities')
   .then(response => response.json())
   .then(function(json) {
-    console.log(json)
-    villeCan = json;
+    
+    // villeCan = json;
 });
 }
 
@@ -259,12 +261,14 @@ function updateHotels(){
               <option value="null">Faites selection</option>
               {listState.map((state) => (<option value={state}>{state}</option>))}
               </select>
-              {/* <h4 style={{marginBottom: "0"}}>
+              <h4 style={{marginBottom: "0"}}>
+                {console.log(villeUs)}
                         Ville:
                         </h4>
                         <select disabled={disabledVille} onChange={handleVille}>
                         <option value="null">Faites selection</option>
-                        </select> */}
+                        {villeUs.map((state) => (state.state == province ? state.ville.map((villeNom) => (<option value={villeNom}>{villeNom}</option>)):<></>) )}
+                        </select>
                         </div>:<></>}
 
               {pays == "null" ? <div> <h4 style={{marginBottom: "0"}}>
@@ -273,13 +277,12 @@ function updateHotels(){
               <select disabled={disabledProvince} onChange={handleProvince}>
               <option value="null">Faites selection</option>
               </select>
-                        {/* <h4 style={{marginBottom: "0"}}>
+                        <h4 style={{marginBottom: "0"}}>
                         Ville:
                         </h4>
                         <select disabled={disabledVille} onChange={handleVille}>
                         <option value="null">Faites selection</option>
-                        {villeUs}}
-                        </select> */}
+                        </select>
                         </div>:<></>}
 
         </div>

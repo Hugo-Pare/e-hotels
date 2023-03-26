@@ -1086,13 +1086,14 @@ def get_us_cities():
         for i in range(len(data)):
             index = states.index(data[i][0])
             cities[index].append(data[i][1])
-
+     
         for i in range(len(states)):
             tmp = []
             for j in range(len(cities[i])):
                 tmp.append(cities[i][j])
             json.append({
-                states[i]: tmp
+                "state": states[i],
+                "ville": tmp
             })
 
         return json

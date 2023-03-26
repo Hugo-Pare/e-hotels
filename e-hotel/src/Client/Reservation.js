@@ -2,6 +2,7 @@ import { useEffect } from "react";
 
 const Reservation = () => {
   const email_client = sessionStorage.getItem("email_id")
+  // const []
   useEffect(() => {
     getReservations();
   }, [])
