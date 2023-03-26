@@ -47,7 +47,6 @@ function Create_location() {
             return
         }
         setLoaded(true)
-        console.log(showRooms)
     }, [showRooms])
 
     function getAllRooms() {
@@ -73,7 +72,11 @@ function Create_location() {
         let tempList = []
         for (let i=0; i<data.length; i++){
             if(validate(data[i])){
-                indexes.push(i)
+              for(let n = 0; n<roomsForDate.length;n++){
+                if(roomsForDate[n].room_num == data[i].room_num){
+                  indexes.push(i)
+                }
+              }
             }
         }
 
@@ -122,6 +125,14 @@ function Create_location() {
             alert("SVP selectione une date checkin et checkout!")
             return null;
         }
+        if(checkInDate < new Date().toISOString().split('T')[0]){
+          alert("La date de checkin doit soit etre aujourdhui ou une journée qui suit!")
+          return null;
+        }
+        if (checkInDate >= checkOutDate){
+          alert("La date de checkout doit venir apres la date de checkin")
+          return null;
+        }
         setLoaded(false)
         getRoomsForDates();
       }
@@ -129,7 +140,7 @@ function Create_location() {
         window.location.reload(false);
       }
       function handleLocation() {
-        console.log("location");
+        console.log("location needs to be implemented");
       }
 
   return (

@@ -168,8 +168,6 @@ function Edit_hotel(){
           return;
         }
 
-        //salaire??
-
         if (!regex_email.test(email)) {
           alert("Le courriel n'est pas valide");
           return;
