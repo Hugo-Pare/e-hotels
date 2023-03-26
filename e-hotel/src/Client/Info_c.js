@@ -15,7 +15,8 @@ function Info_c(){
     const [rue, setRue] = useState();
     const [postal, setPostal] = useState();
     const [numRue, setNumRue] = useState();
-    const[telephone, setTelephone] = useState();
+    const [telephone, setTelephone] = useState();
+    const [nas, setNas] = useState();
     const [disabled, setDisabled] = useState(true);
     const regex_name = /^[a-zA-Z]{2,}$/;
     const regex_email = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/; 
@@ -34,7 +35,6 @@ function Info_c(){
           .then(response => response.json())
           .then(
             json => {
-            console.log(json)
             data = json[0]
             setPrenom(data.firstname)
             setNom(data.lastname)
@@ -45,6 +45,13 @@ function Info_c(){
             setRue(data.street_name)
             setNumRue(data.street_num)
             setTelephone(data.telephone)
+            let stringNas = data.nas.toString();
+            let dif = 9 - data.nas.toString().length;
+            console.log(dif)
+            for (let i = 0; i<dif; i++){
+              stringNas = "0"+stringNas;
+            }
+            setNas(stringNas)
           }
           );
       }
@@ -184,6 +191,18 @@ function Info_c(){
         </label>
         <br/>
         <label>
+                Email:
+                <br/>
+                <input disabled="disabled" value={email}/>
+            </label>
+            <br/>
+            <label>
+                NAS:
+                <br/>
+                <input disabled={"disabled"} value={nas}/>
+            </label>
+            <br/>
+        <label>
             Pays:
             <br/>
             <input value={pays} disabled={disabled} onChange={handlePays}/>
@@ -219,18 +238,14 @@ function Info_c(){
                 <input value={numRue}  disabled={disabled} onChange={handleNumRue}/>
             </label>
             <br/>
-            <label>
-                Email:
-                <br/>
-                <input disabled="disabled" value={email}/>
-            </label>
-            <br/>
+            
             <label>
                 Telephone:
                 <br/>
                 <input disabled={disabled} value={telephone} onChange={handleTelephone}/>
             </label>
             <br/>
+            
             {disabled ?
             <button onClick={handleEdit}>Edit</button>:
             <div><button onClick={save}>Save</button>

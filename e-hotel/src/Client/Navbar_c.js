@@ -11,7 +11,7 @@ const Navbar_c = () => {
         <a href="/clientIn/reservation">Mes Réservations</a>
       </div>
     </div>
-    <a href="">Locations</a>
+    <a href="/clientIn/location">Locations</a>
     <div className="dropdown">
         <button className="dropbtn">Account</button>
         <div className="dropdown-content">

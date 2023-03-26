@@ -19,6 +19,7 @@ function Info_e(){
     const[email, setEmail] = useState();
     const[salaire, setSalaire] = useState();
     const[telephone, setTelephone] = useState();
+    const [nas, setNas] = useState();
     const [disabled, setDisabled] = useState(true);
     const regex_name = /^[a-zA-Z]{2,}$/;
     const regex_email = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/; 
@@ -82,6 +83,13 @@ function Info_e(){
             setPoste(data.poste)
             setSalaire(data.salaire)
             setTelephone(data.telephone)
+            let stringNas = data.nas.toString();
+            let dif = 9 - data.nas.toString().length;
+            console.log(dif)
+            for (let i = 0; i<dif; i++){
+              stringNas = "0"+stringNas;
+            }
+            setNas(stringNas)
           }
           );
       }
@@ -129,10 +137,6 @@ function Info_e(){
 
       function handlePoste(event) {
         setPoste(event.target.value)
-      }
-
-      function handleSalaire(event) {
-        setSalaire(event.target.value)
       }
 
       function handleEmail(event){
@@ -187,9 +191,6 @@ function Info_e(){
           alert("Le numero de rue n'est pas valide");
           return;
         }
-
-        //salaire??
-
         if (!regex_email.test(email)) {
           alert("Le courriel n'est pas valide");
           return;
@@ -260,18 +261,19 @@ function Info_e(){
             <label>
                 Poste:
                 <br/>
-                <select  value={poste} disabled={disabled} onChange={handlePoste}>
-                  <option value="Valet">Valet</option>
-                  <option value="Concierge">Concierge</option>
-                  <option value="Receptionniste">Receptionniste</option>
-                  <option value="Gestionnaire">Gestionnaire</option>
-                </select>
+                <input value={poste} disabled={"disabled"}/>
             </label>
             <br/>
             <label>
                 Salaire:
                 <br/>
-                <input disabled={disabled} value={salaire} onChange={handleSalaire}/>
+                <input disabled={"disabled"} value={salaire}/>
+            </label>
+            <br/>
+            <label>
+                NAS:
+                <br/>
+                <input disabled={"disabled"} value={nas}/>
             </label>
             <br/>
             <label>
