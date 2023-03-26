@@ -8,7 +8,7 @@ const Navbar_c = () => {
       <button className="dropbtn">Réservations</button>
       <div className="dropdown-content">
         <a href="/clientIn/hotels">Créer Réservation</a>
-        <a href="">Mes Réservations</a>
+        <a href="/clientIn/reservation">Mes Réservations</a>
       </div>
     </div>
     <a href="">Locations</a>
