@@ -498,11 +498,11 @@ def get_locations():
         id_hotel = args.get('id_hotel')
 
         if(email_client is not None):
-            cursor.execute('SELECT * FROM location WHERE LOWER(email_id) = LOWER(%s) ORDER BY date_checkin ASC', (email_client,))
+            cursor.execute('SELECT * FROM location WHERE LOWER(email_id) = LOWER(%s) ORDER BY date_checkin DESC', (email_client,))
         elif(id_hotel is not None):
-            cursor.execute('SELECT * FROM location WHERE id_hotel = %s ORDER BY date_checkin ASC', (id_hotel,))
+            cursor.execute('SELECT * FROM location WHERE id_hotel = %s ORDER BY date_checkin DESC', (id_hotel,))
         else:
-            cursor.execute('SELECT * FROM location ORDER BY date_checkin ASC')
+            cursor.execute('SELECT * FROM location ORDER BY date_checkin DESC')
 
         data = cursor.fetchall()
         json = []
@@ -545,7 +545,7 @@ def get_locations_by_id_location(id_location):
         connection = get_db_connection()
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
         
-        cursor.execute('SELECT * FROM location WHERE id_location = (%s) ORDER BY date_checkin ASC', (id_location,))
+        cursor.execute('SELECT * FROM location WHERE id_location = (%s) ORDER BY date_checkin DESC', (id_location,))
         data = cursor.fetchall()
         json = []
 
