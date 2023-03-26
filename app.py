@@ -317,7 +317,7 @@ def get_reservations():
     try:
         connection = get_db_connection()
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cursor.execute('SELECT * FROM reservation')
+        cursor.execute('SELECT * FROM reservation ORDER BY date_checkin ASC')
         data = cursor.fetchall()
         json = []
 
@@ -358,7 +358,7 @@ def get_reservations_by_id(id_reservation):
     try:
         connection = get_db_connection()
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cursor.execute('SELECT * FROM reservation WHERE id_reservation = (%s)', (id_reservation,))
+        cursor.execute('SELECT * FROM reservation WHERE id_reservation = (%s) ORDER BY date_checkin ASC', (id_reservation,))
         data = cursor.fetchall()
         json = []
 
@@ -386,7 +386,7 @@ def get_reservations_canceled():
     try:
         connection = get_db_connection()
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cursor.execute('SELECT * FROM reservation WHERE canceler = true')
+        cursor.execute('SELECT * FROM reservation WHERE canceler = true ORDER BY date_checkin ASC')
         data = cursor.fetchall()
         json = []
 
@@ -420,9 +420,9 @@ def get_reservations_pending():
         email_client = args.get('email_client')
 
         if(email_client is not None):
-            cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false AND LOWER(email_id) = LOWER(%s)', (email_client,))
+            cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false AND LOWER(email_id) = LOWER(%s) ORDER BY date_checkin ASC', (email_client,))
         else:
-            cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false')
+            cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false ORDER BY date_checkin ASC')
         data = cursor.fetchall()
         json = []
 
@@ -458,13 +458,13 @@ def get_reservations_pending_by_hotel_id(id_hotel):
 
         # if statements
         if(id_reservation is not None and email_client is not None):
-            cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false AND id_hotel = (%s) AND id_reservation = (%s) AND LOWER(email_id) = LOWER((%s))', (id_hotel,id_reservation,email_client,))
+            cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false AND id_hotel = (%s) AND id_reservation = (%s) AND LOWER(email_id) = LOWER((%s)) ORDER BY date_checkin ASC', (id_hotel,id_reservation,email_client,))
         elif(email_client is not None):
-            cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false AND id_hotel = (%s) AND LOWER(email_id) = LOWER((%s))', (id_hotel,email_client,))
+            cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false AND id_hotel = (%s) AND LOWER(email_id) = LOWER((%s)) ORDER BY date_checkin ASC', (id_hotel,email_client,))
         elif(id_reservation is not None):
-            cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false AND id_hotel = (%s) AND id_reservation = (%s)', (id_hotel,id_reservation,))
+            cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false AND id_hotel = (%s) AND id_reservation = (%s) ORDER BY date_checkin ASC', (id_hotel,id_reservation,))
         else:
-            cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false AND id_hotel = (%s)', (id_hotel,))
+            cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false AND id_hotel = (%s) ORDER BY date_checkin ASC', (id_hotel,))
 
         data = cursor.fetchall()
         json = []
@@ -498,11 +498,11 @@ def get_locations():
         id_hotel = args.get('id_hotel')
 
         if(email_client is not None):
-            cursor.execute('SELECT * FROM location WHERE LOWER(email_id) = LOWER(%s)', (email_client,))
+            cursor.execute('SELECT * FROM location WHERE LOWER(email_id) = LOWER(%s) ORDER BY date_checkin ASC', (email_client,))
         elif(id_hotel is not None):
-            cursor.execute('SELECT * FROM location WHERE id_hotel = %s', (id_hotel,))
+            cursor.execute('SELECT * FROM location WHERE id_hotel = %s ORDER BY date_checkin ASC', (id_hotel,))
         else:
-            cursor.execute('SELECT * FROM location')
+            cursor.execute('SELECT * FROM location ORDER BY date_checkin ASC')
 
         data = cursor.fetchall()
         json = []
@@ -545,7 +545,7 @@ def get_locations_by_id_location(id_location):
         connection = get_db_connection()
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
         
-        cursor.execute('SELECT * FROM location WHERE id_location = (%s)', (id_location,))
+        cursor.execute('SELECT * FROM location WHERE id_location = (%s) ORDER BY date_checkin ASC', (id_location,))
         data = cursor.fetchall()
         json = []
 
