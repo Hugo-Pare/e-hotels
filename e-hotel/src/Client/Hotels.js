@@ -114,7 +114,7 @@ function valide (hotel){
   if(province != 'null' && province != hotel.province_state){
     return false
   }
-  if(ville != 'null' && ville != hotel.ville){
+  if(ville != 'null' && ville != hotel.city){
     return false
   }
   return true
