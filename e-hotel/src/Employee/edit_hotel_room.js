@@ -209,7 +209,7 @@ function Edit_hotel_room(){
                 Vue:
                 <br/>
                 <select value={hotelVue} disabled={disabled} onChange={handleHotelVue}>
-                    <option value="null"></option>
+                    <option value="null">Aucune</option>
                     <option value="Mer">Mer</option>
                     <option value="Montagne">Montagne</option>
                     <option value="Foret">Foret</option>
