@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef, useLayoutEffect} from 'react';
 import { navigate, useLocation, useNavigate } from "react-router-dom";
 import 'react-datepicker/dist/react-datepicker.css';
+import './hotel_rooms_e.css'
 
 
 function Hotel_rooms_e() {
@@ -61,40 +62,49 @@ function handleSearch() {
 }
 
 
-  return (
-    <div className="hotel-rooms-container">
-      <div className="search">
+return (
+  <div className="hotel-rooms-container">
+    <div className="search">
       <h2>Hotel Rooms</h2>
-      <br/>
-      <label>Numéro de chambre : </label>
-      
-      <input type="num_chambre" name="num_chmabre" onChange={handleNumChambreChange} value={numChambre}/>
+      <br />
+      <label>Numéro de chambre :</label>
+
+      <input
+        type="num_chambre"
+        name="num_chmabre"
+        onChange={handleNumChambreChange}
+        value={numChambre}
+      />
       <button onClick={handleSearch}>Search</button>
-      <button onClick={handleClear}>Clear</button> 
+      <button onClick={handleClear}>Clear</button>
     </div>
-{loaded ?
-      <div className="table-panel">
-      <table className="room-table">
+
+    <div className="table-panel">
+      {loaded ? (
+        <table className="room-table">
           <thead>
-              <tr key="titles">
-                  <th>Numéro de chambre</th>
-              </tr>
+            <tr key="titles">
+              <th>Numéro de chambre</th>
+            </tr>
           </thead>
           <tbody>
-              {showRooms.map((chambre) => (
-                  <tr key={(chambre.room_num)}>
-                      <td>{chambre.room_num}</td>
-                      <td><button onClick={handleEdit} value={chambre.room_num}>Edit</button></td>
-                      
-                  </tr>
-              ))}
+            {showRooms.map((chambre) => (
+              <tr key={chambre.room_num}>
+                <td>{chambre.room_num}</td>
+                <td>
+                  <button onClick={handleEdit} value={chambre.room_num}>
+                    Edit
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
-      </div>
-      : <div>Loading Rooms ...</div>}
-      </div>
-      
-
-  );      
+      ) : (
+        <div>Loading Rooms ...</div>
+      )}
+    </div>
+  </div>
+);     
 }
 export default Hotel_rooms_e;

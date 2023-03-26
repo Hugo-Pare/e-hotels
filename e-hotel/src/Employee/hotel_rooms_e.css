@@ -1,0 +1,20 @@
+
+.table-panel {
+    flex: 1;
+  }
+
+.hotel-rooms-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .room-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .room-table th,
+  .room-table td {
+    text-align: center;
+  }
