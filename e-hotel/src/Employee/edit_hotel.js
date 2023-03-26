@@ -114,11 +114,7 @@ function Edit_hotel(){
       function handleNumRue(event) {
         setNumRue(parseInt(event.target.value))
       }
-
-      function handleNb_chambre(event) {
-        setNb_chambre(event.target.value)
-      }
-
+      
       function handleEmail(event){
         setEmail(event.target.value)
       }
@@ -228,7 +224,7 @@ function Edit_hotel(){
             <label>
                 Nombre de chambre:
                 <br/>
-                <input disabled={disabled} value={nb_chambre} onChange={handleNb_chambre}/>
+                <input disabled={"disabled"} value={nb_chambre}/>
             </label>
             <br/>
             <label> 
