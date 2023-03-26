@@ -12,6 +12,10 @@ function Hotels() {
   const [pays, setPays] = useState("null");
   const [province, setProvince] = useState("null");
   const [ville, setVille] = useState("null");
+  const [listProvince, setListProvince] = useState([]);
+  const [listState, setListState] = useState([]);
+  let villeUs = [];
+  let villeCan = [];
   const [rating, setRating] = useState([]);
   const [chaines, setChaines] = useState();
   const [loaded, setLoaded] = useState(false)
@@ -25,6 +29,10 @@ function Hotels() {
     if(firstUpdate.current == true){
         getAllHotels();
         getChaines();
+        getProvince();
+        getStates();
+        getUsCities();
+        getCanCities();
         firstUpdate.current = false;
     }
   }, [])
@@ -64,20 +72,47 @@ async function getChaines(){
   });
 }
 
+function getProvince() {
+  fetch('http://127.0.0.1:5000/canada/provinces')
+  .then(response => response.json())
+  .then(function(json) {
+    setListProvince(json);
+});
+}
+function getStates() {
+  fetch('http://127.0.0.1:5000/us/states')
+  .then(response => response.json())
+  .then(function(json) {
+    setListState(json);
+});
+}
+function getUsCities() {
+  fetch('http://127.0.0.1:5000/us/cities')
+  .then(response => response.json())
+  .then(function(json) {
+    villeUs = json;
+});
+}
+function getCanCities() {
+  fetch('http://127.0.0.1:5000/canada/cities')
+  .then(response => response.json())
+  .then(function(json) {
+    console.log(json)
+    villeCan = json;
+});
+}
+
 function valide (hotel){
   if (chaineChecked.length> 0  && !chaineChecked.includes(hotel.id_chaine)){
-    console.log("checked")
     return false
   }
   if(rating != null && rating > hotel.rating){
-    console.log("rating")
     return false
   }
   if(pays != 'null' && pays != hotel.country){
-    console.log(pays)
     return false
   }
-  if(province != 'null' && province != hotel.province){
+  if(province != 'null' && province != hotel.province_state){
     return false
   }
   if(ville != 'null' && ville != hotel.ville){
@@ -89,7 +124,6 @@ function valide (hotel){
 function updateHotels(){
   let indexes = [];
   let tempList = [];
-  console.log(data)
   for(let i = 0 ; i <data.length; i++){
     if (true == valide(data[i])){
       indexes.push(i)
@@ -203,20 +237,51 @@ function updateHotels(){
               <option value="Etats-Unis">Etats-Unis</option>
               </select>
 
-              <h4 style={{marginBottom: "0"}}>
-              Province:
+            {pays == "Canada" ? <div> <h4 style={{marginBottom: "0"}}>
+              Province/state:
               </h4>
               <select disabled={disabledProvince} onChange={handleProvince}>
               <option value="null">Faites selection</option>
-              <option value="test">Test</option>
+              {listProvince.map((province) => (<option value={province}>{province}</option>))}
               </select>
+              {/* <h4 style={{marginBottom: "0"}}>
+                        Ville:
+                        </h4>
+                        <select disabled={disabledVille} onChange={handleVille}>
+                        <option value="null">Faites selection</option>
+                        </select> */}
+                        </div>:<></>}
 
-              <h4 style={{marginBottom: "0"}}>
-              Ville:
+              {pays == "Etats-Unis" ? <div> <h4 style={{marginBottom: "0"}}>
+              State:
               </h4>
-              <select disabled={disabledVille} onChange={handleVille}>
+              <select disabled={disabledProvince} onChange={handleProvince}>
+              <option value="null">Faites selection</option>
+              {listState.map((state) => (<option value={state}>{state}</option>))}
+              </select>
+              {/* <h4 style={{marginBottom: "0"}}>
+                        Ville:
+                        </h4>
+                        <select disabled={disabledVille} onChange={handleVille}>
+                        <option value="null">Faites selection</option>
+                        </select> */}
+                        </div>:<></>}
+
+              {pays == "null" ? <div> <h4 style={{marginBottom: "0"}}>
+              Province/State:
+              </h4>
+              <select disabled={disabledProvince} onChange={handleProvince}>
               <option value="null">Faites selection</option>
               </select>
+                        {/* <h4 style={{marginBottom: "0"}}>
+                        Ville:
+                        </h4>
+                        <select disabled={disabledVille} onChange={handleVille}>
+                        <option value="null">Faites selection</option>
+                        {villeUs}}
+                        </select> */}
+                        </div>:<></>}
+
         </div>
       <div className="button-container">
               <button onClick={search}>Search</button>
@@ -226,7 +291,6 @@ function updateHotels(){
     {loaded ?
     
         <div className="grid-container-hotels">
-          {console.log(showHotels)}
                 {showHotels.map((hotel) => (
                     <div className="card" key={hotel.id_hotel} onClick={() => handleClick(hotel.id_hotel)}>
                         <img src={hotelImg} alt="hotel" style={{width:'100%'}}/>
