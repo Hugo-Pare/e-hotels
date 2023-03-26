@@ -15,6 +15,7 @@ function Edit_hotel(){
     const [postal, setPostal] = useState();
     const [numRue, setNumRue] = useState();
     const[email, setEmail] = useState();
+    const[rating, setRating] = useState();
     const[nb_chambre, setNb_chambre] = useState();
     const[telephone, setTelephone] = useState();
     const [disabled, setDisabled] = useState(true);
@@ -37,11 +38,13 @@ function Edit_hotel(){
         "email": email,
         "province_state": provinceState,
         "nb_chambre": nb_chambre,
+        "rating": rating,
         "street_name": rue,
-        "street_num": numRue.toString(),
+        "street_num": numRue,
         "telephone": telephone.toString(),
         "zip_code": postal
     }
+    console.log(JSON.stringify(json))
       
       fetch(`http://127.0.0.1:5000/hotels/info/${id_hotel}`, {
             method: "PATCH",
@@ -66,11 +69,12 @@ function Edit_hotel(){
             data = json[0]
             console.log(data)
             setPays(data.country)
+            setRating(data.rating)
             setProvinceState(data.province_state)
             setVille(data.city)
             setPostal(data.zip_code)
             setRue(data.street_name)
-            setNumRue(data.street_num)
+            setNumRue(parseInt(data.street_num))
             setEmail(data.email)
             setNb_chambre(data.nb_chambre)
             setTelephone(data.telephone)
@@ -108,7 +112,7 @@ function Edit_hotel(){
       }
 
       function handleNumRue(event) {
-        setNumRue(event.target.value)
+        setNumRue(parseInt(event.target.value))
       }
 
       function handleNb_chambre(event) {
@@ -121,6 +125,10 @@ function Edit_hotel(){
 
       function handleTelephone(event){
         setTelephone(event.target.value)
+      }
+
+      function handleRating(event){
+          setRating(event.target.value)
       }
 
       function handleEdit() {
@@ -176,8 +184,32 @@ function Edit_hotel(){
 
     return(
         <div>
-            <h3>Information de l'hotel</h3>
-            <h3>Adresse:</h3>
+            <h3>Information de l'hotel {id_hotel}</h3>
+            <h4>Adresse:</h4>
+            <label>
+                Numero Adresse:
+                <br/>
+                <input value={numRue}  disabled={disabled} onChange={handleNumRue}/>
+            </label>
+            <br/>
+            <label>
+                Rue:
+                <br/>
+                <input value={rue}  disabled={disabled} onChange={handleRue}/>
+            </label>
+            <br/>
+            <label>
+                Ville:
+                <br/>
+                <input value={ville}  disabled={disabled} onChange={handleVille}/>
+            </label>
+            <br/>
+            <label>
+                Province/State:
+                <br/>
+                <input value={provinceState} disabled={disabled} onChange={handleProvince}/>
+            </label>
+            <br/>
             <label>
                 Pays:
                 <br/>
@@ -188,40 +220,29 @@ function Edit_hotel(){
             </label>
             <br/>
             <label>
-                Province/State:
-                <br/>
-                <input value={provinceState} disabled={disabled} onChange={handleProvince}/>
-            </label>
-            <br/>
-           
-            <label>
-                Ville:
-                <br/>
-                <input value={ville}  disabled={disabled} onChange={handleVille}/>
-            </label>
-            <br/>
-            <label>
                 Postal/Zip:
                 <br/>
                 <input value={postal}  disabled={disabled} onChange={handlePostal}/>
             </label>
             <br/>
-            <label>
-                Rue:
-                <br/>
-                <input value={rue}  disabled={disabled} onChange={handleRue}/>
-            </label>
             <br/>
-            <label>
-                Numero Adresse:
-                <br/>
-                <input value={numRue}  disabled={disabled} onChange={handleNumRue}/>
-            </label>
-            <br/>
+            <h4>Hotel: </h4>
             <label>
                 Nombre de chambre:
                 <br/>
                 <input disabled={disabled} value={nb_chambre} onChange={handleNb_chambre}/>
+            </label>
+            <br/>
+            <label> 
+                Rating:
+                <br/>
+                <select value={rating} disabled={disabled} onChange={handleRating}>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
             </label>
             <br/>
             <label>
