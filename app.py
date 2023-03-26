@@ -1019,9 +1019,27 @@ def get_canada_cities():
         cursor.execute('SELECT province_state,ville FROM hotel WHERE pays = (%s) GROUP BY province_state,ville', ('Canada',))
         data = cursor.fetchall()
         json = []
+        provinces = []
+        cities = []
 
         for i in range(len(data)):
-            json.append({data[i][0]: data[i][1]})
+            provinces.append(data[i][0])
+            provinces = [i for n, i in enumerate(provinces) if i not in provinces[:n]]
+
+        for i in range(len(provinces)):
+            cities.append([])
+
+        for i in range(len(data)):
+            index = provinces.index(data[i][0])
+            cities[index].append(data[i][1])
+
+        for i in range(len(provinces)):
+            tmp = []
+            for j in range(len(cities[i])):
+                tmp.append(cities[i][j])
+            json.append({
+                provinces[i]: tmp
+            })
 
         return json
 
@@ -1053,10 +1071,29 @@ def get_us_cities():
 
         cursor.execute('SELECT province_state,ville FROM hotel WHERE pays = (%s) GROUP BY province_state,ville', ('Etats-Unis',))
         data = cursor.fetchall()
+        
         json = []
+        states = []
+        cities = []
 
         for i in range(len(data)):
-            json.append({data[i][0]: data[i][1]})
+            states.append(data[i][0])
+            states = [i for n, i in enumerate(states) if i not in states[:n]]
+
+        for i in range(len(states)):
+            cities.append([])
+
+        for i in range(len(data)):
+            index = states.index(data[i][0])
+            cities[index].append(data[i][1])
+
+        for i in range(len(states)):
+            tmp = []
+            for j in range(len(cities[i])):
+                tmp.append(cities[i][j])
+            json.append({
+                states[i]: tmp
+            })
 
         return json
 
