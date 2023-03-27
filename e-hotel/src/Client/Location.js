@@ -23,11 +23,6 @@ const Location = () => {
   });
   }
 
-  function handlePayment(event) {
-
-    alert("faire payment")
-  }
-
     return (
       <div>
       <h2>Voici vos locations</h2>
@@ -57,9 +52,6 @@ const Location = () => {
                 <td>{format(Date.parse(location.date_checkout), 'yyyy-MM-dd')}</td>
                 <td>${location.frais_total}</td>
                 <td>${location.frais_restant}</td>
-                <td>
-                    <button value={location.id_reservation} onClick={handlePayment}>Payment</button>
-                </td>
               </tr>
             ))}
           </tbody>
