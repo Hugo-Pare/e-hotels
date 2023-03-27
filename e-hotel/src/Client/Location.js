@@ -23,6 +23,11 @@ const Location = () => {
   });
   }
 
+  function handlePayment(event) {
+
+    alert("faire payment")
+  }
+
     return (
       <div>
       <h2>Voici vos locations</h2>
@@ -30,8 +35,8 @@ const Location = () => {
         <table className="room-table">
           <thead>
             <tr key="titles">
-              <th>id location</th>
-              <th>chaine</th>
+              <th>Id location</th>
+              <th>Chaine</th>
               <th>Adresse</th>
               <th># chambre</th>
               <th>CheckIn</th>
@@ -45,13 +50,16 @@ const Location = () => {
               
               <tr key={location.id_location}>
                 <td>{location.id_location}</td>
-                <td>nom de chaine</td>
-                <td>Adresse</td>
+                <td>{location.nom_chaine}</td>
+                <td>{location.street_num + ", " + location.street_name + ", " + location.city + ", " + location.postal_code.trim() + ", " + location.province_state+ ", " + location.country}</td>
                 <td>{location.num_chambre}</td>
                 <td>{format(Date.parse(location.date_checkin), 'yyyy-MM-dd')}</td>
                 <td>{format(Date.parse(location.date_checkout), 'yyyy-MM-dd')}</td>
                 <td>${location.frais_total}</td>
                 <td>${location.frais_restant}</td>
+                <td>
+                    <button value={location.id_reservation} onClick={handlePayment}>Payment</button>
+                </td>
               </tr>
             ))}
           </tbody>

@@ -18,7 +18,6 @@ const Reservation = () => {
     fetch(`http://127.0.0.1:5000/reservations/pending?email_client=${email_client}`)
     .then(response => response.json())
     .then(function(json) {
-      console.log(json)
       setReservations(json)
   });
   }
@@ -34,9 +33,9 @@ const Reservation = () => {
       })
       .then(response => response.json())
       .then(function(json){
-          console.log(json)
+        window.location.reload(false);
       })
-      window.location.reload(false);
+      
   }
   else{
       // do nothing
@@ -65,7 +64,7 @@ const Reservation = () => {
               
               <tr key={reservation.id_reservation}>
                 <td>{reservation.id_reservation}</td>
-                <td>{reservation.nom_chaine}</td>{console.log(reservation.postal_code+".")}
+                <td>{reservation.nom_chaine}</td>
                 <td>{reservation.street_num + ", " + reservation.street_name + ", " + reservation.city + ", " + reservation.postal_code.trim() + ", " + reservation.province_state+ ", " + reservation.country}</td>
                 <td>{reservation.num_chambre}</td>
                 <td>{format(Date.parse(reservation.date_checkin), 'yyyy-MM-dd')}</td>
