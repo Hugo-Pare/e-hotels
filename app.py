@@ -1279,6 +1279,27 @@ def update_reservations(id_reservation):
     except Exception as e:
         print(e)
 
+@app.route('/locations/<id_location>', methods=['PATCH']) 
+def update_location(id_location):
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        args = request.args
+        frais_restant = args.get('frais_restant')
+
+        json = []
+
+        if(frais_restant is not None):
+            cursor.execute('UPDATE location SET frais_restant = (%s) WHERE id_location = (%s)', (frais_restant,id_location,))
+            json.append({"updated amount": frais_restant})
+        
+        connection.commit()
+
+        return json
+
+    except Exception as e:
+        print(e)
+
 @app.route('/hotels/info/<id_hotel>', methods=['PATCH'])
 def update_hotel_info_by_id(id_hotel):
     try:

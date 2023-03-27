@@ -68,6 +68,8 @@ PATCH:
 	/reservations/id_reservation?checkedin=X
 	/reservations/id_reservation?frais_restant=X
 
+	/locations/id_location?frais_restant=X
+
 	/hotels/info/id_hotel
 
 	/rooms/info/id_hotel/room_num
