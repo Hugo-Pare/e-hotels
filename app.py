@@ -339,7 +339,7 @@ def get_reservations():
                 "street_name": data[i][10],
                 "street_num": data[i][11],
                 "postal_code": data[i][12],
-                "id_chaine": data[i][13],
+                "nom_chaine": data[i][13],
                 "country": data[i][14],
                 "province_state": data[i][15],
                 "city": data[i][16]
@@ -459,7 +459,7 @@ def get_reservations_pending():
                 "street_name": data[i][10],
                 "street_num": data[i][11],
                 "postal_code": data[i][12],
-                "id_chaine": data[i][13],
+                "nom_chaine": data[i][13],
                 "country": data[i][14],
                 "province_state": data[i][15],
                 "city": data[i][16]
@@ -559,7 +559,7 @@ def get_locations():
                 "street_name": data[i][10],
                 "street_num": data[i][11],
                 "postal_code": data[i][12],
-                "id_chaine": data[i][13],
+                "nom_chaine": data[i][13],
                 "country": data[i][14],
                 "province_state": data[i][15],
                 "city": data[i][16]
