@@ -18,6 +18,7 @@ function Hotels() {
   const [villeCan, setVilleCan] = useState([]);
   const [rating, setRating] = useState([]);
   const [chaines, setChaines] = useState();
+  const [nbChambre, setNbChambre] = useState();
   const [loaded, setLoaded] = useState(false)
   const [chainesLoaded, setChainesLoaded] = useState(false)
   const navigate = useNavigate();
@@ -105,6 +106,9 @@ function valide (hotel){
   if (chaineChecked.length> 0  && !chaineChecked.includes(hotel.id_chaine)){
     return false
   }
+  if(nbChambre !=null && nbChambre>hotel.nb_chambre){
+    return false
+  }
   if(rating != null && rating > hotel.rating){
     return false
   }
@@ -163,19 +167,10 @@ function updateHotels(){
   function handleRating(event) {
     setRating(event.target.value)
   }
-
-  function handleProvince(event) {
-    if(event.target.value == "null") {
-      setDisabledVille(true)
-    } else {
-      setDisabledVille(false)
-    }
-    setProvince(event.target.value);
+  function handleNbChambre(event){
+    setNbChambre(event.target.value);
   }
 
-  function handleVille(event){
-    setVille(event.target.value);
-  }
 
   function handlePays(event) {
     if(event.target.value == "null") {
@@ -187,6 +182,21 @@ function updateHotels(){
     }
     setPays(event.target.value)
   }
+
+  function handleProvince(event) {
+    if(event.target.value == "null") {
+      setDisabledVille(true)
+    } else {
+      setDisabledVille(false)
+    }
+    setProvince(event.target.value);
+  }
+
+
+  function handleVille(event){
+    setVille(event.target.value);
+  }
+
 
   function search() {
     setLoaded(false)
@@ -224,6 +234,12 @@ function updateHotels(){
               <option value="5">5</option>
               </select>
             </div>
+
+            <h4>
+                Nombre de Chambre:
+                <br/>
+                <input type="number" onChange={handleNbChambre} value={nbChambre}/>
+            </h4>
 
         <div className='zone-filter'>
 
