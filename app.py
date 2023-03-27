@@ -317,7 +317,10 @@ def get_reservations():
     try:
         connection = get_db_connection()
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cursor.execute('SELECT * FROM reservation ORDER BY date_checkin ASC')
+        cursor.execute('''
+        SELECT id_reservation,reservation.id_hotel,reservation.num_chambre,reservation.email_id,reservation.date_checkin,reservation.date_checkout,
+        frais_total,frais_restant,canceler, locationcreer, hotel.rue, hotel.num_rue, hotel.postal_zip_code, chaine.nom_chaine,hotel.pays,hotel.province_state,hotel.ville
+        from reservation join hotel on reservation.id_hotel = hotel.id_hotel join chaine on hotel.fk_chaine = chaine.id_chaine ORDER BY date_checkin ASC''')
         data = cursor.fetchall()
         json = []
 
@@ -332,7 +335,14 @@ def get_reservations():
                 "frais_total": data[i][6],
                 "frais_restant": data[i][7],
                 "canceled": data[i][8],
-                "location": data[i][9]
+                "location": data[i][9],
+                "street_name": data[i][10],
+                "street_num": data[i][11],
+                "postal_code": data[i][12],
+                "id_chaine": data[i][13],
+                "country": data[i][14],
+                "province_state": data[i][15],
+                "city": data[i][16]
             })
 
         return json
@@ -420,9 +430,17 @@ def get_reservations_pending():
         email_client = args.get('email_client')
 
         if(email_client is not None):
-            cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false AND LOWER(email_id) = LOWER(%s) ORDER BY date_checkin ASC', (email_client,))
+            cursor.execute('''
+            SELECT id_reservation,reservation.id_hotel,reservation.num_chambre,reservation.email_id,reservation.date_checkin,reservation.date_checkout,
+            frais_total,frais_restant,canceler, locationcreer, hotel.rue, hotel.num_rue, hotel.postal_zip_code, chaine.nom_chaine,hotel.pays,hotel.province_state,hotel.ville
+            from reservation join hotel on reservation.id_hotel = hotel.id_hotel join chaine on hotel.fk_chaine = chaine.id_chaine 
+            WHERE reservation.canceler = false AND reservation.locationcreer = false AND LOWER(reservation.email_id) = LOWER(%s) ORDER BY reservation.date_checkin ASC''', (email_client,))
         else:
-            cursor.execute('SELECT * FROM reservation WHERE canceler = false AND locationcreer = false ORDER BY date_checkin ASC')
+            cursor.execute('''
+            SELECT id_reservation,reservation.id_hotel,reservation.num_chambre,reservation.email_id,reservation.date_checkin,reservation.date_checkout,
+            frais_total,frais_restant,canceler, locationcreer, hotel.rue, hotel.num_rue, hotel.postal_zip_code, chaine.nom_chaine,hotel.pays,hotel.province_state,hotel.ville 
+            from reservation join hotel on reservation.id_hotel = hotel.id_hotel join chaine on hotel.fk_chaine = chaine.id_chaine
+            WHERE reservation.canceler = false AND reservation.locationcreer = false ORDER BY reservation.date_checkin ASC''')
         data = cursor.fetchall()
         json = []
 
@@ -437,7 +455,14 @@ def get_reservations_pending():
                 "frais_total": data[i][6],
                 "frais_restant": data[i][7],
                 "canceled": data[i][8],
-                "location": data[i][9]
+                "location": data[i][9],
+                "street_name": data[i][10],
+                "street_num": data[i][11],
+                "postal_code": data[i][12],
+                "id_chaine": data[i][13],
+                "country": data[i][14],
+                "province_state": data[i][15],
+                "city": data[i][16]
             })
 
         return json
@@ -498,11 +523,23 @@ def get_locations():
         id_hotel = args.get('id_hotel')
 
         if(email_client is not None):
-            cursor.execute('SELECT * FROM location WHERE LOWER(email_id) = LOWER(%s) ORDER BY date_checkin DESC', (email_client,))
+            cursor.execute('''
+            SELECT location.id_location,location.frais_restant,location.frais_total,location.date_checkin,location.date_checkout,location.email_id,location.num_chambre,
+            location.id_hotel,location.id_reservation,location.id_employe,hotel.rue,hotel.num_rue,hotel.postal_zip_code,chaine.nom_chaine,hotel.pays,hotel.province_state,hotel.ville
+            FROM location JOIN hotel 
+            ON location.id_hotel = hotel.id_hotel JOIN chaine ON hotel.fk_chaine = chaine.id_chaine WHERE LOWER(email_id) = LOWER(%s) ORDER BY date_checkin DESC''', (email_client,))
         elif(id_hotel is not None):
-            cursor.execute('SELECT * FROM location WHERE id_hotel = %s ORDER BY date_checkin DESC', (id_hotel,))
+            cursor.execute('''
+            SELECT location.id_location,location.frais_restant,location.frais_total,location.date_checkin,location.date_checkout,location.email_id,location.num_chambre,
+            location.id_hotel,location.id_reservation,location.id_employe,hotel.rue,hotel.num_rue,hotel.postal_zip_code,chaine.nom_chaine,hotel.pays,hotel.province_state,hotel.ville
+            FROM location JOIN hotel 
+            ON location.id_hotel = hotel.id_hotel JOIN chaine ON hotel.fk_chaine = chaine.id_chaine WHERE id_hotel = %s ORDER BY date_checkin DESC''', (id_hotel,))
         else:
-            cursor.execute('SELECT * FROM location ORDER BY date_checkin DESC')
+            cursor.execute('''
+            SELECT location.id_location,location.frais_restant,location.frais_total,location.date_checkin,location.date_checkout,location.email_id,location.num_chambre,
+            location.id_hotel,location.id_reservation,location.id_employe,hotel.rue,hotel.num_rue,hotel.postal_zip_code,chaine.nom_chaine,hotel.pays,hotel.province_state,hotel.ville
+            FROM location JOIN hotel 
+            ON location.id_hotel = hotel.id_hotel JOIN chaine ON hotel.fk_chaine = chaine.id_chaine ORDER BY date_checkin DESC''')
 
         data = cursor.fetchall()
         json = []
@@ -518,7 +555,14 @@ def get_locations():
                 "num_chambre": data[i][6],
                 "id_hotel": data[i][7],
                 "id_reservation": data[i][8],
-                "id_employe": data[i][9]
+                "id_employe": data[i][9],
+                "street_name": data[i][10],
+                "street_num": data[i][11],
+                "postal_code": data[i][12],
+                "id_chaine": data[i][13],
+                "country": data[i][14],
+                "province_state": data[i][15],
+                "city": data[i][16]
             })
 
         return json
