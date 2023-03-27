@@ -63,7 +63,7 @@ function handleSearch() {
 
 
 return (
-  <div className="hotel-rooms-container">
+  <div className="hotel-edit-rooms-container">
     <div className="search">
       <h2>Hotel Rooms</h2>
       <br />
@@ -79,9 +79,9 @@ return (
       <button onClick={handleClear}>Clear</button>
     </div>
 
-    <div className="table-panel">
+    <div className="table-edit-rooms-panel">
       {loaded ? (
-        <table className="room-table">
+        <table className="room-edit-rooms-table">
           <thead>
             <tr key="titles">
               <th>Numéro de chambre</th>

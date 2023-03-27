@@ -1,20 +1,20 @@
-/* .table-panel {
+.table-edit-rooms-panel {
     display: flex;
     flex: 1;
     width: 100%;
     height: 100%;
   }
-  .hotel-rooms-container {
+  .hotel-edit-rooms-container {
     display: flex;
     flex-direction: column;
   }
   
-  .room-table {
+  .room-edit-rooms-table {
     width: 100%;
     border-collapse: collapse;
   }
   
-  .room-table th,
-  .room-table td {
+  .room-edit-rooms-table th,
+  .room-edit-rooms-table td {
     text-align: center;
-  } */
+  }
