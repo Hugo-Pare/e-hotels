@@ -10,7 +10,7 @@ const Navbar_e = () => {
         <button className="dropbtn">Réservations</button>
         <div className="dropdown-content">
           <a href="/employeeIn">Actifs</a>
-          <a href="">Cancelé</a>
+          <a href="/employeeIn/reservationsCanceles">Cancelé</a>
         </div>
       </div>
       <div className="dropdown">
