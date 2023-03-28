@@ -7,9 +7,9 @@ function Location_existante(){
     const id_employe = sessionStorage.getItem("id")
     const id_hotel = sessionStorage.getItem("hotel_id")
     const navigate = useNavigate();
+    const [data, setData] =  useState();
     const [idHotel, setIdHotel] = useState("")
     const [loaded, setLoaded] = useState(false)
-    const [data, setData] = useState([])
     const [email, setEmail] = useState("")
 
     useEffect(() => {
@@ -18,7 +18,7 @@ function Location_existante(){
 
 
     async function getAllLocations(){
-        fetch(`http://127.0.0.1:5000/locations?id_hotel=24${id_hotel}`)
+        fetch(`http://127.0.0.1:5000/locations?id_hotel=${id_hotel}`)
         .then(response => response.json())
         .then(function(json){
             setLoaded(true)
@@ -65,17 +65,35 @@ function Location_existante(){
         getAllLocations()
     }
 
-    function handlePayment(event){
-        const id_reservation = event.target.value
-        console.log("clicked location, id_reservation = " + id_reservation)
-        // navigate to location page
-        navigate('/employeeIn/location', {
-            state: {
-                reservationId: id_reservation,
-                id_employe: id_employe
-            }
-        });
-    }
+    async function handlePayment(location) {
+        if (location.frais_restant === '0.00') {
+          alert('La chambre a déjà été payée !')
+        } else {
+          var amount = parseFloat(prompt('Veuillez entrer le montant à payer :')).toFixed(2)
+          while (Number(amount) > Number(parseFloat(location.frais_restant).toFixed(2))) {
+            amount = parseFloat(prompt('Le montant ne peut pas dépassé la valeur restante, entrez à nouveau :')).toFixed(2)
+          }
+      
+          if (!isNaN(amount)) {
+            const newAmount = parseFloat(parseFloat(location.frais_restant).toFixed(2) - amount).toFixed(2)
+            console.log(newAmount)
+      
+            setLoaded(false)
+            setData()
+      
+            // update reservation.frais_restant = newAmount
+            fetch(`http://127.0.0.1:5000/locations/${location.id_location}?frais_restant=${newAmount}`, {
+              method: "PATCH"
+            })
+            .then(response => response.json())
+            .then(function(json) {
+              console.log(json)
+              getAllLocations()
+            })
+          }
+        }
+      }
+    
 
     return(
         <>
@@ -108,7 +126,7 @@ function Location_existante(){
                         <tbody>
                             {data[0].map((location) => (
                                 <tr key={location.id_location}>
-                                    <td>{location.id_reservation}</td>
+                                    <td>{location.id_location}</td>
                                     <td>{format(Date.parse(location.date_checkin), 'yyyy-MM-dd')}</td>
                                     <td>{format(Date.parse(location.date_checkout), 'yyyy-MM-dd')}</td>
                                     <td>{location.email_id}</td>
@@ -116,7 +134,7 @@ function Location_existante(){
                                     <td>${location.frais_total}</td>
                                     <td>${location.frais_restant}</td>
                                     <td>
-                                        <button value={location.id_reservation} onClick={handlePayment}>Payer</button>
+                                    <button onClick={() => handlePayment(location)}>Payer</button>
                                     </td>
                                 </tr>
                             ))}
