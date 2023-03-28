@@ -1,5 +1,8 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable eqeqeq */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef, useLayoutEffect} from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from "react-router-dom";
 
 function Create_location() {
   
@@ -19,7 +22,10 @@ function Create_location() {
     const ref3 = useRef(false);
     const ref4 = useRef(false);
 
+    const navigate = useNavigate();
+
     const hotel_id = sessionStorage.getItem("hotel_id")
+    const id_employe = sessionStorage.getItem("id")
 
     useEffect(() => {
         getAllRooms()
@@ -139,8 +145,29 @@ function Create_location() {
       function clear() {
         window.location.reload(false);
       }
-      function handleLocation() {
-        console.log("location needs to be implemented");
+      function handleLocation(event) {
+        if(checkInDate === undefined || checkOutDate === undefined){
+          alert("Veuillez sélectionner des dates de check-in et de check-out pour rechercher des chambres disponibles")
+        }
+        else{
+          const array = event.target.value.split(",")
+          const num = array[0]
+          const prix = array[1]
+          
+          console.log("handleLocation " + num);
+          console.log("prix: " + prix)
+          // navigate to location page
+          navigate('/employeeIn/chooseClient', {
+            state: {
+                room_num: num,
+                prix: prix,
+                id_employe: id_employe,
+                hotel_id: hotel_id,
+                date_checkin: checkInDate,
+                date_checkout: checkOutDate
+            }
+          });
+        }
       }
 
   return (
@@ -239,8 +266,7 @@ function Create_location() {
                       <td>{chambre.oven.toString()}</td>
                       <td>{chambre.vue}</td>
                       {/* <td>{chambre.rating}</td> */}
-                      <td><button value={chambre.num} onClick={handleLocation}>Location</button></td>
-                      
+                      <td><button value={[chambre.room_num,chambre.prix]} onClick={handleLocation}>Location</button></td>
                   </tr>
               ))}
           </tbody>

@@ -23,6 +23,8 @@ import Edit_hotel_room from './Employee/edit_hotel_room';
 import Edit_hotel from './Employee/edit_hotel'
 import LocationClient from './Client/Location';
 import Location_existante from './Employee/location_existante'
+import Choose_Client from './Employee/chooseClient';
+import Employee_Create_Location from './Employee/employeeCreateLocation';
 
 import { BrowserRouter as Router, Routes, Route, React} from 'react-router-dom';
 
@@ -54,6 +56,8 @@ function App() {
             <Route exact path='/employeeIn/edit_hotel' element={<><Navbar_e />< Edit_hotel/></>}/>
             <Route exact path="/employeeIn/createLocation" element={<><Navbar_e />< CreateLocation/></>}></Route>
             <Route exact path="/employeeIn/locationExistante" element={<><Navbar_e />< Location_existante/></>}></Route>
+            <Route exact path="/employeeIn/chooseClient" element={<><Navbar_e />< Choose_Client/></>}></Route>
+            <Route exact path="/employeeIn/employeeCreateLocation" element={<><Navbar_e /><Employee_Create_Location/></>}></Route>
         </Route>
       </Routes>
     </Router>
