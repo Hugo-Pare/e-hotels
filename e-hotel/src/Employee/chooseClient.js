@@ -120,7 +120,7 @@ function ChooseClient() {
                                     <td>{client.telephone}</td>
                                     <td>{client.country}</td>
                                     <td>
-                                        <button value={client.email} onClick={chooseClient}>Location</button>
+                                        <button value={client.email} onClick={chooseClient}>Sélectionner</button>
                                     </td>
                                 </tr>
                             ))}

@@ -3,7 +3,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef, useLayoutEffect} from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
-import { format } from 'date-fns'
 
 function EmployeeCreateLocation(){
     const navigate = useNavigate();
@@ -112,22 +111,22 @@ function EmployeeCreateLocation(){
                     <h1>Créer Location</h1>
                     <div>
                         <label>Email du client : </label>
-                        <input value={email_client} readOnly></input>
+                        <label>{email_client}</label>
                         <br/>
                         <label>Numéro de chambre : </label>
-                        <input value={room_num} readOnly></input>
+                        <label>{room_num}</label>
                         <br/>
                         <label>Date de Check-In : </label>
-                        <input value={date_checkin} readOnly></input>
+                        <label>{date_checkin}</label>
                         <br/>
                         <label>Date de Check-Out : </label>
-                        <input value={date_checkout} readOnly></input>
+                        <label >{date_checkout}</label>
                         <br/>
                         <label>Frais Total : </label>
-                        <input value={prix_total} readOnly></input>
+                        <label >{prix_total}</label>
                         <br/>
                         <label>Frais Restant : </label>
-                        <input value={frais_restant} readOnly></input>
+                        <label>{frais_restant} </label>
                         <br/>
                         <button onClick={handlePayment}>Faire un Paiement</button>
                         <br/>

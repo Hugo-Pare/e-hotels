@@ -132,7 +132,7 @@ function Edit_hotel(){
       }
 
       function save() {
-        if (!pays || !provinceState || !ville || !postal || !rue || !numRue || !nb_chambre || !email || !telephone) {
+        if (!pays || !provinceState || !ville || !postal || !rue || !numRue || !email || !telephone) {
           alert("S'il vous plait remplir tout les champs");
           return;
         }

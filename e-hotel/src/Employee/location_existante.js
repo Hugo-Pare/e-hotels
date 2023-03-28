@@ -15,7 +15,7 @@ function Location_existante(){
 
     useEffect(() => {
         getAllLocations()
-    }, []) // ne pas changer, ca marche - touche pas :)
+    }, []) 
 
 
     async function getAllLocations(){
@@ -38,7 +38,7 @@ function Location_existante(){
           setData([]);
           setLoaded(false);
       
-          fetch(`http://127.0.0.1:5000/reservations/pending/${idHotel}?email_client=${email}&id_reservation=${id_location}`)
+          fetch(`http://127.0.0.1:5000/location?email_client=${email}&id_reservation=${id_location}`)
             .then((response) => response.json())
             .then(function (json) {
               setLoaded(true);
