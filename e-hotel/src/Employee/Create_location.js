@@ -141,7 +141,7 @@ function Create_location() {
       }
       function handleLocation(event) {
         if(checkOutDate === undefined || checkOutDate == ""){
-          alert("Veuillez sélectionner une date check-out")
+          alert("SVP selectione une date checkout!")
         } else if(!allowLocation){
           alert("Veuillez appuyer le search pour appliquer la date check-out et autre filters avant de selectionner une chambre")
         } else if(dateChange) {
