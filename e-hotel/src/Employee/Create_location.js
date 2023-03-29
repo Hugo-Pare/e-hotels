@@ -2,17 +2,15 @@
 /* eslint-disable eqeqeq */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef, useLayoutEffect} from 'react';
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Create_location() {
   
-    // const [showRooms, setShowRooms] = useState([])
     const [checkInDate, setCheckIn] = useState();
     const [checkOutDate, setCheckOut] = useState();
     const [minPrice, setMinPrice] = useState();
     const [maxPrice, setMaxPrice] = useState();
     const [capacite, setCapacite] = useState();
-    const [rating, setRating] = useState();
     const [loaded, setLoaded] = useState(false);
     const [data, setData] = useState();
     const [showRooms, setShowRooms] = useState();
@@ -123,9 +121,7 @@ function Create_location() {
       function handleCapacite(event) {
         setCapacite(event.target.value)
       }
-      function handleRating(event) {
-        setRating(event.target.value)
-      }
+     
       function search() {
         if (checkInDate == null || checkOutDate == null) {
             alert("SVP selectione une date checkin et checkout!")
@@ -214,19 +210,6 @@ function Create_location() {
               <option value="7">7</option>
               </select>
             </div>
-            <div className="rating-filter">
-              <h4 style={{ marginBottom:"0"}}>
-              Rating:
-              </h4>
-              <select onChange={handleRating}>
-              <option value="null">Faites selection</option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-              </select>
-            </div>
 
             <div className="button-container">
               <button onClick={search}>Search</button>
@@ -248,8 +231,7 @@ function Create_location() {
                 <th>Micro-Onde</th>
                 <th>Four</th>
                 <th>Vue</th>
-                  
-                  {/* <th>Rating</th> */}
+
               </tr>
           </thead>
           <tbody>
@@ -265,7 +247,7 @@ function Create_location() {
                       <td>{chambre.microwave.toString()}</td>
                       <td>{chambre.oven.toString()}</td>
                       <td>{chambre.vue}</td>
-                      {/* <td>{chambre.rating}</td> */}
+                     
                       <td><button value={[chambre.room_num,chambre.prix]} onClick={handleLocation}>Location</button></td>
                   </tr>
               ))}
