@@ -3,10 +3,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef, useLayoutEffect} from 'react';
 import { useNavigate } from "react-router-dom";
+import { format } from 'date-fns'
 
 function Create_location() {
   
-    const [checkInDate, setCheckIn] = useState();
+    const today = new Date();
+    const checkInDate = format(Date.parse(today), 'yyyy-MM-dd')
     const [checkOutDate, setCheckOut] = useState();
     const [minPrice, setMinPrice] = useState();
     const [maxPrice, setMaxPrice] = useState();
@@ -110,11 +112,8 @@ function Create_location() {
         setMinPrice(event.target.value)
       }
 
-      function handleCheckIn(event) {
-        setCheckIn(event.target.value)
-      }
-
       function handleCheckOut(event) {
+        console.log(event.target.value)
         setCheckOut(event.target.value)
       }
 
@@ -123,16 +122,12 @@ function Create_location() {
       }
      
       function search() {
-        if (checkInDate == null || checkOutDate == null) {
-            alert("SVP selectione une date checkin et checkout!")
+        if (checkOutDate == null) {
+            alert("SVP selectione une date checkout!")
             return null;
         }
-        if(checkInDate < new Date().toISOString().split('T')[0]){
-          alert("La date de checkin doit soit etre aujourdhui ou une journée qui suit!")
-          return null;
-        }
         if (checkInDate >= checkOutDate){
-          alert("La date de checkout doit venir apres la date de checkin")
+          alert("La date de checkout doit venir une journée au minimum apres la date d'aujourd'hui")
           return null;
         }
         setLoaded(false)
@@ -182,12 +177,12 @@ function Create_location() {
               </h4>
             </div>
             <div className="date-filter">
-            <h4 style={{marginTop: "0"}}>
+            {/* <h4 style={{marginTop: "0"}}>
               Check-in date:
               <div className="date-picker">
               <input type="date" value={checkInDate} onChange={handleCheckIn}></input>
               </div>
-              </h4>
+              </h4> */}
               <h4 style={{marginTop: "0"}}>
               Check-out date:
               <div className="date-picker">
