@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable eqeqeq */
 import React, { useState, useEffect, useRef, useLayoutEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -132,8 +134,21 @@ const updateRooms = () => {
     getRoomsForDates()
   };
 
-  const handleReservation = () => {
-    navigate('/clientIn/hotelRooms/reservation')
+  const handleReservation = (event) => {
+    const array = event.target.value.split(",")
+    const num = array[0]
+    const prix = array[1]
+
+    navigate('/clientIn/hotelRooms/reservation', {
+      state: {
+        id_hotel: sessionStorage.getItem("hotel_id"),
+        room_num: num,
+        id_email: sessionStorage.getItem("email_id"),
+        date_checkin: checkInDate,
+        date_checkout: checkOutDate,
+        frais_total: prix
+      }
+    })
   }
 
   const clear = () => {
@@ -241,7 +256,7 @@ const updateRooms = () => {
                       <td>{chambre.oven.toString()}</td>
                       <td>{chambre.vue}</td>
                       {/* <td>{chambre.rating}</td> */}
-                      <td><button value={chambre.num} onClick={handleReservation}>Réserver</button></td>
+                      <td><button value={[chambre.room_num,chambre.prix]} onClick={handleReservation}>Réserver</button></td>
                       
                   </tr>
               ))}
