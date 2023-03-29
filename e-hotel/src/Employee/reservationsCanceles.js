@@ -27,32 +27,10 @@ function Reservation_Canceles(){
         fetch(`http://127.0.0.1:5000/reservations/canceled`)
         .then(response => response.json())
         .then(function(json){
-            //setLoaded(true)
             setData(json)
             setShowReservation(json)
         })
     }
-
-    // async function getCanceledReservation(email){
-    //     if(email !== ""){
-    //         // fetch reservations by email
-    //         setData([])
-    //         setLoaded(false)
-
-    //         fetch(`http://127.0.0.1:5000/reservations/pending/${idHotel}?email_client=${email}`)
-    //         .then(response => response.json())
-    //         .then(function(json){
-    //             setLoaded(true)
-    //             setData([json])
-    //         })
-    //     }
-    //     else{
-    //         // refresh reservations
-    //         setData([])
-    //         setLoaded(false)
-    //         getAllCanceledReservations()
-    //     }
-    // }
 
     function handleEmailChange(event){
         setEmail(event.target.value)
@@ -69,12 +47,7 @@ function Reservation_Canceles(){
       }
 
     function handleClear(){
-        //window.location.reload(false);
-        console.log("clicked clear")
-        setEmail("")
-        setData([])
-        setLoaded(false)
-        getAllCanceledReservations()
+        window.location.reload(false);
     }
 
     return(
