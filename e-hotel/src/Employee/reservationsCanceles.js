@@ -1,67 +1,75 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import './first_page_e.css'
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { format } from 'date-fns'
+import { set } from 'date-fns/esm';
 
 function Reservation_Canceles(){
-    const navigate = useNavigate();
-
+    const id_hotel = sessionStorage.getItem("id_hotel")
     const [idHotel, setIdHotel] = useState("")
     const [loaded, setLoaded] = useState(false)
     const [data, setData] = useState([])
+    const [showReservation, setShowReservation] = useState([])
     const [email, setEmail] = useState("")
 
     useEffect(() => {
         getAllCanceledReservations()
-    }, []) // ne pas changer, ca marche - touche pas :)
+    }, []) 
 
-
+    useLayoutEffect(() => {
+        setLoaded(true)
+    }, [showReservation])
 
     async function getAllCanceledReservations(){
+        setLoaded(false)
         fetch(`http://127.0.0.1:5000/reservations/canceled`)
         .then(response => response.json())
         .then(function(json){
-            setLoaded(true)
-            setData([json])
+            //setLoaded(true)
+            setData(json)
+            setShowReservation(json)
         })
     }
 
-    async function getCanceledReservation(email){
-        if(email !== ""){
-            // fetch reservations by email
-            setData([])
-            setLoaded(false)
+    // async function getCanceledReservation(email){
+    //     if(email !== ""){
+    //         // fetch reservations by email
+    //         setData([])
+    //         setLoaded(false)
 
-            fetch(`http://127.0.0.1:5000/reservations/pending/${idHotel}?email_client=${email}`)
-            .then(response => response.json())
-            .then(function(json){
-                setLoaded(true)
-                setData([json])
-            })
-        }
-        else{
-            // refresh reservations
-            setData([])
-            setLoaded(false)
-            getAllCanceledReservations()
-        }
-    }
+    //         fetch(`http://127.0.0.1:5000/reservations/pending/${idHotel}?email_client=${email}`)
+    //         .then(response => response.json())
+    //         .then(function(json){
+    //             setLoaded(true)
+    //             setData([json])
+    //         })
+    //     }
+    //     else{
+    //         // refresh reservations
+    //         setData([])
+    //         setLoaded(false)
+    //         getAllCanceledReservations()
+    //     }
+    // }
 
     function handleEmailChange(event){
         setEmail(event.target.value)
     }
 
 
-    function handleSearch(){
-        console.log("clicked search")
-        console.log("email: "+ email)
-        getCanceledReservation(email)
-    }
+    function handleSearch() {
+        setLoaded(false);
+        const temp = data.filter((reservation) => reservation.id_email === email);
+        setShowReservation(temp);
+        setLoaded(true);
+        console.log("clicked search");
+        console.log("email: " + email);
+      }
 
     function handleClear(){
+        //window.location.reload(false);
         console.log("clicked clear")
         setEmail("")
         setData([])
@@ -98,7 +106,7 @@ function Reservation_Canceles(){
                             </tr>
                         </thead>
                         <tbody>
-                            {data[0].map((reservation) => (
+                            {showReservation.map((reservation) => (
                                 <tr key={reservation.id_reservation}>
                                     <td>{reservation.id_reservation}</td>
                                     <td>{format(Date.parse(reservation.date_checkin), 'yyyy-MM-dd')}</td>
@@ -112,7 +120,7 @@ function Reservation_Canceles(){
                         </tbody>
                     </table>
                     {/* si data is empty, "aucune réservation trouvée" */}
-                    {data[0].length === 0 ? <div className='no-result-found'>Aucune Réservation Trouvée</div> : <div></div>}
+                    {showReservation.length === 0 ? <div className='no-result-found'>Aucune Réservation Trouvée</div> : <div></div>}
                     
                 </div>
             : <div><p>Loading Reservations Cancelées ...</p></div>}
