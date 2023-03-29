@@ -17,6 +17,7 @@ function Create_location() {
     const [showRooms, setShowRooms] = useState();
     const [roomsForDate, setRoomsForDate] = useState();
     const [dateChange, setDateChange] = useState(false)
+    const [allowLocation, setAllowLocation] = useState(false)
     const ref = useRef(false);
     const ref2 = useRef(false);
     const ref3 = useRef(false);
@@ -125,10 +126,11 @@ function Create_location() {
         if (checkOutDate == null) {
             alert("SVP selectione une date checkout!")
             return null;
-        }
-        if (checkInDate >= checkOutDate){
+        } else if (checkInDate >= checkOutDate){
           alert("La date de checkout doit venir une journée au minimum apres la date d'aujourd'hui")
           return null;
+        } else {
+          setAllowLocation(true)
         }
         setDateChange(false)
         setLoaded(false)
@@ -138,8 +140,10 @@ function Create_location() {
         window.location.reload(false);
       }
       function handleLocation(event) {
-        if(checkOutDate === undefined){
-          alert("Veuillez sélectionner une date check-out pour rechercher des chambres disponibles")
+        if(checkOutDate === undefined || checkOutDate == ""){
+          alert("Veuillez sélectionner une date check-out")
+        } else if(!allowLocation){
+          alert("Veuillez appuyer le search pour appliquer la date check-out et autre filters avant de selectionner une chambre")
         } else if(dateChange) {
           alert("Vous avez changé la date de check-out svp, appuyer sur le search pour appliquer la nouvelle date avant de faire selection de la chambre.")
         }
