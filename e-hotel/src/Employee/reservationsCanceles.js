@@ -1,10 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-
 import { useEffect, useLayoutEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import { format } from 'date-fns'
-import { set } from 'date-fns/esm';
 
 function Reservation_Canceles(){
     const id_hotel = sessionStorage.getItem("id_hotel")
@@ -13,6 +10,8 @@ function Reservation_Canceles(){
     const [data, setData] = useState([])
     const [showReservation, setShowReservation] = useState([])
     const [email, setEmail] = useState("")
+    const [id_reservation, setIdReservation] = useState("")
+
 
     useEffect(() => {
         getAllCanceledReservations()
@@ -36,14 +35,27 @@ function Reservation_Canceles(){
         setEmail(event.target.value)
     }
 
+    function handleIdChange(event){
+        setIdReservation(event.target.value)
+    }
 
     function handleSearch() {
         setLoaded(false);
-        const temp = data.filter((reservation) => reservation.id_email === email);
-        setShowReservation(temp);
-        setLoaded(true);
-        console.log("clicked search");
-        console.log("email: " + email);
+        let temp = []
+        if (email == "" && id_reservation == "") {
+            alert ("Entre un ID de reservation ou email de client, SVP!")
+            setLoaded(true)
+            return
+        } else if(email != "" && id_reservation != "") {
+            temp = data.filter((reservation) => (reservation.id_email === email && reservation.id_reservation == id_reservation));
+            setShowReservation(temp);
+        } else if (id_reservation != "") {
+            temp = data.filter((reservation) => reservation.id_reservation == id_reservation);
+            setShowReservation(temp);
+        } else if (email != "") {
+            temp = data.filter((reservation) => (reservation.id_email === email));
+            setShowReservation(temp);
+        }
       }
 
     function handleClear(){
@@ -59,6 +71,8 @@ function Reservation_Canceles(){
                     <div className="filter">
                         <label>Email : </label>
                         <input type="email" name="email" onChange={handleEmailChange} value={email}/>
+                        <label>Id Reservation: </label>
+                        <input type="id" name="id_reservation" onChange={handleIdChange} value={id_reservation}/>
                         <button onClick={handleSearch}>Search</button>
                         <button onClick={handleClear}>Clear</button> 
                     </div>
