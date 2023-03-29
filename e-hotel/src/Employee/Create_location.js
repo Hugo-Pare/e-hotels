@@ -7,8 +7,7 @@ import { format } from 'date-fns'
 
 function Create_location() {
   
-    const today = new Date();
-    const checkInDate = format(Date.parse(today), 'yyyy-MM-dd')
+    const checkInDate = format(Date.parse(new Date()), 'yyyy-MM-dd')
     const [checkOutDate, setCheckOut] = useState();
     const [minPrice, setMinPrice] = useState();
     const [maxPrice, setMaxPrice] = useState();
@@ -17,6 +16,7 @@ function Create_location() {
     const [data, setData] = useState();
     const [showRooms, setShowRooms] = useState();
     const [roomsForDate, setRoomsForDate] = useState();
+    const [dateChange, setDateChange] = useState(false)
     const ref = useRef(false);
     const ref2 = useRef(false);
     const ref3 = useRef(false);
@@ -113,7 +113,7 @@ function Create_location() {
       }
 
       function handleCheckOut(event) {
-        console.log(event.target.value)
+        setDateChange(true)
         setCheckOut(event.target.value)
       }
 
@@ -130,6 +130,7 @@ function Create_location() {
           alert("La date de checkout doit venir une journée au minimum apres la date d'aujourd'hui")
           return null;
         }
+        setDateChange(false)
         setLoaded(false)
         getRoomsForDates();
       }
@@ -137,8 +138,10 @@ function Create_location() {
         window.location.reload(false);
       }
       function handleLocation(event) {
-        if(checkInDate === undefined || checkOutDate === undefined){
-          alert("Veuillez sélectionner des dates de check-in et de check-out pour rechercher des chambres disponibles")
+        if(checkOutDate === undefined){
+          alert("Veuillez sélectionner une date check-out pour rechercher des chambres disponibles")
+        } else if(dateChange) {
+          alert("Vous avez changé la date de check-out svp, appuyer sur le search pour appliquer la nouvelle date avant de faire selection de la chambre.")
         }
         else{
           const array = event.target.value.split(",")
