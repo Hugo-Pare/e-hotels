@@ -820,11 +820,11 @@ def get_rooms():
         vue = args.get('vue')               # needs to be implemented
 
         if(mincapacite is None):
-            cursor.execute('SELECT * FROM chambre')
+            cursor.execute('SELECT * FROM chambre ORDER BY num_chambre ASC')
 
         else:
             cursor.execute( ''' SELECT * FROM chambre 
-                                WHERE capacite BETWEEN (%s) AND (%s) AND prix BETWEEN (%s) AND (%s)''', (mincapacite,maxcapacite,minprice,maxprice,))
+                                WHERE capacite BETWEEN (%s) AND (%s) AND prix BETWEEN (%s) AND (%s) ORDER BY num_chambre ASC''', (mincapacite,maxcapacite,minprice,maxprice,))
         data = cursor.fetchall()
         json = []
 
@@ -860,6 +860,7 @@ def get_rooms_with_info():
                             hotel.rue,hotel.num_rue,hotel.postal_zip_code,hotel.email,hotel.telephone,hotel.rating,
                             hotel.fk_chaine,chaine.nom_chaine FROM chambre 
                             JOIN hotel ON hotel.id_hotel = chambre.id_hotel JOIN chaine ON chaine.id_chaine = hotel.fk_chaine
+                            ORDER BY num_chambre ASC
                         ''')
 
         data = cursor.fetchall()
@@ -908,7 +909,7 @@ def get_rooms_by_hotel_and_room_num_with_info(id_hotel,room_num):
                             hotel.rue,hotel.num_rue,hotel.postal_zip_code,hotel.email,hotel.telephone,hotel.rating,
                             hotel.fk_chaine,chaine.nom_chaine FROM chambre 
                             JOIN hotel ON hotel.id_hotel = chambre.id_hotel JOIN chaine ON chaine.id_chaine = hotel.fk_chaine
-                            WHERE chambre.id_hotel = (%s) AND chambre.num_chambre = (%s)
+                            WHERE chambre.id_hotel = (%s) AND chambre.num_chambre = (%s) ORDER BY num_chambre ASC
                         ''', (id_hotel,room_num,))
 
         data = cursor.fetchall()
@@ -967,6 +968,7 @@ def get_rooms_available_by_date(checkin,checkout):
                     OR (date_checkout > (%s) AND date_checkout < (%s))
                     OR (date_checkin = (%s) AND date_checkout = (%s))
                 )
+                ORDER BY num_chambre ASC
             ''', (id_hotel,checkin,checkout,checkin,checkout,checkin,checkout,checkin,checkout,checkin,checkout,checkin,checkout,))
         else:
             cursor.execute(''' 
@@ -981,6 +983,7 @@ def get_rooms_available_by_date(checkin,checkout):
                     OR (date_checkout > (%s) AND date_checkout < (%s))
                     OR (date_checkin = (%s) AND date_checkout = (%s))
                 )
+                ORDER BY num_chambre ASC
             ''', (checkin,checkout,checkin,checkout,checkin,checkout,checkin,checkout,checkin,checkout,checkin,checkout,))
 
         data = cursor.fetchall()
@@ -1012,7 +1015,7 @@ def get_rooms_by_hotel_id(id_hotel):
     try:
         connection = get_db_connection()
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cursor.execute('SELECT * FROM chambre WHERE id_hotel = (%s)', (id_hotel,))
+        cursor.execute('SELECT * FROM chambre WHERE id_hotel = (%s) ORDER BY num_chambre ASC', (id_hotel,))
         data = cursor.fetchall()
         json = []
 
