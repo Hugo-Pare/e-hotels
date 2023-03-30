@@ -48,7 +48,6 @@ function First_page_e(){
     }
 
     function filterReservations(json){
-        console.log(format(Date.parse(today), 'yyyy-MM-dd'))
         const temp = json.filter((reservation) => (reservation.date_checkin === format(Date.parse(today), 'yyyy-MM-dd')));
         return temp
     }
@@ -57,7 +56,6 @@ function First_page_e(){
         fetch(`http://127.0.0.1:5000/reservations/pending/${id_hotel}`)
         .then(response => response.json())
         .then(function(json){
-            console.log(showToday)
             fixDates(json)
             if(showToday){
                 setData(filterReservations(json))
