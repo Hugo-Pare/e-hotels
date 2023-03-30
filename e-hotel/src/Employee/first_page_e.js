@@ -38,15 +38,16 @@ function First_page_e(){
 
     function fixDates(json){
         for(let i=0; i<json.length; i++){
-            let checkin = new Date(json[i].date_checkin)
-            let checkout = new Date(json[i].date_checkout)
-            const checkinOffset = checkin.getTimezoneOffset() * 60000
-            const checkoutOffset = checkout.getTimezoneOffset() * 60000
-            json[i].date_checkin = format(Date.parse(new Date(checkin.getTime() + checkinOffset)), 'yyyy-MM-dd')
-            json[i].date_checkout = format(Date.parse(new Date(checkout.getTime() + checkoutOffset)), 'yyyy-MM-dd')
+          let checkin = new Date(json[i].date_checkin)
+          let checkout = new Date(json[i].date_checkout)
+          const checkinOffset = checkin.getTimezoneOffset() * 60000
+          const checkoutOffset = checkout.getTimezoneOffset() * 60000
+          json[i].date_checkin = format(Date.parse(new Date(checkin.getTime() + checkinOffset)), 'yyyy-MM-dd')
+          json[i].date_checkout = format(Date.parse(new Date(checkout.getTime() + checkoutOffset)), 'yyyy-MM-dd')
         }
         return json
-    }
+      }
+      
 
     function filterReservations(json){
         const temp = json.filter((reservation) => (reservation.date_checkin === format(Date.parse(today), 'yyyy-MM-dd')));
@@ -241,7 +242,7 @@ function First_page_e(){
                         </tbody>
                     </table>
                     {/* si data is empty, "aucune réservation trouvée" */}
-                    {data[0].length === 0 ? <div className='no-result-found'>Aucune Réservation Trouvée</div> : <div></div>}
+                    {data.length === 0 ? <div className='no-result-found'>Aucune Réservation Trouvée</div> : <div></div>}
                     
                 </div>
             : <div><p>Loading Reservations ...</p></div>}
