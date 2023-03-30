@@ -1,12 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import {  useNavigate } from "react-router-dom";
 import { format } from 'date-fns'
 
 function Location_existante(){
     const id_employe = sessionStorage.getItem("id")
     const id_hotel = sessionStorage.getItem("hotel_id")
-    const navigate = useNavigate();
     const [data, setData] =  useState();
     const [idHotel, setIdHotel] = useState("")
     const [loaded, setLoaded] = useState(false)
@@ -17,13 +15,25 @@ function Location_existante(){
         getAllLocations()
     }, []) 
 
+    function fixDates(json){
+      for(let i=0; i<json.length; i++){
+          let checkin = new Date(json[i].date_checkin)
+          let checkout = new Date(json[i].date_checkout)
+          const checkinOffset = checkin.getTimezoneOffset() * 60000
+          const checkoutOffset = checkout.getTimezoneOffset() * 60000
+          json[i].date_checkin = format(Date.parse(new Date(checkin.getTime() + checkinOffset)), 'yyyy-MM-dd')
+          json[i].date_checkout = format(Date.parse(new Date(checkout.getTime() + checkoutOffset)), 'yyyy-MM-dd')
+      }
+      return json
+  }
 
     async function getAllLocations(){
         fetch(`http://127.0.0.1:5000/locations?id_hotel=${id_hotel}`)
         .then(response => response.json())
         .then(function(json){
+            fixDates(json)
+            setData(json)
             setLoaded(true)
-            setData([json])
         })
     }
 
@@ -33,43 +43,39 @@ function Location_existante(){
 
 
     async function getLocation(email, id_location) {
+        setLoaded(false);
         if (email && id_location) {
           // fetch reservations by email and id
-          setData([]);
-          setLoaded(false);
       
           fetch(`http://127.0.0.1:5000/location?email_client=${email}&id_reservation=${id_location}`)
             .then((response) => response.json())
             .then(function (json) {
-              setLoaded(true);
-              setData([json]);
+              fixDates(json)
+              setData(json)
+              setLoaded(true)
             });
         } else if (email) {
           // fetch reservations by email
-          setData([]);
-          setLoaded(false);
-      
+
           fetch(`http://127.0.0.1:5000/locations?email_client=${email}`)
             .then((response) => response.json())
             .then(function (json) {
-              setLoaded(true);
-              setData([json]);
+              fixDates(json)
+              setData(json)
+              setLoaded(true)
             });
         } else if (id_location !== "") {
           // fetch reservations by id
-          setData([]);
-          setLoaded(false);
-      
+
           fetch(`http://127.0.0.1:5000/locations/${id_location}`)
             .then((response) => response.json())
             .then(function (json) {
-              setLoaded(true);
-              setData([json]);
+              fixDates(json)
+              setData(json)
+              setLoaded(true)
             });
         } else {
           // refresh reservations
-          setData([]);
-          setLoaded(false);
           getAllLocations();
         }
       }
@@ -156,11 +162,11 @@ function Location_existante(){
                             </tr>
                         </thead>
                         <tbody>
-                            {data[0].map((location) => (
+                            {data.map((location) => (
                                 <tr key={location.id_location}>
                                     <td>{location.id_location}</td>
-                                    <td>{format(Date.parse(location.date_checkin), 'yyyy-MM-dd')}</td>
-                                    <td>{format(Date.parse(location.date_checkout), 'yyyy-MM-dd')}</td>
+                                    <td>{location.date_checkin}</td>
+                                    <td>{location.date_checkout}</td>
                                     <td>{location.email_id}</td>
                                     <td>{location.num_chambre}</td>
                                     <td>${location.frais_total}</td>

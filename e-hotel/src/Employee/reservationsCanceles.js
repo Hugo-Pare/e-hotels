@@ -12,7 +12,6 @@ function Reservation_Canceles(){
     const [email, setEmail] = useState("")
     const [id_reservation, setIdReservation] = useState("")
 
-
     useEffect(() => {
         getAllCanceledReservations()
     }, []) 
@@ -21,11 +20,24 @@ function Reservation_Canceles(){
         setLoaded(true)
     }, [showReservation])
 
+    function fixDates(json){
+        for(let i=0; i<json.length; i++){
+            let checkin = new Date(json[i].date_checkin)
+            let checkout = new Date(json[i].date_checkout)
+            const checkinOffset = checkin.getTimezoneOffset() * 60000
+            const checkoutOffset = checkout.getTimezoneOffset() * 60000
+            json[i].date_checkin = format(Date.parse(new Date(checkin.getTime() + checkinOffset)), 'yyyy-MM-dd')
+            json[i].date_checkout = format(Date.parse(new Date(checkout.getTime() + checkoutOffset)), 'yyyy-MM-dd')
+        }
+        return json
+    }
+
     async function getAllCanceledReservations(){
         setLoaded(false)
         fetch(`http://127.0.0.1:5000/reservations/canceled`)
         .then(response => response.json())
         .then(function(json){
+            fixDates(json)
             setData(json)
             setShowReservation(json)
         })
@@ -96,8 +108,8 @@ function Reservation_Canceles(){
                             {showReservation.map((reservation) => (
                                 <tr key={reservation.id_reservation}>
                                     <td>{reservation.id_reservation}</td>
-                                    <td>{format(Date.parse(reservation.date_checkin), 'yyyy-MM-dd')}</td>
-                                    <td>{format(Date.parse(reservation.date_checkout), 'yyyy-MM-dd')}</td>
+                                    <td>{reservation.date_checkin}</td>
+                                    <td>{reservation.date_checkout}</td>
                                     <td>{reservation.id_email}</td>
                                     <td>{reservation.num_chambre}</td>
                                     <td>${reservation.frais_total}</td>

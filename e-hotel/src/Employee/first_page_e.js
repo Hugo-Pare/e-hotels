@@ -11,7 +11,6 @@ function First_page_e(){
     const navigate = useNavigate();
     let id_hotel = null
     const today = new Date();
-    const timeOffset = today.getTimezoneOffset() * 60000;
     const [showToday, setShowToday] = useState(true);
     const [idHotel, setIdHotel] = useState("")
     const [loaded, setLoaded] = useState(false)
@@ -41,8 +40,10 @@ function First_page_e(){
         for(let i=0; i<json.length; i++){
             let checkin = new Date(json[i].date_checkin)
             let checkout = new Date(json[i].date_checkout)
-            json[i].date_checkin = format(Date.parse(new Date(checkin.getTime() + timeOffset)), 'yyyy-MM-dd')
-            json[i].date_checkout = format(Date.parse(new Date(checkout.getTime() + timeOffset)), 'yyyy-MM-dd')
+            const checkinOffset = checkin.getTimezoneOffset() * 60000
+            const checkoutOffset = checkout.getTimezoneOffset() * 60000
+            json[i].date_checkin = format(Date.parse(new Date(checkin.getTime() + checkinOffset)), 'yyyy-MM-dd')
+            json[i].date_checkout = format(Date.parse(new Date(checkout.getTime() + checkoutOffset)), 'yyyy-MM-dd')
         }
         return json
     }
