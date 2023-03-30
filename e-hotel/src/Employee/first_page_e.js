@@ -3,14 +3,16 @@
 import './first_page_e.css'
 
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { format } from 'date-fns'
 
 function First_page_e(){
     const id_employe = sessionStorage.getItem("id")
     const navigate = useNavigate();
     let id_hotel = null
-
+    const today = new Date();
+    const timeOffset = today.getTimezoneOffset() * 60000;
+    const [showToday, setShowToday] = useState(true);
     const [idHotel, setIdHotel] = useState("")
     const [loaded, setLoaded] = useState(false)
     const [data, setData] = useState([])
@@ -35,55 +37,89 @@ function First_page_e(){
         })
     }
 
+    function fixDates(json){
+        for(let i=0; i<json.length; i++){
+            let checkin = new Date(json[i].date_checkin)
+            let checkout = new Date(json[i].date_checkout)
+            json[i].date_checkin = format(Date.parse(new Date(checkin.getTime() + timeOffset)), 'yyyy-MM-dd')
+            json[i].date_checkout = format(Date.parse(new Date(checkout.getTime() + timeOffset)), 'yyyy-MM-dd')
+        }
+        return json
+    }
+
+    function filterReservations(json){
+        console.log(format(Date.parse(today), 'yyyy-MM-dd'))
+        const temp = json.filter((reservation) => (reservation.date_checkin === format(Date.parse(today), 'yyyy-MM-dd')));
+        return temp
+    }
+
     async function getAllReservations(){
         fetch(`http://127.0.0.1:5000/reservations/pending/${id_hotel}`)
         .then(response => response.json())
         .then(function(json){
+            console.log(showToday)
+            fixDates(json)
+            if(showToday){
+                setData(filterReservations(json))
+            } else {
+                setData(json)
+            }
             setLoaded(true)
-            setData([json])
         })
     }
 
     async function getReservation(email,id){
         if(email !== "" && id !== ""){
             // fetch reservations by email and id
-            setData([])
             setLoaded(false)
 
             fetch(`http://127.0.0.1:5000/reservations/pending/${idHotel}?email_client=${email}&id_reservation=${id}`)
             .then(response => response.json())
             .then(function(json){
-                setLoaded(true)
-                setData([json])
+                fixDates(json)
+            if(showToday){
+                setData(filterReservations(json))
+            } else {
+                setData(json)
+            }
+            setLoaded(true)
             })
         }
         else if(email !== ""){
             // fetch reservations by email
-            setData([])
             setLoaded(false)
 
             fetch(`http://127.0.0.1:5000/reservations/pending/${idHotel}?email_client=${email}`)
             .then(response => response.json())
             .then(function(json){
+                fixDates(json)
+                if(showToday){
+                    setData(filterReservations(json))
+                } else {
+                    setData(json)
+                }
                 setLoaded(true)
-                setData([json])
+                
             })
         }
         else if(id !== ""){
             // fetch reservations by id
-            setData([])
             setLoaded(false)
 
             fetch(`http://127.0.0.1:5000/reservations/pending/${idHotel}?id_reservation=${id}`)
             .then(response => response.json())
             .then(function(json){
+                fixDates(json)
+                if(showToday){
+                    setData(filterReservations(json))
+                } else {
+                    setData(json)
+                }
                 setLoaded(true)
-                setData([json])
             })
         }
         else{
             // refresh reservations
-            setData([])
             setLoaded(false)
             getHotelId()
         }
@@ -97,6 +133,11 @@ function First_page_e(){
         setId(event.target.value)
     }
 
+    function handleToday(event){
+        const value = event.target.checked ? true : false;
+        setShowToday(value)
+    }
+
     function handleSearch(){
         console.log("clicked search")
         console.log("email: "+ email)
@@ -106,13 +147,7 @@ function First_page_e(){
     }
 
     function handleClear(){
-        console.log("clicked clear")
-        setEmail("")
-        setId("")
-        setData([])
-        setLoaded(false)
-
-        getHotelId()
+        window.location.reload(false); //avoids possible issue present with previous implementation
     }
 
     function handleLocation(event){
@@ -162,9 +197,13 @@ function First_page_e(){
                         <label>Email : </label>
                         <input type="email" name="email" onChange={handleEmailChange} value={email}/>
                     
-                        <label>ID Réservation : </label>
+                        <label style={{marginLeft:"40px"}}>ID Réservation : </label>
                         <input type="id" name="id" onChange={handleIdChange} value={id}/>
-                    
+
+                        <label style={{marginLeft:"40px", marginRight:"40px"}}>
+                            Check-in aujourd'hui:
+                        <input type="checkbox" checked={showToday} value={showToday} onChange={handleToday}/>
+                        </label>
                         <button onClick={handleSearch}>Search</button>
                         <button onClick={handleClear}>Clear</button> 
                     </div>
@@ -185,11 +224,11 @@ function First_page_e(){
                             </tr>
                         </thead>
                         <tbody>
-                            {data[0].map((reservation) => (
+                            {data.map((reservation) => (
                                 <tr key={reservation.id_reservation}>
                                     <td>{reservation.id_reservation}</td>
-                                    <td>{format(Date.parse(reservation.date_checkin), 'yyyy-MM-dd')}</td>
-                                    <td>{format(Date.parse(reservation.date_checkout), 'yyyy-MM-dd')}</td>
+                                    <td>{reservation.date_checkin}</td>
+                                    <td>{reservation.date_checkout}</td>
                                     <td>{reservation.id_email}</td>
                                     <td>{reservation.num_chambre}</td>
                                     <td>${reservation.frais_total}</td>
