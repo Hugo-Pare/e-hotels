@@ -179,7 +179,7 @@ function Location_existante(){
                         </tbody>
                     </table>
                     {/* si data is empty, "aucune réservation trouvée" */}
-                    {data[0].length === 0 ? <div className='no-result-found'>Aucune Location Trouvée</div> : <div></div>}
+                    {data.length === 0 ? <div className='no-result-found'>Aucune Location Trouvée</div> : <div></div>}
                     
                 </div>
             : <div><p>Loading Locations ...</p></div>}
