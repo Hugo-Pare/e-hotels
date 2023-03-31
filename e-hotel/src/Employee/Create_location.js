@@ -114,7 +114,9 @@ function Create_location() {
       }
 
       function handleCheckOut(event) {
-        setDateChange(true)
+        if(event.target.value != checkOutDate){
+          setDateChange(true)
+        }
         setCheckOut(event.target.value)
       }
 

@@ -17,6 +17,10 @@ function Hotel_rooms() {
   const [capacite, setCapacite] = useState();
   const [data, setData] = useState([]);
   const [loaded, setLoaded] = useState(false)
+
+  const [dateChange, setDateChange] = useState(false)
+  const [allowLocation, setAllowLocation] = useState(false)
+
   const navigate = useNavigate();
   const firstUpdate = useRef(true);
   const secondUpdate = useRef(true);
@@ -69,9 +73,15 @@ async function getRoomsForDates() {
   };
 
   const handleCheckIn = (date) => {
+    if(date.target.value != checkInDate){
+      setDateChange(true)
+    }
     setCheckInDate(date.target.value);
   };
   const handleCheckOut = (date) => {
+    if(date.target.value != checkOutDate){
+      setDateChange(true)
+    }
     setCheckOutDate(date.target.value);
   };
 
@@ -119,7 +129,7 @@ const updateRooms = () => {
 }
 
   const search = () => {
-    if(checkInDate == null || checkOutDate == null){
+    if(checkInDate == null || checkOutDate == null || checkInDate == "" || checkOutDate == ""){
       alert("Selectionne une date Check-In et Check-Out SVP!")
       return
     }
@@ -131,10 +141,19 @@ const updateRooms = () => {
     alert("La date de checkout doit venir apres la date de checkin")
     return null;
   }
+    setAllowLocation(true)
+    setDateChange(false)
     getRoomsForDates()
   };
 
   const handleReservation = (event) => {
+    if(checkOutDate === undefined || checkOutDate == "" || checkInDate === undefined || checkInDate == ""){
+      alert("SVP selectione une date check-in et check-out!")
+    } else if(!allowLocation){
+      alert("Veuillez appuyer le search pour appliquer la date check-out, check-in et autre filters avant de selectionner une chambre")
+    } else if(dateChange) {
+      alert("Vous avez changé la date de check-out et ou la date de check-in. SVP appuyer sur le search pour appliquer les nouvelles date avant de faire selection de la chambre.")
+    } else {
     const array = event.target.value.split(",")
     const num = array[0]
     const prix = array[1]
@@ -149,6 +168,8 @@ const updateRooms = () => {
         frais_total: prix
       }
     })
+
+  }
   }
 
   const clear = () => {
