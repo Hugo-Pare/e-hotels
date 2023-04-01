@@ -16,6 +16,7 @@ GET:
 
 	/employes
 	/employes?id_employe=X
+	/employes/exists/id_employe?email=X
 
 	/reservations
 	/reservations/id_reservation

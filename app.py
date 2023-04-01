@@ -308,6 +308,34 @@ def get_employes():
     except Exception as e:
         print(e)
 
+# id_employe = ID de l'employé qui souhaite changer de email
+# email = nouveau email de l'employé
+@app.route('/employes/exists/<id_employe>') 
+def check_email_in_database(id_employe):
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+        args = request.args
+        email = args.get('email')
+        json = []
+
+        if(email is not None):
+            cursor.execute('SELECT * FROM employe WHERE LOWER(email) = LOWER((%s)) AND id_employe != (%s)', (email,id_employe,))
+            data = cursor.fetchall()
+            if len(data) > 0:
+                json.append({"email already taken by another employee": "true"})
+            else:
+                json.append({"email already taken by another employee": "false"})
+            
+        else:
+            json.append({"error": "wrong input"})
+
+        return json
+
+    except Exception as e:
+        print(e)
+
 @app.route('/reservations') 
 def get_reservations():
     try:
