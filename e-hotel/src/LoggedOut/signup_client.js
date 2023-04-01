@@ -178,46 +178,43 @@ function Signup_client() {
       </label>
       <br />
       <h3>Adresse:</h3>
-      <label style={{color: isClicked && !streetNumber ? 'red' : 'black'}} htmlFor="streetNumber">
-        Numéro de rue:
-        <br/>
-        <input type="text" value={streetNumber} onChange={(e) => setStreetNumber(e.target.value)} />
+      <label style={{color: isClicked && !country ? 'red' : 'black'}} htmlFor="Pays">
+          Pays :
+          <br/>
+          <input type="text" value={postalCode} onChange={(e) => setCountry(e.target.value)}/>
       </label>
-      <br />
-      <label style={{color: isClicked && !streetName ? 'red' : 'black'}} htmlFor="streetName">
-        Nom de rue:
+      <br/>
+      <label style={{color: isClicked && !province ? 'red' : 'black'}} htmlFor="Province/State">
+        Province/State:
         <br/>
-        <input type="text" value={streetName} onChange={(e) => setStreetName(e.target.value)} />
+        <input type="text" value={province} onChange={(e) => setProvince(e.target.value)}/>
       </label>
-      <br />
+      <br/>
       <label style={{color: isClicked && !city ? 'red' : 'black'}} htmlFor="city">
         Ville:
         <br/>
         <input type="text" value={city} onChange={(e) => setCity(e.target.value)} />
         </label>
         <br/>
-        <label style={{color: isClicked && !province ? 'red' : 'black'}} htmlFor="Province/State">
-          Province/State:
-          <br/>
-          <input type="text" value={province} onChange={(e) => setProvince(e.target.value)}/>
-        </label>
+        <label style={{color: isClicked && !streetName ? 'red' : 'black'}} htmlFor="streetName">
+        Nom de rue:
         <br/>
+        <input type="text" value={streetName} onChange={(e) => setStreetName(e.target.value)} />
+      </label>
+      <br />
+      <label style={{color: isClicked && !streetNumber ? 'red' : 'black'}} htmlFor="streetNumber">
+        Numéro de rue:
+        <br/>
+        <input type="text" value={streetNumber} onChange={(e) => setStreetNumber(e.target.value)} />
+      </label>
+      <br />
         <label style={{color: isClicked && !postalCode ? 'red' : 'black'}} htmlFor="Code_Postal/Zip">
           Code Postal/Zip:
           <br/>
           <input type="text" value={postalCode} onChange={(e) => setPostalCode(e.target.value)}/>
         </label>
         <br/>
-        <label style={{color: isClicked && !country ? 'red' : 'black'}} htmlFor="Pays">
-          Pays :
-          <br/>
-          <select id="Pays" name="Pays" value={country} onChange={(e) => setCountry(e.target.value)}>
-            <option value="">--Choisir un pays--</option>
-            <option value="Canada">Canada</option>
-            <option value="Etats-Unis">États-Unis</option>
-          </select>
-        </label>
-        <br/>
+        
           <button onClick={handleSignUpClick}>Sign up</button>
     </div>
     )
