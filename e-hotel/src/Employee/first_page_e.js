@@ -40,6 +40,8 @@ function First_page_e(){
         for(let i=0; i<json.length; i++){
           let checkin = new Date(json[i].date_checkin)
           let checkout = new Date(json[i].date_checkout)
+          console.log(checkin)
+          console.log(json[i].date_checkout)
           const checkinOffset = checkin.getTimezoneOffset() * 60000
           const checkoutOffset = checkout.getTimezoneOffset() * 60000
           json[i].date_checkin = format(Date.parse(new Date(checkin.getTime() + checkinOffset)), 'yyyy-MM-dd')
