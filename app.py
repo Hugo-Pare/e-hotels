@@ -374,12 +374,12 @@ def get_reservations_by_id(id_reservation):
     except Exception as e:
         print(e)
 
-@app.route('/reservations/canceled') 
-def get_reservations_canceled():
+@app.route('/reservations/canceled/<id_hotel>') 
+def get_reservations_canceled(id_hotel):
     try:
         connection = get_db_connection()
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cursor.execute('SELECT * FROM reservation WHERE canceler = true ORDER BY date_checkin ASC')
+        cursor.execute('SELECT * FROM reservation WHERE canceler = true AND id_hotel = (%s) ORDER BY date_checkin ASC', (id_hotel,))
         data = cursor.fetchall()
         json = []
 

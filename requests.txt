@@ -18,10 +18,9 @@ GET:
 	/employes?id_employe=X
 
 	/reservations
-	/reservations/count
 	/reservations/id_reservation
-	/reservations/canceled/
-	/reservations/pending/
+	/reservations/canceled/id_hotel
+	/reservations/pending
 	/reservations/pending?email_client=X
 	/reservations/pending/id_hotel
 	/reservations/pending/id_hotel?id_reservation=X
@@ -31,7 +30,6 @@ GET:
 	/locations
 	/locations?id_hotel=X
 	/locations?email_client=X
-	/locations/count
 	/locations/id_location
 
 	/chaines
