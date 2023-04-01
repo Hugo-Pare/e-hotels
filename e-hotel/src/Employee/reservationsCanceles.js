@@ -4,7 +4,7 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import { format } from 'date-fns'
 
 function Reservation_Canceles(){
-    const id_hotel = sessionStorage.getItem("id_hotel")
+    const id_hotel = sessionStorage.getItem("hotel_id")
     const [idHotel, setIdHotel] = useState("")
     const [loaded, setLoaded] = useState(false)
     const [data, setData] = useState([])
@@ -34,7 +34,7 @@ function Reservation_Canceles(){
 
     async function getAllCanceledReservations(){
         setLoaded(false)
-        fetch(`http://127.0.0.1:5000/reservations/canceled`)
+        fetch(`http://127.0.0.1:5000/reservations/canceled/${id_hotel}`)
         .then(response => response.json())
         .then(function(json){
             fixDates(json)
