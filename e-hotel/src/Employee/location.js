@@ -12,11 +12,9 @@ function Location(){
 
     const [data, setData] =  useState();
     const [loaded, setLoaded] =  useState(false);
-    const [idLocation, setIdLocation] = useState();
 
     useEffect(() => {
         getReservationById()
-        getIdLocation()
     }, [])
 
     async function getReservationById(){
@@ -33,7 +31,6 @@ function Location(){
     function handleLocation(){
 
         const json = {
-            "id_location": idLocation,
             "frais_restant": data.frais_restant,
             "frais_total": data.frais_total,
             "date_checkin": data.date_checkin,
@@ -73,15 +70,6 @@ function Location(){
         // alert
         alert("Location Enregistrée")
         navigate('/employeeIn', {state: {id: id_employe}})
-    }
-
-    async function getIdLocation(){
-        fetch(`http://127.0.0.1:5000/locations/count`)
-        .then(response => response.json())
-        .then(function(json){
-            setIdLocation(parseInt(json[0]) + 1)
-            // console.log(location_count)
-        })
     }
 
     async function handlePayment(){

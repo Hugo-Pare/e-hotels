@@ -51,7 +51,7 @@ return(
       <div className="grid-container-client">
         <div className="grid-item-client-res" style={{backgroundImage: `url(${hotel})`, backgroundRepeat: 'no-repeat', padding: '10px'}}>
           <div className="bookRoom" style={{backgroundColor:'white', width:"fit-content", margin:"0"}}>
-            <h3 style={{margin: '0'}}>Réservez une chambre maintenant tant qu'elle sont encore disponible!</h3>
+            <h3 style={{margin: '0'}}>Réservez une chambre maintenant tant qu'elle est encore disponible!</h3>
             <button style={{marginTop: '10px'}} onClick={handleReservationClick}>Nouvelle Réservation</button>
           </div>
         </div>

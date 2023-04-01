@@ -123,7 +123,6 @@ def post_reservation():
         data = request.get_json(force=True)
         
         # get value for each key
-        id_reservation = data['id_reservation']
         id_hotel = data['id_hotel']
         num_chambre = data['num_chambre']
         email_id = data['email_id']
@@ -136,8 +135,8 @@ def post_reservation():
         connection = get_db_connection()
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cursor.execute('''
-            INSERT INTO reservation VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)''',
-            (id_reservation,id_hotel,num_chambre,email_id,date_checkin,date_checkout,frais_total,frais_restant,"false","false",)
+            INSERT INTO reservation VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)''',
+            (id_hotel,num_chambre,email_id,date_checkin,date_checkout,frais_total,frais_restant,"false","false",)
         )
         connection.commit()
 
@@ -150,7 +149,6 @@ def post_reservation():
             "email_id": email_id,
             "num_chambre": num_chambre,
             "id_hotel": id_hotel,
-            "id_reservation": id_reservation,
             "cancelled": "false",
             "location": "false"
         }
@@ -167,7 +165,6 @@ def post_location_with_reservation():
         data = request.get_json(force=True)
         
         # get value for each key
-        id_location = data['id_location']
         frais_restant = data['frais_restant']
         frais_total = data['frais_total']
         date_checkin = data['date_checkin']
@@ -181,13 +178,12 @@ def post_location_with_reservation():
         # connect to database
         connection = get_db_connection()
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cursor.execute('INSERT INTO location VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)', 
-        (id_location,frais_restant,frais_total,date_checkin,date_checkout,email_id,num_chambre,id_hotel,id_reservation,id_employe,))
+        cursor.execute('INSERT INTO location VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)', 
+        (frais_restant,frais_total,date_checkin,date_checkout,email_id,num_chambre,id_hotel,id_reservation,id_employe,))
         connection.commit()
 
         # return json data of new location
         location_data = {
-            "id_location": id_location,
             "frais_restant": frais_restant,
             "frais_total": frais_total,
             "date_checkin": date_checkin,

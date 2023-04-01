@@ -18,11 +18,8 @@ function EmployeeCreateLocation(){
 
     const [frais_restant, setFrais_restant] = useState();
 
-    const [idLocation, setIdLocation] = useState();
-
     useEffect(() => {
         setInfoLocation();
-        getIdLocation();
     }, [])
 
     function setInfoLocation(){
@@ -58,20 +55,10 @@ function EmployeeCreateLocation(){
         }
     }
 
-    async function getIdLocation(){
-        fetch(`http://127.0.0.1:5000/locations/count`)
-        .then(response => response.json())
-        .then(function(json){
-            setIdLocation(parseInt(json[0]) + 1)
-            // console.log(location_count)
-        })
-    }
-
     function handleLocation(){
         console.log("handleLocation")
 
         const json = {
-            "id_location": idLocation,
             "frais_restant": frais_restant,
             "frais_total": prix_total,
             "date_checkin": date_checkin,

@@ -34,7 +34,7 @@ function LoginEmployee() {
 
   return (
     <div>
-          <h2>Login Employer</h2>
+          <h2>Login Employé</h2>
           <form onSubmit={handleEmployeeLoginSubmit}>
             <label>
               Numéro d'identification:
