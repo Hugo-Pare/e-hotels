@@ -324,9 +324,9 @@ def check_email_in_database(id_employe):
             cursor.execute('SELECT * FROM employe WHERE LOWER(email) = LOWER((%s)) AND id_employe != (%s)', (email,id_employe,))
             data = cursor.fetchall()
             if len(data) > 0:
-                json.append({"email already taken by another employee": "true"})
+                json.append({"email_already_taken_by_another_employee": "true"})
             else:
-                json.append({"email already taken by another employee": "false"})
+                json.append({"email_already_taken_by_another_employee": "false"})
             
         else:
             json.append({"error": "wrong input"})
