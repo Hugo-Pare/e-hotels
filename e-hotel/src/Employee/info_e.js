@@ -150,6 +150,18 @@ function Info_e(){
       function handleEdit() {
         setDisabled(!disabled)
       }
+      async function checkEmailExistence(email) {
+        const response = await fetch(`http://127.0.0.1:5000/employes/exists/${id_employe}?email=${email}`);
+        const data = await response.json();
+        if (data[0].email_already_taken_by_another_employee === 'true') {
+          alert("S'il vous plaît utiliser un email qui n'est pas déjà associer à un autre employee");
+          fetchEmployeeInfo();
+          setDisabled(true)
+
+        } else {
+          updateToDataBase();
+        }
+      }
 
       function save() {
         if (!prenom|| !nom || !pays || !provinceState || !ville || !postal || !rue || !numRue || !poste || !salaire || !email || !telephone) {
@@ -200,7 +212,7 @@ function Info_e(){
           return;
         } 
         setDisabled(!disabled)
-        updateToDataBase()
+        checkEmailExistence(email)
       }
 
     return(
