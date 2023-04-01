@@ -361,16 +361,16 @@ def get_reservations_by_id(id_reservation):
 
         for i in range(len(data)):
             json.append({
-                "id_reservation": data[i][0],
-                "id_hotel": data[i][1],
-                "num_chambre": data[i][2],
-                "id_email": data[i][3],
-                "date_checkin": data[i][4],
-                "date_checkout": data[i][5],
-                "frais_total": data[i][6],
-                "frais_restant": data[i][7],
-                "canceled": data[i][8],
-                "location": data[i][9]
+                "id_reservation": data[i][9],
+                "id_hotel": data[i][0],
+                "num_chambre": data[i][1],
+                "id_email": data[i][2],
+                "date_checkin": data[i][3],
+                "date_checkout": data[i][4],
+                "frais_total": data[i][5],
+                "frais_restant": data[i][6],
+                "canceled": data[i][7],
+                "location": data[i][8]
             })
 
         return json

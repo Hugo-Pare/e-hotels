@@ -26,7 +26,7 @@ function Location(){
         .then(function(json){
             setLoaded(true)
             setData(json[0])
-            // console.log(json)
+            console.log(json)
         })
     }
 
