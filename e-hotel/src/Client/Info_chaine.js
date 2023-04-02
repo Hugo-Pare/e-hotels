@@ -13,10 +13,10 @@ function Info_chaine() {
   const navigate = useNavigate();
   const [data, setData] = useState(JSON.parse(sessionStorage.getItem("hotels")));
 
-    function handleClick(e, hotel_id) {
-      sessionStorage.setItem("hotel_id", hotel_id)
-      navigate('/clientIn/hotelRooms');
-    }
+  function handleClick(e, hotel) {
+    sessionStorage.setItem("hotel_id", hotel.id_hotel)
+    navigate('/clientIn/hotelRooms', {state: {hotelInfo: hotel}});
+  }
 
   return(
     <div>
@@ -26,12 +26,15 @@ function Info_chaine() {
 
       <div className="grid-container">
               {data.map((hotel) => (
-                  <div className="card" key={hotel.id_hotel} onClick={(e) => handleClick(e, hotel.id_hotel)}>
+                  <div className="card" key={hotel.id_hotel} onClick={(e) => handleClick(e, hotel)}>
                   <img src={hotelImg} alt="hotel" style={{width:'100%'}}/>
                   <p>{hotel.street_num}, {hotel.street_name}, {hotel.city}</p>
                   <p>{hotel.province_state}, {hotel.country}</p>
                   <p>{hotel.email}</p>
                   <p>{hotel.telephone}</p>
+                  <div>
+                    {hotel.rating} <span>&#11088;</span>
+                  </div>
               </div> 
                 
               ))}

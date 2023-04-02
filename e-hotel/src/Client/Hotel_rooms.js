@@ -22,12 +22,29 @@ function Hotel_rooms() {
   const [dateChange, setDateChange] = useState(false)
   const [allowLocation, setAllowLocation] = useState(false)
 
+  const [chaineName, setChaineName] = useState();
+
   const navigate = useNavigate();
   const firstUpdate = useRef(true);
   const secondUpdate = useRef(true);
+
   useEffect(() => {
     getAllRooms()
+    getChaineName();
   }, [])
+
+  async function getChaineName(){
+    fetch(`http://127.0.0.1:5000/chaines`)
+    .then(response => response.json())
+    .then(function(json) {
+      console.log(json)
+      for(let i = 0; i < Object.keys(json).length; i++){
+        if(json[i].id_chaine == hotelInfo.id_chaine){
+          setChaineName(json[i].nom_chaine)
+        }
+      }
+    });
+  }
 
   useLayoutEffect(() => {
       if (firstUpdate.current) {
@@ -181,10 +198,12 @@ const updateRooms = () => {
   return (
     <div className="hotel-rooms-container">
         <div className="filter-panel"> 
-          <h3>Filter rooms</h3>
+          <h3>{chaineName}</h3>
           <h5>{hotelInfo.street_num} {hotelInfo.street_name}, {hotelInfo.zip_code}</h5>
           <h5>{hotelInfo.city}, {hotelInfo.province_state}, {hotelInfo.country}</h5>
           <h5>{hotelInfo.telephone}</h5>
+          <h5>{hotelInfo.email}</h5>
+          <h3>Filter rooms</h3>
           <div className="price-filter">
               <h4 style={{marginTop:'0'}}>
               Prix Maximum:

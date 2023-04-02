@@ -7,6 +7,7 @@ function ClientCreateReservation(){
     const reservationInfo = useLocation().state
     const navigate = useNavigate();
     const [frais_restant, setFrais_restant] = useState(reservationInfo.frais_total)
+    
 
     function handlePayment(){
         console.log("payment")
@@ -70,6 +71,7 @@ function ClientCreateReservation(){
                 <h4>{reservationInfo.hotelInfo.street_num} {reservationInfo.hotelInfo.street_name}, {reservationInfo.hotelInfo.zip_code}</h4>
                 <h4>{reservationInfo.hotelInfo.city}, {reservationInfo.hotelInfo.province_state}, {reservationInfo.hotelInfo.country}</h4>
                 <h4>{reservationInfo.hotelInfo.telephone}</h4>
+                <h4>{reservationInfo.hotelInfo.email}</h4>
                 <div>
                         <label>Email du client : </label>
                         <label>{reservationInfo.id_email}</label>
