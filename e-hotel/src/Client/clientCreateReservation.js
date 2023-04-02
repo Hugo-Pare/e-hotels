@@ -67,6 +67,9 @@ function ClientCreateReservation(){
             <div>
                 <h1>Créer une réservation</h1>
                 {console.log(reservationInfo)}
+                <h4>{reservationInfo.hotelInfo.street_num} {reservationInfo.hotelInfo.street_name}, {reservationInfo.hotelInfo.zip_code}</h4>
+                <h4>{reservationInfo.hotelInfo.city}, {reservationInfo.hotelInfo.province_state}, {reservationInfo.hotelInfo.country}</h4>
+                <h4>{reservationInfo.hotelInfo.telephone}</h4>
                 <div>
                         <label>Email du client : </label>
                         <label>{reservationInfo.id_email}</label>

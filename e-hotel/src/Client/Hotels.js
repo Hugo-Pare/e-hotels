@@ -1,3 +1,5 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable eqeqeq */
 import React, { useState, useEffect, useRef, useLayoutEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 import './info_chaine.css';
@@ -148,9 +150,10 @@ function updateHotels(){
     setChainesChecked(temp)
   }
 
-  function handleClick(hotel_id) {
-    sessionStorage.setItem("hotel_id", hotel_id)
-    navigate('/clientIn/hotelRooms');
+  function handleClick(hotel) {
+    console.log(hotel)
+    sessionStorage.setItem("hotel_id", hotel.id_hotel)
+    navigate('/clientIn/hotelRooms', {state: {hotelInfo: hotel}});
   }
 
   const handleSelectedChaines = (e) => {
@@ -308,12 +311,15 @@ function updateHotels(){
     
         <div className="grid-container-hotels">
                 {showHotels.map((hotel) => (
-                    <div className="card" key={hotel.id_hotel} onClick={() => handleClick(hotel.id_hotel)}>
+                    <div className="card" key={hotel.id_hotel} onClick={() => handleClick(hotel)}>
                         <img src={hotelImg} alt="hotel" style={{width:'100%'}}/>
                         <p>{hotel.street_num}, {hotel.street_name}, {hotel.city}</p>
                         <p>{hotel.province_state}, {hotel.country}</p>
                         <p>{hotel.email}</p>
                         <p>{hotel.telephone}</p>
+                        <div>
+                          {hotel.rating} <span>&#11088;</span>
+                        </div>
                     </div>
                 ))}
         </div>

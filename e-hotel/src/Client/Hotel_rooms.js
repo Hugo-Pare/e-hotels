@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable eqeqeq */
-import React, { useState, useEffect, useRef, useLayoutEffect} from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import 'react-datepicker/dist/react-datepicker.css';
 import './hotel_rooms.css'
 
 function Hotel_rooms() {
+  const hotelInfo = useLocation().state.hotelInfo
   
   const [roomsAvailableDate, setRoomsAvailableDate] = useState([]);
   const [showRooms, setShowRooms] = useState([])
@@ -165,7 +166,8 @@ const updateRooms = () => {
         id_email: sessionStorage.getItem("email_id"),
         date_checkin: checkInDate,
         date_checkout: checkOutDate,
-        frais_total: prix
+        frais_total: prix,
+        hotelInfo: hotelInfo
       }
     })
 
@@ -178,7 +180,11 @@ const updateRooms = () => {
 
   return (
     <div className="hotel-rooms-container">
-        <div className="filter-panel"> <h3>Filter rooms</h3>
+        <div className="filter-panel"> 
+          <h3>Filter rooms</h3>
+          <h5>{hotelInfo.street_num} {hotelInfo.street_name}, {hotelInfo.zip_code}</h5>
+          <h5>{hotelInfo.city}, {hotelInfo.province_state}, {hotelInfo.country}</h5>
+          <h5>{hotelInfo.telephone}</h5>
           <div className="price-filter">
               <h4 style={{marginTop:'0'}}>
               Prix Maximum:
