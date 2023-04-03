@@ -72,3 +72,7 @@ PATCH:
 	/hotels/info/id_hotel
 
 	/rooms/info/id_hotel/room_num
+
+VIEWS
+	/nbchambre/location
+	/nbchambre/hotel

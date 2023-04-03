@@ -1392,6 +1392,52 @@ def update_room_info_by_id(id_hotel,room_num):
     except Exception as e:
         print(e)
 
+@app.route('/nbchambre/location') 
+def get_nb_chambre_by_location():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute('SELECT pays,province_state,ville,nb_chambre FROM nb_chambre_par_location')
+        data = cursor.fetchall()
+        json = []
+
+        for i in range(len(data)):
+            json.append({
+                "country": data[i][0],
+                "province_state": data[i][1],
+                "city": data[i][2],
+                "nb_chambre": data[i][3]
+            })
+
+        return json
+
+    except Exception as e:
+        print(e)
+
+@app.route('/nbchambre/hotel') 
+def get_nb_chambre_by_hotel():
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cursor.execute('SELECT nom_chaine,id_hotel,pays,province_state,ville,nb_chambre FROM nb_chambre_par_hotel')
+        data = cursor.fetchall()
+        json = []
+
+        for i in range(len(data)):
+            json.append({
+                "nom_chaine": data[i][0],
+                "id_hotel": data[i][1],
+                "country": data[i][2],
+                "province_state": data[i][3],
+                "city": data[i][4],
+                "nb_chambre": data[i][5]
+            })
+
+        return json
+
+    except Exception as e:
+        print(e)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
