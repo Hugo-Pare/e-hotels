@@ -12,6 +12,7 @@ const Navbar_c = () => {
       </div>
     </div>
     <a href="/clientIn/location">Locations</a>
+    <a href="/clientIn/nbchambre/location">More Info</a>
     <div className="dropdown">
         <button className="dropbtn">Account</button>
         <div className="dropdown-content">
