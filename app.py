@@ -1414,23 +1414,28 @@ def get_nb_chambre_by_location():
     except Exception as e:
         print(e)
 
-@app.route('/nbchambre/hotel') 
-def get_nb_chambre_by_hotel():
+@app.route('/capacite/hotel') 
+def get_capacite_by_hotel():
     try:
         connection = get_db_connection()
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cursor.execute('SELECT nom_chaine,id_hotel,pays,province_state,ville,nb_chambre FROM nb_chambre_par_hotel')
+        args = request.args
+        id_chaine = args.get('id_chaine')
+
+        if(id_chaine is not None):
+            cursor.execute('SELECT id_hotel,fk_chaine,capacite FROM capacite_par_hotel WHERE fk_chaine = (%s)', (id_chaine,))
+
+        else:
+            cursor.execute('SELECT id_hotel,fk_chaine,capacite FROM capacite_par_hotel')
+            
         data = cursor.fetchall()
         json = []
 
         for i in range(len(data)):
             json.append({
-                "nom_chaine": data[i][0],
-                "id_hotel": data[i][1],
-                "country": data[i][2],
-                "province_state": data[i][3],
-                "city": data[i][4],
-                "nb_chambre": data[i][5]
+                "id_hotel": data[i][0],
+                "id_chaine": data[i][1],
+                "capacite": data[i][2]
             })
 
         return json

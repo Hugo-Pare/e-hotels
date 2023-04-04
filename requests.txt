@@ -75,4 +75,5 @@ PATCH:
 
 VIEWS
 	/nbchambre/location
-	/nbchambre/hotel
+	/capacite/hotel
+	/capacite/hotel?id_chaine=X
