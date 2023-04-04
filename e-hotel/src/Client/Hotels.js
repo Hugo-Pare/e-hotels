@@ -21,6 +21,7 @@ function Hotels() {
   const [rating, setRating] = useState([]);
   const [chaines, setChaines] = useState();
   const [nbChambre, setNbChambre] = useState();
+  const [listCapacity, setListCapacity] = useState([]);
   const [loaded, setLoaded] = useState(false)
   const [chainesLoaded, setChainesLoaded] = useState(false)
   const navigate = useNavigate();
@@ -58,8 +59,18 @@ async function getAllHotels() {
       .then(function(json) {
         setHotels(json)
         setData(json)
-        setLoaded(true)
+        getAllCapacity();
+        
   });
+}
+
+async function getAllCapacity() {
+  fetch(`http://127.0.0.1:5000/capacite/hotel`)
+    .then(response => response.json())
+    .then(function(json) {
+        setListCapacity(json)
+        setLoaded(true)
+    })
 }
 
 async function getChaines(){
@@ -102,6 +113,15 @@ function getCanCities() {
   .then(function(json) {
     setVilleCan(json)
 });
+}
+
+function getCapacityMaximal(hotel) {
+  for (var i = 0 ; i < listCapacity.length ; i++){
+    if(listCapacity[i].id_hotel == hotel) {
+      return listCapacity[i].capacite;
+    }
+  }
+  return "NA"
 }
 
 function valide (hotel){
@@ -199,7 +219,6 @@ function updateHotels(){
   function handleVille(event){
     setVille(event.target.value);
   }
-
 
   function search() {
     setLoaded(false)
@@ -317,6 +336,7 @@ function updateHotels(){
                         <p>{hotel.province_state}, {hotel.country}</p>
                         <p>{hotel.email}</p>
                         <p>{hotel.telephone}</p>
+                        <p>Capacité maximal: {getCapacityMaximal(hotel.id_hotel)}</p>
                         <div>
                           {hotel.rating} <span>&#11088;</span>
                         </div>

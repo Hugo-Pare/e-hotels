@@ -69,7 +69,7 @@ function Signup_client() {
     const regex_nas = /^\d{9}$/;
     const regex_postalcode = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
     const regex_zip = /^\d{5}$/;
-    const regex_string = /[a-zA-Z]+/; 
+    const regex_string = /[a-zA-Z]+/;
     if (!firstName || !lastName || !email || !phoneNumber || !socialInsuranceNumber || !streetNumber || !streetName || !city || !province || !postalCode || !country) {
       alert("S'il vous plait remplir tout les champs");
       setIsClicked(true);
@@ -91,7 +91,7 @@ function Signup_client() {
       return;
     }
     if (!regex_phonenumber.test(phoneNumber)) {
-      alert("Le numero de telephone n'est pas valide");
+      alert("Le numero de telephone n'est pas valide, il faut juste des numeros, (pas d'espace, pas de - et ni de ())");
       setIsClicked(true);
       return;
     } 
