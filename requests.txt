@@ -13,6 +13,7 @@ GET:
 	/clients
 	/clients?email=X
 	/clients/exists?email=X
+	/clients/exists/nas
 
 	/employes
 	/employes?id_employe=X
@@ -41,10 +42,10 @@ GET:
  	/hotels?id_chaine=X&id_hotel=X
  	/hotels/country
  	/hotels/country?id_chaine=X
-    	/hotels/country/province_state
+    /hotels/country/province_state
  	/hotels/country/province_state?id_chaine=X
-    	/hotels/country/province_state/city
-    	/hotels/country/province_state/city?id_chaine=X
+    /hotels/country/province_state/city
+    /hotels/country/province_state/city?id_chaine=X
 
 	/rooms
 	/rooms/info

@@ -18,54 +18,6 @@ def get_db_connection():
 
     return connection
 
-### TESTS --- START ###
-
-@app.route('/')
-def hello():
-    return 'Hello World!'
-
-@app.route('/test1') 
-def test1():
-    try:
-        connection = get_db_connection()
-        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cursor.execute('SELECT * FROM test')
-        num = cursor.fetchall()
-
-        return num
-
-    except Exception as e:
-        print(e)
-
-@app.post('/test2/<num>') 
-def test2(num):
-    try:
-        connection = get_db_connection()
-        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cursor.execute('INSERT INTO test VALUES (%s)', [num])
-        connection.commit()
-
-        return []
-
-    except Exception as e:
-        print(e)
-
-@app.route('/test3', methods=['POST']) 
-def test3():
-    try:
-        data = request.json
-        num = data['num']
-        connection = get_db_connection()
-        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cursor.execute('INSERT INTO test VALUES (%s)', [num])
-        connection.commit()
-        return json.dumps(num)
-
-    except Exception as e:
-        print(e)
-
-### TESTS --- END ###
-
 @app.route('/signup/client', methods=['POST'])
 def signup_user():
     try:
@@ -259,6 +211,27 @@ def check_if_client_exists():
             
         else:
             json.append({"error": "wrong input"})
+            
+
+        return json
+
+    except Exception as e:
+        print(e)
+
+@app.route('/clients/exists/<nas>') 
+def check_if_client_nas_exists(nas):
+    try:
+        connection = get_db_connection()
+        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        json = []
+
+        cursor.execute('SELECT * FROM client WHERE nas = (%s)', (nas,))
+        data = cursor.fetchall()
+        if len(data) > 0:
+            json.append({"exists": "true"})
+        else:
+            json.append({"exists": "false"})
+            
             
 
         return json
