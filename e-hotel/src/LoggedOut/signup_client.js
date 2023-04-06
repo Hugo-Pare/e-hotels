@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import { post } from 'jquery';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 function Signup_client() {
   const [firstName, setFirstName] = useState('');
@@ -17,15 +17,25 @@ function Signup_client() {
   const [postalCode, setPostalCode] = useState('');
   const [country, setCountry] = useState('');
   const [isClicked, setIsClicked] = useState(false);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
 
 
-  async function checkEmailExistence(email) {
+  async function checkEmailExistence(email, socialInsuranceNumber) {
     const response = await fetch(`http://127.0.0.1:5000/clients/exists?email=${email}`);
     const data = await response.json();
     if (data[0].exists === 'true') {
       alert("S'il vous plaît utiliser un email qui n'est pas déjà associer à un compte");
+    } else {
+      checkSinExistence(socialInsuranceNumber);
+    }
+  }
+
+  async function checkSinExistence(socialInsuranceNumber) {
+    const response = await fetch(`http://127.0.0.1:5000/clients/exists/${socialInsuranceNumber}`);
+    const data = await response.json();
+    if (data[0].exists === 'true') {
+      alert("S'il vous plaît utiliser un numero d'assurance sociale qui n'est pas déjà associer à un compte");
     } else {
       addToDataBase();
     }
@@ -58,6 +68,8 @@ function Signup_client() {
       .then(response => response.json())
       .then(function(json){
           console.log(json)
+          alert("L'enregistrement a été effectué avec succès")
+          navigate('/client');
       })
   }
 
@@ -137,7 +149,7 @@ function Signup_client() {
       return;
     }
     else {
-      checkEmailExistence(email);
+      checkEmailExistence(email, socialInsuranceNumber);
     }
     }
   
@@ -181,7 +193,11 @@ function Signup_client() {
       <label style={{color: isClicked && !country ? 'red' : 'black'}} htmlFor="Pays">
           Pays :
           <br/>
-          <input type="text" value={postalCode} onChange={(e) => setCountry(e.target.value)}/>
+          <select value={country} onChange={(e) => setCountry(e.target.value)}>
+            <option value="null">-------------------</option>
+            <option value="Canada">Canada</option>
+            <option value="Etats-Unis">Etats-Unis</option>
+          </select>
       </label>
       <br/>
       <label style={{color: isClicked && !province ? 'red' : 'black'}} htmlFor="Province/State">
