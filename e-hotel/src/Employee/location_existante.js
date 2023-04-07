@@ -48,7 +48,7 @@ function Location_existante(){
         if (email && id_location) {
           // fetch reservations by email and id
           console.log("in email and location");
-          fetch(`http://127.0.0.1:5000/location?email_client=${email}&id_location=${id_location}&id_hotel=${id_hotel}`)
+          fetch(`http://127.0.0.1:5000/locations?email_client=${email}&id_location=${id_location}&id_hotel=${id_hotel}`)
             .then((response) => response.json())
             .then(function (json) {
               fixDates(json)
@@ -68,9 +68,10 @@ function Location_existante(){
         } else if (id_location !== "") {
           // fetch reservations by id
           console.log("location");
-          fetch(`http://127.0.0.1:5000/locations/${id_location}&id_hotel=${id_hotel}`)
+          fetch(`http://127.0.0.1:5000/locations?id_location=${id_location}&id_hotel=${id_hotel}`)
             .then((response) => response.json())
             .then(function (json) {
+              console.log(json)
               fixDates(json)
               setData(json)
               setLoaded(true)
