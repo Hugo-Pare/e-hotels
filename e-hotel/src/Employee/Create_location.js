@@ -156,11 +156,14 @@ function Create_location() {
           
           console.log("handleLocation " + num);
           console.log("prix: " + prix)
+          var date1 = new Date(checkInDate);
+          var date2 = new Date(checkOutDate);
+          var diffDays = (date2.getDate() - date1.getDate()).toFixed(2);
           // navigate to location page
           navigate('/employeeIn/chooseClient', {
             state: {
                 room_num: num,
-                prix: prix,
+                prix: prix * diffDays,
                 id_employe: id_employe,
                 hotel_id: hotel_id,
                 date_checkin: checkInDate,

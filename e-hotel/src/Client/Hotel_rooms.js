@@ -177,6 +177,11 @@ const updateRooms = () => {
     const num = array[0]
     const prix = array[1]
 
+    var date1 = new Date(checkInDate);
+    var date2 = new Date(checkOutDate);
+    var diffDays = (date2.getDate() - date1.getDate()).toFixed(2);
+    
+
     navigate('/clientIn/hotelRooms/reservation', {
       state: {
         id_hotel: sessionStorage.getItem("hotel_id"),
@@ -184,7 +189,7 @@ const updateRooms = () => {
         id_email: sessionStorage.getItem("email_id"),
         date_checkin: checkInDate,
         date_checkout: checkOutDate,
-        frais_total: prix,
+        frais_total: prix * diffDays,
         hotelInfo: hotelInfo
       }
     })

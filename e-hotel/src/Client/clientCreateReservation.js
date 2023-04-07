@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 function ClientCreateReservation(){
     const reservationInfo = useLocation().state
     const navigate = useNavigate();
-    const [frais_restant, setFrais_restant] = useState(reservationInfo.frais_total)
+    const [frais_restant, setFrais_restant] = useState((reservationInfo.frais_total).toFixed(2))
     
 
     function handlePayment(){
@@ -17,9 +17,12 @@ function ClientCreateReservation(){
         }
         else{
             var amount = parseFloat(prompt('Veuillez entrer le montant à payer :')).toFixed(2)
+            console.log(amount + "amount");
             while(Number(amount) > Number(parseFloat(frais_restant).toFixed(2))){
                 amount = parseFloat(prompt('Le montant ne peut pas dépassé la valeur restante, entrez à nouveau :')).toFixed(2)
             }
+
+            console.log("pass")
 
             if(!isNaN(amount)){
                 const newAmount = parseFloat(parseFloat(frais_restant).toFixed(2) - amount).toFixed(2)
@@ -86,7 +89,7 @@ function ClientCreateReservation(){
                         <label >{reservationInfo.date_checkout}</label>
                         <br/>
                         <label>Frais Total : </label>
-                        <label >{reservationInfo.frais_total}</label>
+                        <label >{(reservationInfo.frais_total).toFixed(2)}</label>
                         <br/>
                         <label>Frais Restant : </label>
                         <label>{frais_restant} </label>

@@ -26,13 +26,13 @@ function EmployeeCreateLocation(){
         console.log(locationInfo)
         setID_employe(locationInfo.id_employe)
         setRoom_num(locationInfo.room_num)
-        setPrix_total(locationInfo.prix)
+        setPrix_total((locationInfo.prix).toFixed(2))
         setID_hotel(locationInfo.id_hotel)
         setEmail_client(locationInfo.email_client)
         setDate_checkin(locationInfo.date_checkin)
         setDate_checkout(locationInfo.date_checkout)
 
-        setFrais_restant(locationInfo.prix)
+        setFrais_restant((locationInfo.prix).toFixed(2))
     }
 
     function handlePayment(){
