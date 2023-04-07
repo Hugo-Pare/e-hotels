@@ -573,7 +573,7 @@ def get_locations_by_id_location(id_location):
         connection = get_db_connection()
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
         
-        cursor.execute('SELECT * FROM location WHERE id_location = (%s) ORDER BY date_checkin DESC', (id_location,))
+        cursor.execute('SELECT id_location, frais_restant, frais_total, date_checkin, date_checkout, email_id, num_chambre, id_hotel, id_reservation, id_employe FROM location WHERE id_location = (%s) ORDER BY date_checkin DESC', (id_location,))
         data = cursor.fetchall()
         json = []
 
