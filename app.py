@@ -517,7 +517,7 @@ def get_locations():
             SELECT location.id_location,location.frais_restant,location.frais_total,location.date_checkin,location.date_checkout,location.email_id,location.num_chambre,
             location.id_hotel,location.id_reservation,location.id_employe,hotel.rue,hotel.num_rue,hotel.postal_zip_code,chaine.nom_chaine,hotel.pays,hotel.province_state,hotel.ville
             FROM location JOIN hotel 
-            ON location.id_hotel = hotel.id_hotel JOIN chaine ON hotel.fk_chaine = chaine.id_chaine WHERE location.id_hotel = %s ORDER BY date_checkin DESC''', (id_hotel,))
+            ON location.id_hotel = hotel.id_hotel JOIN chaine ON hotel.fk_chaine = chaine.id_chaine WHERE location.id_hotel = (%s) ORDER BY date_checkin DESC''', (id_hotel,))
         else:
             cursor.execute('''
             SELECT location.id_location,location.frais_restant,location.frais_total,location.date_checkin,location.date_checkout,location.email_id,location.num_chambre,
@@ -656,125 +656,126 @@ def get_hotels():
     except Exception as e:
         print(e)
 
-@app.route('/hotels/<country>',strict_slashes=True) 
-def get_hotels_by_country(country):
-    try:
-        connection = get_db_connection()
-        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        args = request.args
+# not used
+# @app.route('/hotels/<country>',strict_slashes=True) 
+# def get_hotels_by_country(country):
+#     try:
+#         connection = get_db_connection()
+#         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+#         args = request.args
 
-        #args
-        id_chaine = args.get('id_chaine')
+#         #args
+#         id_chaine = args.get('id_chaine')
 
-        if (id_chaine is not None):
-            cursor.execute('SELECT * FROM hotel WHERE LOWER(pays) = LOWER((%s)) AND fk_chaine = (%s)', (country,id_chaine,))
+#         if (id_chaine is not None):
+#             cursor.execute('SELECT * FROM hotel WHERE LOWER(pays) = LOWER((%s)) AND fk_chaine = (%s)', (country,id_chaine,))
 
-        else:
-            cursor.execute('SELECT * FROM hotel WHERE LOWER(pays) = LOWER(%s)', (country,))
+#         else:
+#             cursor.execute('SELECT * FROM hotel WHERE LOWER(pays) = LOWER(%s)', (country,))
 
-        data = cursor.fetchall()
-        json = []
+#         data = cursor.fetchall()
+#         json = []
 
-        for i in range(len(data)):
-            json.append({
-                "country": data[i][0],
-                "province_state": data[i][1],
-                "city": data[i][2],
-                "street_name": data[i][3],
-                "street_num": data[i][4],
-                "zip_code": data[i][5],
-                "nb_chambre": data[i][6],
-                "telephone": data[i][7].strip(),
-                "email": data[i][8],
-                "rating": data[i][9],
-                "id_chaine": data[i][10],
-                "id_hotel": data[i][11]
-            })
+#         for i in range(len(data)):
+#             json.append({
+#                 "country": data[i][0],
+#                 "province_state": data[i][1],
+#                 "city": data[i][2],
+#                 "street_name": data[i][3],
+#                 "street_num": data[i][4],
+#                 "zip_code": data[i][5],
+#                 "nb_chambre": data[i][6],
+#                 "telephone": data[i][7].strip(),
+#                 "email": data[i][8],
+#                 "rating": data[i][9],
+#                 "id_chaine": data[i][10],
+#                 "id_hotel": data[i][11]
+#             })
 
-        return json
+#         return json
 
-    except Exception as e:
-        print(e)
+#     except Exception as e:
+#         print(e)
 
-@app.route('/hotels/<country>/<province_state>',strict_slashes=True) 
-def get_hotels_by_country_and_province_state(country,province_state):
-    try:
-        connection = get_db_connection()
-        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        args = request.args
+# @app.route('/hotels/<country>/<province_state>',strict_slashes=True) 
+# def get_hotels_by_country_and_province_state(country,province_state):
+#     try:
+#         connection = get_db_connection()
+#         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+#         args = request.args
 
-        #args
-        id_chaine = args.get('id_chaine')
+#         #args
+#         id_chaine = args.get('id_chaine')
 
-        if (id_chaine is not None):
-            cursor.execute('SELECT * FROM hotel WHERE LOWER(pays) = LOWER((%s)) AND LOWER(province_state) = LOWER((%s)) AND fk_chaine = (%s)', (country,province_state,id_chaine,))
+#         if (id_chaine is not None):
+#             cursor.execute('SELECT * FROM hotel WHERE LOWER(pays) = LOWER((%s)) AND LOWER(province_state) = LOWER((%s)) AND fk_chaine = (%s)', (country,province_state,id_chaine,))
 
-        else:
-            cursor.execute('SELECT * FROM hotel WHERE LOWER(pays) = LOWER((%s)) AND LOWER(province_state) = LOWER((%s))', (country,province_state,))
+#         else:
+#             cursor.execute('SELECT * FROM hotel WHERE LOWER(pays) = LOWER((%s)) AND LOWER(province_state) = LOWER((%s))', (country,province_state,))
 
-        data = cursor.fetchall()
-        json = []
+#         data = cursor.fetchall()
+#         json = []
 
-        for i in range(len(data)):
-            json.append({
-                "country": data[i][0],
-                "province_state": data[i][1],
-                "city": data[i][2],
-                "street_name": data[i][3],
-                "street_num": data[i][4],
-                "zip_code": data[i][5],
-                "nb_chambre": data[i][6],
-                "telephone": data[i][7].strip(),
-                "email": data[i][8],
-                "rating": data[i][9],
-                "id_chaine": data[i][10],
-                "id_hotel": data[i][11]
-            })
+#         for i in range(len(data)):
+#             json.append({
+#                 "country": data[i][0],
+#                 "province_state": data[i][1],
+#                 "city": data[i][2],
+#                 "street_name": data[i][3],
+#                 "street_num": data[i][4],
+#                 "zip_code": data[i][5],
+#                 "nb_chambre": data[i][6],
+#                 "telephone": data[i][7].strip(),
+#                 "email": data[i][8],
+#                 "rating": data[i][9],
+#                 "id_chaine": data[i][10],
+#                 "id_hotel": data[i][11]
+#             })
 
-        return json
+#         return json
 
-    except Exception as e:
-        print(e)
+#     except Exception as e:
+#         print(e)
 
-@app.route('/hotels/<country>/<province_state>/<city>',strict_slashes=True) 
-def get_hotels_by_country_and_province_state_and_city(country,province_state,city):
-    try:
-        connection = get_db_connection()
-        cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        args = request.args
+# @app.route('/hotels/<country>/<province_state>/<city>',strict_slashes=True) 
+# def get_hotels_by_country_and_province_state_and_city(country,province_state,city):
+#     try:
+#         connection = get_db_connection()
+#         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
+#         args = request.args
 
-        #args
-        id_chaine = args.get('id_chaine')
+#         #args
+#         id_chaine = args.get('id_chaine')
 
-        if (id_chaine is not None):
-            cursor.execute('SELECT * FROM hotel WHERE LOWER(pays) = LOWER((%s)) AND LOWER(province_state) = LOWER((%s)) AND LOWER(ville) = LOWER((%s)) AND fk_chaine = (%s)', (country,province_state,city,id_chaine,))
+#         if (id_chaine is not None):
+#             cursor.execute('SELECT * FROM hotel WHERE LOWER(pays) = LOWER((%s)) AND LOWER(province_state) = LOWER((%s)) AND LOWER(ville) = LOWER((%s)) AND fk_chaine = (%s)', (country,province_state,city,id_chaine,))
 
-        else:
-            cursor.execute('SELECT * FROM hotel WHERE LOWER(pays) = LOWER((%s)) AND LOWER(province_state) = LOWER((%s)) AND LOWER(ville) = LOWER((%s))', (country,province_state,city,))
+#         else:
+#             cursor.execute('SELECT * FROM hotel WHERE LOWER(pays) = LOWER((%s)) AND LOWER(province_state) = LOWER((%s)) AND LOWER(ville) = LOWER((%s))', (country,province_state,city,))
 
-        data = cursor.fetchall()
-        json = []
+#         data = cursor.fetchall()
+#         json = []
 
-        for i in range(len(data)):
-            json.append({
-                "country": data[i][0],
-                "province_state": data[i][1],
-                "city": data[i][2],
-                "street_name": data[i][3],
-                "street_num": data[i][4],
-                "zip_code": data[i][5],
-                "nb_chambre": data[i][6],
-                "telephone": data[i][7].strip(),
-                "email": data[i][8],
-                "rating": data[i][9],
-                "id_chaine": data[i][10],
-                "id_hotel": data[i][11]
-            })
+#         for i in range(len(data)):
+#             json.append({
+#                 "country": data[i][0],
+#                 "province_state": data[i][1],
+#                 "city": data[i][2],
+#                 "street_name": data[i][3],
+#                 "street_num": data[i][4],
+#                 "zip_code": data[i][5],
+#                 "nb_chambre": data[i][6],
+#                 "telephone": data[i][7].strip(),
+#                 "email": data[i][8],
+#                 "rating": data[i][9],
+#                 "id_chaine": data[i][10],
+#                 "id_hotel": data[i][11]
+#             })
 
-        return json
+#         return json
 
-    except Exception as e:
-        print(e)
+#     except Exception as e:
+#         print(e)
 
 @app.route('/rooms') 
 def get_rooms():
@@ -783,12 +784,10 @@ def get_rooms():
         cursor = connection.cursor(cursor_factory=psycopg2.extras.DictCursor)
         args = request.args
 
-        mincapacite = args.get('mincapacite')
-        maxcapacite = args.get('maxcapacite')
-        id_chaine = args.get('id_chaine')   # needs to be implemented
-        minprice = args.get('minprice')
-        maxprice = args.get('maxprice')
-        vue = args.get('vue')               # needs to be implemented
+        # mincapacite = args.get('mincapacite')
+        # maxcapacite = args.get('maxcapacite')
+        # minprice = args.get('minprice')
+        # maxprice = args.get('maxprice')
 
         if(mincapacite is None):
             cursor.execute('SELECT * FROM chambre ORDER BY num_chambre ASC')
