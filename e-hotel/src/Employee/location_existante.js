@@ -71,7 +71,6 @@ function Location_existante(){
           fetch(`http://127.0.0.1:5000/locations?id_location=${id_location}&id_hotel=${id_hotel}`)
             .then((response) => response.json())
             .then(function (json) {
-              console.log(json)
               fixDates(json)
               setData(json)
               setLoaded(true)
