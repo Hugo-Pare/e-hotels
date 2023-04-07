@@ -525,13 +525,18 @@ def get_locations():
             location.id_hotel,location.id_reservation,location.id_employe,hotel.rue,hotel.num_rue,hotel.postal_zip_code,chaine.nom_chaine,hotel.pays,hotel.province_state,hotel.ville
             FROM location JOIN hotel 
             ON location.id_hotel = hotel.id_hotel JOIN chaine ON hotel.fk_chaine = chaine.id_chaine WHERE location.id_hotel = (%s) AND LOWER(email_id) = LOWER(%s) ORDER BY date_checkin DESC''', (id_hotel,email_client,))
+        elif(id_hotel is not None and id_location is not None):
+            cursor.execute('''
+            SELECT location.id_location,location.frais_restant,location.frais_total,location.date_checkin,location.date_checkout,location.email_id,location.num_chambre,
+            location.id_hotel,location.id_reservation,location.id_employe,hotel.rue,hotel.num_rue,hotel.postal_zip_code,chaine.nom_chaine,hotel.pays,hotel.province_state,hotel.ville
+            FROM location JOIN hotel 
+            ON location.id_hotel = hotel.id_hotel JOIN chaine ON hotel.fk_chaine = chaine.id_chaine WHERE location.id_hotel = (%s) AND location.id_location = (%s) ORDER BY date_checkin DESC''', (id_hotel,id_location,))
         elif(email_client is not None):
             cursor.execute('''
             SELECT location.id_location,location.frais_restant,location.frais_total,location.date_checkin,location.date_checkout,location.email_id,location.num_chambre,
             location.id_hotel,location.id_reservation,location.id_employe,hotel.rue,hotel.num_rue,hotel.postal_zip_code,chaine.nom_chaine,hotel.pays,hotel.province_state,hotel.ville
             FROM location JOIN hotel 
-            ON location.id_hotel = hotel.id_hotel JOIN chaine ON hotel.fk_chaine = chaine.id_chaine WHERE AND LOWER(email_id) = LOWER(%s) ORDER BY date_checkin DESC''', (email_client,))
-        
+            ON location.id_hotel = hotel.id_hotel JOIN chaine ON hotel.fk_chaine = chaine.id_chaine WHERE LOWER(email_id) = LOWER(%s) ORDER BY date_checkin DESC''', (email_client,))
         elif(id_hotel is not None):
             cursor.execute('''
             SELECT location.id_location,location.frais_restant,location.frais_total,location.date_checkin,location.date_checkout,location.email_id,location.num_chambre,
