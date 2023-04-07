@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import 'react-datepicker/dist/react-datepicker.css';
 import './hotel_rooms.css'
+import { format } from 'date-fns'
 
 function Hotel_rooms() {
   const hotelInfo = useLocation().state.hotelInfo
@@ -151,7 +152,7 @@ const updateRooms = () => {
       alert("Selectionne une date Check-In et Check-Out SVP!")
       return
     }
-  if(checkInDate < new Date().toISOString().split('T')[0]){
+  if(checkInDate < new Date(format(Date.parse(new Date()), 'yyyy-MM-dd')).toISOString().split('T')[0]){
     alert("La date de checkin doit soit etre aujourdhui ou une journée qui suit!")
     return null;
   }
