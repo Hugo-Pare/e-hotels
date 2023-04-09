@@ -513,12 +513,12 @@ def get_locations():
             location.id_hotel,location.id_reservation,location.id_employe,hotel.rue,hotel.num_rue,hotel.postal_zip_code,chaine.nom_chaine,hotel.pays,hotel.province_state,hotel.ville
             FROM location JOIN hotel 
             ON location.id_hotel = hotel.id_hotel JOIN chaine ON hotel.fk_chaine = chaine.id_chaine WHERE LOWER(email_id) = LOWER(%s) AND location.id_hotel = (%s) AND location.id_location = (%s) ORDER BY date_checkin DESC''', (email_client,id_hotel,id_location,))
-        elif(email_client is not None and id_hotel is not None):
-            cursor.execute('''
-            SELECT location.id_location,location.frais_restant,location.frais_total,location.date_checkin,location.date_checkout,location.email_id,location.num_chambre,
-            location.id_hotel,location.id_reservation,location.id_employe,hotel.rue,hotel.num_rue,hotel.postal_zip_code,chaine.nom_chaine,hotel.pays,hotel.province_state,hotel.ville
-            FROM location JOIN hotel 
-            ON location.id_hotel = hotel.id_hotel JOIN chaine ON hotel.fk_chaine = chaine.id_chaine WHERE LOWER(email_id) = LOWER(%s) AND id_hotel = (%s) ORDER BY date_checkin DESC''', (email_client,id_hotel,))
+        # elif(email_client is not None and id_hotel is not None):
+        #     cursor.execute('''
+        #     SELECT location.id_location,location.frais_restant,location.frais_total,location.date_checkin,location.date_checkout,location.email_id,location.num_chambre,
+        #     location.id_hotel,location.id_reservation,location.id_employe,hotel.rue,hotel.num_rue,hotel.postal_zip_code,chaine.nom_chaine,hotel.pays,hotel.province_state,hotel.ville
+        #     FROM location JOIN hotel 
+        #     ON location.id_hotel = hotel.id_hotel JOIN chaine ON hotel.fk_chaine = chaine.id_chaine WHERE LOWER(email_id) = LOWER(%s) AND id_hotel = (%s) ORDER BY date_checkin DESC''', (email_client,id_hotel,))
         elif(id_hotel is not None and email_client is not None):
             cursor.execute('''
             SELECT location.id_location,location.frais_restant,location.frais_total,location.date_checkin,location.date_checkout,location.email_id,location.num_chambre,

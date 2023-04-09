@@ -45,6 +45,7 @@ function Location_existante(){
     async function getLocation(email, id_location) {
         setLoaded(false);
         if (email && id_location) {
+          console.log("both");
           // fetch reservations by email and id
           fetch(`http://127.0.0.1:5000/locations?email_client=${email}&id_location=${id_location}&id_hotel=${id_hotel}`)
             .then((response) => response.json())
@@ -55,6 +56,7 @@ function Location_existante(){
             });
         } else if (email) {
           // fetch reservations by email
+          console.log("email");
           fetch(`http://127.0.0.1:5000/locations?email_client=${email}&id_hotel=${id_hotel}`)
             .then((response) => response.json())
             .then(function (json) {
@@ -63,6 +65,7 @@ function Location_existante(){
               setLoaded(true)
             });
         } else if (id_location !== "") {
+          console.log("id");
           // fetch reservations by id
           fetch(`http://127.0.0.1:5000/locations?id_location=${id_location}&id_hotel=${id_hotel}`)
             .then((response) => response.json())
