@@ -45,7 +45,7 @@ function Location_existante(){
     async function getLocation(email, id_location) {
         setLoaded(false);
         if (email && id_location) {
-          console.log("both");
+          
           // fetch reservations by email and id
           fetch(`http://127.0.0.1:5000/locations?email_client=${email}&id_location=${id_location}&id_hotel=${id_hotel}`)
             .then((response) => response.json())
